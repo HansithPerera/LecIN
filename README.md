@@ -1,2 +1,2 @@
-# LenIN
+# LecIN
 COMP602_Project
