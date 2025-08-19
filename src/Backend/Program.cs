@@ -1,8 +1,17 @@
+using Backend;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+//Add EF Core for PostgresSQL
+builder.Services.AddDbContextFactory<DataContext>(
+    options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+    );
+
 
 var app = builder.Build();
 
