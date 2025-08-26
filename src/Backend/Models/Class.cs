@@ -1,11 +1,22 @@
-﻿namespace Backend.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Backend.Models;
 
 public class Class
 {
-    public string Code { get; set; }
-    public string Name { get; set; }
     
-    public List<Student> Students { get; set; }
+    [Key]
+    public string Id { get; set; }
     
-    public List<Teacher> Teachers { get; set; }
+    [ForeignKey(nameof(Course))]
+    public string CourseId { get; set; }
+    
+    public Course Course { get; set; }
+    
+    public DateTimeOffset StartTime { get; set; }
+    
+    public DateTimeOffset EndTime { get; set; }
+    
+    public string Location { get; set; }
 }

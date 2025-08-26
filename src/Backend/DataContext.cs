@@ -3,12 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend;
 
-public class DataContext: DbContext
+public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
-    {
-        
-    }
-    
     public DbSet<Student> Students => Set<Student>();
 }
