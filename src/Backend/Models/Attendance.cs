@@ -2,6 +2,7 @@
 
 namespace Backend.Models;
 
+[Table("Attendance")]
 public class Attendance
 {
     [ForeignKey(nameof(Student))]
