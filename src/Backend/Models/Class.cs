@@ -9,8 +9,11 @@ public class Class
     [Key]
     public string Id { get; set; }
     
-    [ForeignKey(nameof(Course))]
     public string CourseId { get; set; }
+    
+    public int CourseYearId { get; set; }
+    
+    public int CourseSemesterCode { get; set; }
     
     public Course Course { get; set; }
     
@@ -19,6 +22,4 @@ public class Class
     public TimeSpan Duration => EndTime - StartTime;
     
     public DateTimeOffset EndTime { get; set; }
-    
-    public string Location { get; set; }
 }
