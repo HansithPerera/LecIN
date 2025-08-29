@@ -5,10 +5,10 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/Student/teachers": {
+    "/api/Admin/teachers": {
       "get": {
         "tags": [
-          "Student"
+          "Admin"
         ],
         "responses": {
           "200": {
@@ -360,6 +360,14 @@
           "courseId": {
             "type": "string"
           },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
           "course": {
             "$ref": "#/components/schemas/Course"
           },
@@ -374,9 +382,6 @@
           "endTime": {
             "type": "string",
             "format": "date-time"
-          },
-          "location": {
-            "type": "string"
           }
         }
       },
@@ -385,6 +390,14 @@
         "properties": {
           "code": {
             "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
           },
           "name": {
             "type": "string"
@@ -469,6 +482,9 @@
     }
   },
   "tags": [
+    {
+      "name": "Admin"
+    },
     {
       "name": "Student"
     }
