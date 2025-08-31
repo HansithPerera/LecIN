@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models;
 
@@ -6,14 +7,16 @@ namespace Backend.Models;
 public class Attendance
 {
     [ForeignKey(nameof(Student))]
-    public string StudentId { get; set; }
-    
-    public Student Student { get; set; }
-    
+    [MaxLength(255)]
+    public required string StudentId { get; set; }
+
+    public required Student Student { get; set; }
+
     [ForeignKey(nameof(Class))]
-    public string ClassId { get; set; }
-    
-    public Class Class { get; set; }
-    
+    [MaxLength(255)]
+    public required string ClassId { get; set; }
+
+    public required Class Class { get; set; }
+
     public DateTimeOffset Timestamp { get; set; }
 }

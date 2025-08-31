@@ -1,34 +1,34 @@
-﻿using Backend.Models;
+﻿using Backend.Database;
+using Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace Backend;
+namespace Backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class StudentController (IDbContextFactory<DataContext> ctxFactory):  ControllerBase
+[Authorize(Policy = Constants.StudentAuthorizationPolicy)]
+public class StudentController(AppService repository) : ControllerBase
 {
+    #region Post
+
+    [HttpPost("checkin")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult CheckInToCourse([FromBody] string courseCode)
+    {
+        throw new NotImplementedException();
+    }
+
+    #endregion
 
     #region Get
-    
-    [HttpGet("teachers")]
-    [ProducesResponseType(typeof(List<Teacher>), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAllTeachers()
-    {
-        await using var ctx = await ctxFactory.CreateDbContextAsync();
-        var teachers = await ctx.Teachers.ToListAsync();
-        return Ok(teachers);
-    }
-    
+
     [HttpGet("profile")]
     [ProducesResponseType(typeof(Student), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProfile()
     {
-        var ctx = await ctxFactory.CreateDbContextAsync();
-        var student = await ctx.Students.FirstOrDefaultAsync();
-        
         throw new NotImplementedException();
     }
 
@@ -55,18 +55,6 @@ public class StudentController (IDbContextFactory<DataContext> ctxFactory):  Con
     {
         throw new NotImplementedException();
     }
-    
-    #endregion
-    
-    #region Post
-    
-    [HttpPost("checkin")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult CheckInToCourse([FromBody] string courseCode)
-    {
-        throw new NotImplementedException();
-    }
-    
+
     #endregion
 }

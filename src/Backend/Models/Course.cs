@@ -1,21 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models;
 
 [Table("Courses")]
-[PrimaryKey(nameof(Code), nameof(Year), nameof(SemesterCode))]
 public class Course
 {
-    public string Code { get; set; }
-    
+    [MaxLength(255)] public required string Code { get; set; }
+
     public int Year { get; set; }
-    
+
     public int SemesterCode { get; set; }
-    
-    public string Name { get; set; }
-    
-    public List<Student> Students { get; set; }
-    
-    public List<Teacher> Teachers { get; set; }
+
+    [MaxLength(255)] public required string Name { get; set; }
 }
