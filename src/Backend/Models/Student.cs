@@ -6,9 +6,9 @@ namespace Backend.Models;
 [Table("Students")]
 public class Student
 {
-    [Key] public string Id { get; set; }
+    [Key] [MaxLength(255)] public required string Id { get; set; }
 
-    public string FirstName { get; set; }
+    [MaxLength(255)] public required string FirstName { get; set; }
 
-    public string LastName { get; set; }
+    [MaxLength(255)] public required string LastName { get; set; }
 }
