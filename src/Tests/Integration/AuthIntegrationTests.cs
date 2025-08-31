@@ -1,9 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
-using Backend;
 using Backend.Database;
 using Backend.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Tests.Integration;
