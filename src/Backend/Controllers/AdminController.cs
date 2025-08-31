@@ -1,24 +1,21 @@
-﻿using Backend.Models;
+﻿using Backend.Database;
+using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Policy = Constants.AdminAuthorizationPolicy)]
-public class AdminController(IDbContextFactory<AppDbContext> ctxFactory) : ControllerBase
+public class AdminController(AppService repository) : ControllerBase
 {
     [HttpGet("teachers")]
     [ProducesResponseType(typeof(List<Teacher>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllTeachers()
     {
-        var userId = User.Identity?.Name;
-        await using var ctx = await ctxFactory.CreateDbContextAsync();
-        var teachers = await ctx.Teachers.ToListAsync();
-        return Ok(teachers);
+        throw new NotImplementedException();
     }
 
     [HttpGet("courses")]
@@ -26,9 +23,7 @@ public class AdminController(IDbContextFactory<AppDbContext> ctxFactory) : Contr
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllCourses()
     {
-        await using var ctx = await ctxFactory.CreateDbContextAsync();
-        var courses = await ctx.Courses.ToListAsync();
-        return Ok(courses);
+        throw new NotImplementedException();
     }
 
     [HttpGet("students")]
@@ -36,8 +31,6 @@ public class AdminController(IDbContextFactory<AppDbContext> ctxFactory) : Contr
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllStudents()
     {
-        await using var ctx = await ctxFactory.CreateDbContextAsync();
-        var students = await ctx.Students.ToListAsync();
-        return Ok(students);
+        throw new NotImplementedException();
     }
 }

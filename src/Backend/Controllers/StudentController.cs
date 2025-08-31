@@ -1,14 +1,14 @@
-﻿using Backend.Models;
+﻿using Backend.Database;
+using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Policy = Constants.StudentAuthorizationPolicy)]
-public class StudentController(IDbContextFactory<AppDbContext> ctxFactory) : ControllerBase
+public class StudentController(AppService repository) : ControllerBase
 {
     #region Post
 
@@ -29,9 +29,6 @@ public class StudentController(IDbContextFactory<AppDbContext> ctxFactory) : Con
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProfile()
     {
-        var ctx = await ctxFactory.CreateDbContextAsync();
-        var student = await ctx.Students.FirstOrDefaultAsync();
-
         throw new NotImplementedException();
     }
 

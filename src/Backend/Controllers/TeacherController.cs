@@ -1,14 +1,14 @@
-﻿using Backend.Models;
+﻿using Backend.Database;
+using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Policy = Constants.TeacherAuthorizationPolicy)]
-public class TeacherController(IDbContextFactory<AppDbContext> ctxFactory) : ControllerBase
+public class TeacherController(AppService repository) : ControllerBase
 {
     #region GET
 
@@ -18,10 +18,13 @@ public class TeacherController(IDbContextFactory<AppDbContext> ctxFactory) : Con
     public async Task<IActionResult> GetProfile()
     {
         var userId = User.Identity?.Name;
-        await using var ctx = await ctxFactory.CreateDbContextAsync();
-        var teacher = await ctx.Teachers.FirstOrDefaultAsync(t => t.Id == userId);
-        if (teacher == null) return NotFound();
-        return Ok(teacher);
+        if (string.IsNullOrEmpty(userId))
+            return NotFound("User ID not found in token.");
+
+        var teacher = await repository.GetTeacherByIdAsync(userId);
+        return teacher == null
+            ? NotFound("Teacher not found.")
+            : Ok(teacher);
     }
 
     [HttpGet("courses")]
@@ -29,8 +32,7 @@ public class TeacherController(IDbContextFactory<AppDbContext> ctxFactory) : Con
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllCourses()
     {
-        await using var ctx = await ctxFactory.CreateDbContextAsync();
-        var courses = await ctx.Courses.ToListAsync();
+        var courses = await repository.GetAllCoursesAsync();
         return Ok(courses);
     }
 

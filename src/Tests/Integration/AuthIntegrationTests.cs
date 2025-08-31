@@ -1,8 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using Backend;
+using Backend.Database;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Tests.Integration;
 
@@ -13,26 +15,21 @@ public class AuthIntegrationTests : IClassFixture<MockAppBuilder>
     public AuthIntegrationTests(MockAppBuilder mockAppBuilder)
     {
         _mockAppBuilder = mockAppBuilder;
-        var e = _mockAppBuilder.Services.GetService(typeof(IDbContextFactory<AppDbContext>));
-        var dbFactory = e as IDbContextFactory<AppDbContext>;
-        SeedTeacher(dbFactory);
+        var dataService = _mockAppBuilder.Services.GetRequiredService<AppService>();
+        SeedTeacher(dataService);
     }
 
-    private static void SeedTeacher(IDbContextFactory<AppDbContext> dbFactory)
+    private static void SeedTeacher(AppService appService)
     {
-        using var ctx = dbFactory.CreateDbContext();
-        
-        var teacher = ctx.Teachers.FirstOrDefault(t => t.Id == "teacher-1");
-        if (teacher != null) return;
-        
-        ctx.Teachers.Add(new Teacher
+        var teacher = new Teacher
         {
             Id = "teacher-1",
-            FirstName = "FirstName",
-            LastName = "LastName",
-            CreatedAt = default
-        });
-        ctx.SaveChanges();
+            FirstName = "Alice",
+            LastName = "Smith",
+            CreatedAt = DateTimeOffset.UtcNow
+        };
+        
+        appService.AddTeacherAsync(teacher).GetAwaiter().GetResult();
     }
 
 
