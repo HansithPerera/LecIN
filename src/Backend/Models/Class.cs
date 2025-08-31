@@ -9,7 +9,7 @@ public class Class
     [Key]
     public string Id { get; set; }
     
-    public string CourseId { get; set; }
+    public string CourseCode { get; set; }
     
     public int CourseYearId { get; set; }
     

@@ -1,4 +1,5 @@
 ﻿using Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,8 @@ namespace Backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Policy = Constants.StudentAuthorizationPolicy)]
+
 public class StudentController (IDbContextFactory<DataContext> ctxFactory):  ControllerBase
 {
 

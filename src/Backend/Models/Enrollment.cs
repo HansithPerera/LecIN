@@ -10,6 +10,8 @@ public class Enrollment
     
     public Student Student { get; set; }
     
+    public string CourseCode { get; set; }
+    
     public string CourseId { get; set; }
     
     public int CourseYearId { get; set; }
