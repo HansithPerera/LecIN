@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend;
 
-public class UserTypeAuthorization(IDbContextFactory<DataContext> ctxFactory): AuthorizationHandler<ScopeRequirement>
+public class UserTypeAuthorization(IDbContextFactory<AppDbContext> ctxFactory): AuthorizationHandler<ScopeRequirement>
 {
     protected override async Task HandleRequirementAsync(
         AuthorizationHandlerContext context,

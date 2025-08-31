@@ -13,7 +13,7 @@ builder.Configuration.AddEnvironmentVariables();
 // If the application is running as a mock during OPENAPI generation, skip collecting these values.
 var isMock = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
 
-builder.Services.AddDbContextFactory<DataContext>(
+builder.Services.AddDbContextFactory<AppDbContext>(
     options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found."))
 );
 

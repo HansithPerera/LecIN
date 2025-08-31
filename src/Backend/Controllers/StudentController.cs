@@ -9,7 +9,7 @@ namespace Backend.Controllers;
 [ApiController]
 [Authorize(Policy = Constants.StudentAuthorizationPolicy)]
 
-public class StudentController (IDbContextFactory<DataContext> ctxFactory):  ControllerBase
+public class StudentController (IDbContextFactory<AppDbContext> ctxFactory):  ControllerBase
 {
 
     #region Get

@@ -8,7 +8,7 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Policy = Constants.TeacherAuthorizationPolicy)]
-public class TeacherController(IDbContextFactory<DataContext> ctxFactory) : ControllerBase
+public class TeacherController(IDbContextFactory<AppDbContext> ctxFactory) : ControllerBase
 {
     #region GET
     

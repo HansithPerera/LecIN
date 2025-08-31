@@ -8,7 +8,7 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Policy = Constants.AdminAuthorizationPolicy)]
-public class AdminController(IDbContextFactory<DataContext> ctxFactory) : ControllerBase
+public class AdminController(IDbContextFactory<AppDbContext> ctxFactory) : ControllerBase
 {
     [HttpGet("teachers")]
     [ProducesResponseType(typeof(List<Teacher>), StatusCodes.Status200OK)]
