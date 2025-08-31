@@ -6,11 +6,11 @@ namespace Backend.Models;
 [Table("Teachers")]
 public class Teacher
 {
-    [Key] public required string Id { get; set; }
+    [Key] [MaxLength(255)] public required string Id { get; set; }
 
-    public required string FirstName { get; set; }
+    [MaxLength(255)] public required string FirstName { get; set; }
 
-    public required string LastName { get; set; }
+    [MaxLength(255)] public required string LastName { get; set; }
 
     public required DateTimeOffset CreatedAt { get; set; }
 
