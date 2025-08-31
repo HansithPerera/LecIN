@@ -1,9 +1,11 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.Extensions.Logging;
+
+namespace Tests;
+
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
-
-namespace Backend;
 
 public class TestAuthHandler(
     IOptionsMonitor<AuthenticationSchemeOptions> options,

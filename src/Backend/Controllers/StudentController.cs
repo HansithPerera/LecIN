@@ -8,12 +8,22 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Policy = Constants.StudentAuthorizationPolicy)]
-
-public class StudentController (IDbContextFactory<AppDbContext> ctxFactory):  ControllerBase
+public class StudentController(IDbContextFactory<AppDbContext> ctxFactory) : ControllerBase
 {
+    #region Post
+
+    [HttpPost("checkin")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult CheckInToCourse([FromBody] string courseCode)
+    {
+        throw new NotImplementedException();
+    }
+
+    #endregion
 
     #region Get
-    
+
     [HttpGet("profile")]
     [ProducesResponseType(typeof(Student), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -21,7 +31,7 @@ public class StudentController (IDbContextFactory<AppDbContext> ctxFactory):  Co
     {
         var ctx = await ctxFactory.CreateDbContextAsync();
         var student = await ctx.Students.FirstOrDefaultAsync();
-        
+
         throw new NotImplementedException();
     }
 
@@ -48,18 +58,6 @@ public class StudentController (IDbContextFactory<AppDbContext> ctxFactory):  Co
     {
         throw new NotImplementedException();
     }
-    
-    #endregion
-    
-    #region Post
-    
-    [HttpPost("checkin")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult CheckInToCourse([FromBody] string courseCode)
-    {
-        throw new NotImplementedException();
-    }
-    
+
     #endregion
 }

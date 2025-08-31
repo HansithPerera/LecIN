@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models;
 
@@ -7,10 +6,10 @@ namespace Backend.Models;
 public class Course
 {
     public string Code { get; set; }
-    
+
     public int Year { get; set; }
-    
+
     public int SemesterCode { get; set; }
-    
+
     public string Name { get; set; }
 }

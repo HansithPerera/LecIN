@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend;
+namespace Backend.Auth;
 
-public class UserTypeAuthorization(IDbContextFactory<AppDbContext> ctxFactory): AuthorizationHandler<ScopeRequirement>
+public class UserTypeAuthorization(IDbContextFactory<AppDbContext> ctxFactory) : AuthorizationHandler<ScopeRequirement>
 {
     protected override async Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
@@ -27,13 +27,9 @@ public class UserTypeAuthorization(IDbContextFactory<AppDbContext> ctxFactory): 
         };
 
         if (hasRole)
-        {
             context.Succeed(requirement);
-        }
         else
-        {
             context.Fail();
-        }
     }
 }
 

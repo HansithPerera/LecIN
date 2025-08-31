@@ -3,13 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models;
 
-[Table("Students")] 
+[Table("Students")]
 public class Student
 {
-    [Key]
-    public string Id { get; set; }
-    
+    [Key] public string Id { get; set; }
+
     public string FirstName { get; set; }
-    
+
     public string LastName { get; set; }
 }

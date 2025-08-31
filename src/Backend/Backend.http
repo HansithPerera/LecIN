@@ -1,8 +1,0 @@
-﻿###
-GET http://localhost:5105/api/Teacher/courses
-Authorization: Bearer {{admin_token}}
-###
-
-GET http://localhost:5105/api/Teacher/courses
-Authorization: Bearer {{teacher_token}}
-###

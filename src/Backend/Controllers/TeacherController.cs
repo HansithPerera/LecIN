@@ -11,7 +11,7 @@ namespace Backend.Controllers;
 public class TeacherController(IDbContextFactory<AppDbContext> ctxFactory) : ControllerBase
 {
     #region GET
-    
+
     [HttpGet("profile")]
     [ProducesResponseType(typeof(Teacher), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -20,13 +20,10 @@ public class TeacherController(IDbContextFactory<AppDbContext> ctxFactory) : Con
         var userId = User.Identity?.Name;
         await using var ctx = await ctxFactory.CreateDbContextAsync();
         var teacher = await ctx.Teachers.FirstOrDefaultAsync(t => t.Id == userId);
-        if (teacher == null)
-        {
-            return NotFound();
-        }
+        if (teacher == null) return NotFound();
         return Ok(teacher);
     }
-    
+
     [HttpGet("courses")]
     [ProducesResponseType(typeof(List<Course>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -44,7 +41,7 @@ public class TeacherController(IDbContextFactory<AppDbContext> ctxFactory) : Con
     {
         throw new NotImplementedException();
     }
-    
+
     [HttpGet("course/{courseId}/classes")]
     [ProducesResponseType(typeof(List<Class>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -52,7 +49,7 @@ public class TeacherController(IDbContextFactory<AppDbContext> ctxFactory) : Con
     {
         throw new NotImplementedException();
     }
-    
+
     [HttpGet("course/{courseId}/classes/{classId}/attendance")]
     [ProducesResponseType(typeof(List<Attendance>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
