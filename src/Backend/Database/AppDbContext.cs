@@ -14,6 +14,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Course> Courses => Set<Course>();
 
     public DbSet<Attendance> Attendances => Set<Attendance>();
+    
+    public DbSet<Enrollment> Enrollments => Set<Enrollment>();
+    
+    public DbSet<Admin> Admins => Set<Admin>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

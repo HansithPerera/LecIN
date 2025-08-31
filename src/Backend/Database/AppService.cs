@@ -86,6 +86,28 @@ public class AppService(
         await appCache.EvictTeacherAsync(teacherId);
         return Result.Ok<bool, Errors.DeleteError>(true);
     }
+    
+    public async Task<bool> TeacherExistsAsync(string teacherId)
+    {
+        var teacher = await GetTeacherByIdAsync(teacherId);
+        return teacher != null;
+    }
+
+    #endregion
+
+    #region admin
+
+    public async Task<Admin?> GetAdminByIdAsync(string adminId)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Admins.FirstOrDefaultAsync(a => a.Id == adminId);
+    }
+    
+    public async Task<bool> AdminExistsAsync(string adminId)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Admins.AnyAsync(a => a.Id == adminId);
+    }
 
     #endregion
 }

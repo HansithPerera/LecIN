@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Auth;
 
-public class UserTypeAuthorization(IDbContextFactory<AppDbContext> ctxFactory) : AuthorizationHandler<ScopeRequirement>
+public class UserTypeAuthorization(AppService service) : AuthorizationHandler<ScopeRequirement>
 {
     protected override async Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
@@ -16,14 +16,12 @@ public class UserTypeAuthorization(IDbContextFactory<AppDbContext> ctxFactory) :
             context.Fail();
             return;
         }
-
-        await using var ctx = await ctxFactory.CreateDbContextAsync();
-
+        
         var hasRole = requirement.Scope switch
         {
-            UserType.Admin => throw new NotImplementedException("Admin role check not implemented"),
-            UserType.Teacher => await ctx.Teachers.AnyAsync(t => t.Id == userId),
-            UserType.Student => await ctx.Students.AnyAsync(s => s.Id == userId),
+            UserType.Admin => await service.GetAdminByIdAsync(userId) != null,
+            UserType.Teacher => await service.GetTeacherByIdAsync(userId) != null,
+            UserType.Student => await service.GetStudentByIdAsync(userId) != null,
             _ => false
         };
 

@@ -10,12 +10,13 @@ namespace Backend.Controllers;
 [Authorize(Policy = Constants.AdminAuthorizationPolicy)]
 public class AdminController(AppService repository) : ControllerBase
 {
+    
     [HttpGet("teachers")]
     [ProducesResponseType(typeof(List<Teacher>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllTeachers()
     {
-        throw new NotImplementedException();
+        return Ok(await repository.GetAllTeachersAsync());
     }
 
     [HttpGet("courses")]

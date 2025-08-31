@@ -791,15 +791,23 @@
   "components": {
     "schemas": {
       "Attendance": {
+        "required": [
+          "studentId",
+          "student",
+          "classId",
+          "class"
+        ],
         "type": "object",
         "properties": {
           "studentId": {
+            "maxLength": 255,
             "type": "string"
           },
           "student": {
             "$ref": "#/components/schemas/Student"
           },
           "classId": {
+            "maxLength": 255,
             "type": "string"
           },
           "class": {
@@ -812,12 +820,19 @@
         }
       },
       "Class": {
+        "required": [
+          "id",
+          "courseCode",
+          "course"
+        ],
         "type": "object",
         "properties": {
           "id": {
+            "maxLength": 255,
             "type": "string"
           },
           "courseCode": {
+            "maxLength": 255,
             "type": "string"
           },
           "courseYearId": {
@@ -846,9 +861,14 @@
         }
       },
       "Course": {
+        "required": [
+          "code",
+          "name"
+        ],
         "type": "object",
         "properties": {
           "code": {
+            "maxLength": 255,
             "type": "string"
           },
           "year": {
@@ -860,6 +880,7 @@
             "format": "int32"
           },
           "name": {
+            "maxLength": 255,
             "type": "string"
           }
         }
@@ -891,15 +912,23 @@
         }
       },
       "Student": {
+        "required": [
+          "id",
+          "firstName",
+          "lastName"
+        ],
         "type": "object",
         "properties": {
           "id": {
+            "maxLength": 255,
             "type": "string"
           },
           "firstName": {
+            "maxLength": 255,
             "type": "string"
           },
           "lastName": {
+            "maxLength": 255,
             "type": "string"
           }
         }
@@ -914,12 +943,15 @@
         "type": "object",
         "properties": {
           "id": {
+            "maxLength": 255,
             "type": "string"
           },
           "firstName": {
+            "maxLength": 255,
             "type": "string"
           },
           "lastName": {
+            "maxLength": 255,
             "type": "string"
           },
           "createdAt": {
