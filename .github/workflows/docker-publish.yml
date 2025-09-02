@@ -33,6 +33,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
+      # Setup .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+          
+      # Restore, build, and test the .NET project
+      - name: Restore dependencies
+        working-directory: ./src
+        run: dotnet restore
+      - name: Build
+        working-directory: ./src
+        run: dotnet build --no-restore
+      - name: Test
+        working-directory: ./tests
+        run: dotnet test --no-build --verbosity normal
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
@@ -40,7 +57,7 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 #v3.5.0
         with:
-          cosign-release: 'v2.2.4'
+          cosign-release: 'v2.2.4'l
 
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
