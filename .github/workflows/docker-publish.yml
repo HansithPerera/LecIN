@@ -42,15 +42,15 @@ jobs:
           
       # Restore, build, and test the .NET project
       - name: Restore dependencies
-        working-directory: ./src
+        working-directory: "./src"
         run: dotnet restore
       - name: Build
-        working-directory: ./src
+        working-directory: "./src"
         run: dotnet build --no-restore
       - name: Test
-        working-directory: ./tests
+        working-directory: "./src"
         run: dotnet test --no-build --verbosity normal
-
+        
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
