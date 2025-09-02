@@ -74,7 +74,7 @@ public class AppService(
         await ctx.SaveChangesAsync();
         return Result.Ok<Teacher, Errors.InsertError>(teacher);
     }
-    
+
     public async Task<Result<bool, Errors.DeleteError>> DeleteTeacherAsync(string teacherId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
@@ -86,7 +86,7 @@ public class AppService(
         await appCache.EvictTeacherAsync(teacherId);
         return Result.Ok<bool, Errors.DeleteError>(true);
     }
-    
+
     public async Task<bool> TeacherExistsAsync(string teacherId)
     {
         var teacher = await GetTeacherByIdAsync(teacherId);
@@ -96,17 +96,45 @@ public class AppService(
     #endregion
 
     #region admin
+    
+    public async Task<Result<Course, Errors.InsertError>> AddCourseAsync(Course course)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        var existing = await ctx.Courses.AnyAsync(c => c.Code == course.Code && c.Year == course.Year && c.SemesterCode == course.SemesterCode);
+        if (existing) return Result.Err<Course, Errors.InsertError>(Errors.InsertError.Conflict);
 
+        ctx.Courses.Add(course);
+        await ctx.SaveChangesAsync();
+        return Result.Ok<Course, Errors.InsertError>(course);
+    }
+    
+    public async Task<Course?> GetCourseAsync(string courseCode, int courseYear, int courseSemesterCode)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Courses.FirstOrDefaultAsync(c => c.Code == courseCode && c.Year == courseYear && c.SemesterCode == courseSemesterCode);
+    }
+    
     public async Task<Admin?> GetAdminByIdAsync(string adminId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Admins.FirstOrDefaultAsync(a => a.Id == adminId);
     }
-    
+
     public async Task<bool> AdminExistsAsync(string adminId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Admins.AnyAsync(a => a.Id == adminId);
+    }
+
+    public async Task<Result<Admin, Errors.InsertError>> AddAdminAsync(Admin admin)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        var existing = await ctx.Admins.AnyAsync(a => a.Id == admin.Id);
+        if (existing) return Result.Err<Admin, Errors.InsertError>(Errors.InsertError.Conflict);
+
+        ctx.Admins.Add(admin);
+        await ctx.SaveChangesAsync();
+        return Result.Ok<Admin, Errors.InsertError>(admin);
     }
 
     #endregion
