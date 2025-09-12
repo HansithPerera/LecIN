@@ -26,6 +26,14 @@ public class AppService(
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Courses.ToListAsync();
     }
+    
+    public async Task<Student> AddStudentAsync(Student student)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        ctx.Students.Add(student);
+        await ctx.SaveChangesAsync();
+        return student;
+    }
 
     public async Task<List<Student>> GetStudentsInCourseAsync(int courseId)
     {
@@ -134,6 +142,9 @@ public class AppService(
 
     public async Task<Admin?> GetAdminByIdAsync(string adminId)
     {
+        var fromCache = await appCache.GetAdminAsync(adminId);
+        if (fromCache != null) return fromCache;
+        
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Admins.FirstOrDefaultAsync(a => a.Id == adminId);
     }
@@ -152,6 +163,7 @@ public class AppService(
 
         ctx.Admins.Add(admin);
         await ctx.SaveChangesAsync();
+        await appCache.SetAdminAsync(admin);
         return Result.Ok<Admin, Errors.InsertError>(admin);
     }
 
