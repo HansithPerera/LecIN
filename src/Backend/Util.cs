@@ -27,18 +27,18 @@ public static class Util
     {
         dynamic result = new ExpandoObject();
         result.StudentId = attendance.StudentId;
-        result.StudentFirstName = attendance.Student.FirstName;
-        result.StudentLastName = attendance.Student.LastName;
+        result.StudentFirstName = attendance.Student?.FirstName;
+        result.StudentLastName = attendance.Student?.LastName;
 
         result.ClassId = attendance.ClassId;
-        result.ClassStartTime = attendance.Class.StartTime;
-        result.ClassEndTime = attendance.Class.EndTime;
-        result.ClassDuration = attendance.Class.Duration;
+        result.ClassStartTime = attendance.Class?.StartTime;
+        result.ClassEndTime = attendance.Class?.EndTime;
+        result.ClassDuration = attendance.Class?.Duration;
 
-        result.CourseCode = attendance.Class.CourseCode;
-        result.CourseYearId = attendance.Class.CourseYearId;
-        result.CourseSemesterCode = attendance.Class.CourseSemesterCode;
-        result.CourseName = attendance.Class.Course?.Name;
+        result.CourseCode = attendance.Class?.CourseCode;
+        result.CourseYearId = attendance.Class?.CourseYearId;
+        result.CourseSemesterCode = attendance.Class?.CourseSemesterCode;
+        result.CourseName = attendance.Class?.Course?.Name;
 
         result.Timestamp = attendance.Timestamp;
         return result;
