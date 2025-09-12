@@ -44,6 +44,7 @@ builder.Services.AddSingleton<AppCache>();
 
 // Define authorization policies based on user roles.
 builder.Services.AddSingleton<IAuthorizationHandler, UserTypeAuthorization>();
+builder.Services.AddSingleton<IAuthorizationHandler, AdminPermissionAuthorization>();
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(Constants.AdminAuthorizationPolicy,
         policy => policy.Requirements.Add(new ScopeRequirement(UserType.Admin)))
