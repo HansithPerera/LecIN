@@ -30,7 +30,7 @@ public class AdminController(AppService service) : ControllerBase
     [HttpGet("teachers")]
     [ProducesResponseType(typeof(List<Teacher>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [Authorize(Policy = Constants.AdminReadStudentsPermission)]
+    [Authorize(Policy = Constants.AdminReadTeachersPermission)]
     public async Task<IActionResult> GetAllTeachers()
     {
         return Ok(await service.GetAllTeachersAsync());
@@ -39,6 +39,7 @@ public class AdminController(AppService service) : ControllerBase
     [HttpGet("courses")]
     [ProducesResponseType(typeof(List<Course>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = Constants.AdminReadCoursesPermission)]
     public async Task<IActionResult> GetAllCourses()
     {
         return Ok(await service.GetAllCoursesAsync());
@@ -47,6 +48,7 @@ public class AdminController(AppService service) : ControllerBase
     [HttpGet("students")]
     [ProducesResponseType(typeof(List<Student>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = Constants.AdminReadStudentsPermission)]
     public async Task<IActionResult> GetAllStudents()
     {
         return Ok(await service.GetAllStudentsAsync());
@@ -55,6 +57,7 @@ public class AdminController(AppService service) : ControllerBase
     [HttpGet("courses/{courseCode}/{courseYear}/{courseSemesterCode}")]
     [ProducesResponseType(typeof(Course), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = Constants.AdminReadCoursesPermission)]
     public async Task<IActionResult> GetCourse(string courseCode, int courseYear, int courseSemesterCode)
     {
         var course = await service.GetCourseAsync(courseCode, courseYear, courseSemesterCode);
@@ -67,6 +70,7 @@ public class AdminController(AppService service) : ControllerBase
     [HttpPost("course")]
     [ProducesResponseType(typeof(Course), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Authorize(Policy = Constants.AdminManageCoursesPermission)]
     public async Task<IActionResult> CreateCourse([FromBody] NewCourseReq course)
     {
         var creationResult = await CourseRules.AddNewCourse(course, service);
@@ -89,6 +93,7 @@ public class AdminController(AppService service) : ControllerBase
     [HttpPost("teacher")]
     [ProducesResponseType(typeof(Teacher), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Authorize(Policy = Constants.AdminManageTeachersPermission)]
     public async Task<IActionResult> CreateTeacher([FromBody] NewTeacherReq teacher)
     {
         var creationResult = await TeacherRules.AddNewTeacherAsync(teacher, service);
@@ -104,7 +109,7 @@ public class AdminController(AppService service) : ControllerBase
         return CreatedAtAction(nameof(GetAllTeachers), new { id = createdTeacher.Id }, createdTeacher);
     }
 
-    [HttpGet("/courses/{courseCode}/{courseYear}/{courseSemesterCode}/attendance/export/")]
+    [HttpGet("courses/{courseCode}/{courseYear}/{courseSemesterCode}/attendance/export")]
     [ProducesResponseType(typeof(byte[]), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize(Policy = Constants.AdminExportDataPermission)]
