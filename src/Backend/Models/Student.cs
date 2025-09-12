@@ -11,4 +11,6 @@ public class Student
     [MaxLength(255)] public required string FirstName { get; set; }
 
     [MaxLength(255)] public required string LastName { get; set; }
+
+    public List<Enrollment>? Enrollments { get; set; }
 }

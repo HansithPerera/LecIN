@@ -1,6 +1,5 @@
 ﻿using Backend.Database;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Auth;
 
@@ -16,7 +15,7 @@ public class UserTypeAuthorization(AppService service) : AuthorizationHandler<Sc
             context.Fail();
             return;
         }
-        
+
         var hasRole = requirement.Scope switch
         {
             UserType.Admin => await service.GetAdminByIdAsync(userId) != null,

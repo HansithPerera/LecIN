@@ -29,7 +29,23 @@ public class AppService(
 
     public async Task<List<Student>> GetStudentsInCourseAsync(int courseId)
     {
-        throw new NotImplementedException();
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Students
+            .Where(s => s.Enrollments!.Any(e =>
+                e.CourseSemesterCode == courseId && e.CourseCode == e.CourseCode && e.CourseYearId == e.CourseYearId))
+            .ToListAsync();
+    }
+
+    public async Task<List<Attendance>> GetCourseAttendance(string courseCode, int courseYear, int courseSemesterCode)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Attendances
+            .Include(a => a.Student)
+            .Include(a => a.Class)
+            .Where(a => a.Class!.CourseCode == courseCode &&
+                        a.Class.CourseYearId == courseYear &&
+                        a.Class.CourseSemesterCode == courseSemesterCode)
+            .ToListAsync();
     }
 
     #region Teacher
@@ -96,24 +112,26 @@ public class AppService(
     #endregion
 
     #region admin
-    
+
     public async Task<Result<Course, Errors.InsertError>> AddCourseAsync(Course course)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
-        var existing = await ctx.Courses.AnyAsync(c => c.Code == course.Code && c.Year == course.Year && c.SemesterCode == course.SemesterCode);
+        var existing = await ctx.Courses.AnyAsync(c =>
+            c.Code == course.Code && c.Year == course.Year && c.SemesterCode == course.SemesterCode);
         if (existing) return Result.Err<Course, Errors.InsertError>(Errors.InsertError.Conflict);
 
         ctx.Courses.Add(course);
         await ctx.SaveChangesAsync();
         return Result.Ok<Course, Errors.InsertError>(course);
     }
-    
+
     public async Task<Course?> GetCourseAsync(string courseCode, int courseYear, int courseSemesterCode)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
-        return await ctx.Courses.FirstOrDefaultAsync(c => c.Code == courseCode && c.Year == courseYear && c.SemesterCode == courseSemesterCode);
+        return await ctx.Courses.FirstOrDefaultAsync(c =>
+            c.Code == courseCode && c.Year == courseYear && c.SemesterCode == courseSemesterCode);
     }
-    
+
     public async Task<Admin?> GetAdminByIdAsync(string adminId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
