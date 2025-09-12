@@ -20,6 +20,14 @@ public class AppService(
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Students.ToListAsync();
     }
+    
+    public async Task<Attendance> AddAttendanceAsync(Attendance attendance)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        ctx.Attendances.Add(attendance);
+        await ctx.SaveChangesAsync();
+        return attendance;
+    }
 
     public async Task<List<Course>> GetAllCoursesAsync()
     {
@@ -50,6 +58,7 @@ public class AppService(
         return await ctx.Attendances
             .Include(a => a.Student)
             .Include(a => a.Class)
+            .Include(a => a.Class!.Course)
             .Where(a => a.Class!.CourseCode == courseCode &&
                         a.Class.CourseYearId == courseYear &&
                         a.Class.CourseSemesterCode == courseSemesterCode)
@@ -86,7 +95,17 @@ public class AppService(
         await appCache.EvictTeacherAsync(teacher.Id);
         return Result.Ok<Teacher, Errors.UpdateError>(teacher);
     }
+    
+    public async Task<Result<Class, Errors.InsertError>> AddClassAsync(Class @class)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        var existing = await ctx.Classes.AnyAsync(c => c.Id == @class.Id);
+        if (existing) return Result.Err<Class, Errors.InsertError>(Errors.InsertError.Conflict);
 
+        ctx.Classes.Add(@class);
+        await ctx.SaveChangesAsync();
+        return Result.Ok<Class, Errors.InsertError>(@class);
+    }
 
     public async Task<Result<Teacher, Errors.InsertError>> AddTeacherAsync(Teacher teacher)
     {

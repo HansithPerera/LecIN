@@ -64,7 +64,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Attendance>()
             .HasOne(a => a.Student)
             .WithMany()
-            .HasForeignKey(a => a.StudentId)
+            .HasForeignKey(a => a.StudentId);
+
+        modelBuilder.Entity<Attendance>()
+            .HasOne(a => a.Class)
+            .WithMany()
             .HasForeignKey(a => a.ClassId);
 
         modelBuilder.Entity<Enrollment>()
