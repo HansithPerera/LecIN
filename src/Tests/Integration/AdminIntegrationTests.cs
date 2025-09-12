@@ -41,7 +41,8 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
             FirstName = "Admin",
             LastName = "User",
             CreatedAt = DateTimeOffset.UtcNow,
-            Email = "admin@gmail.com"
+            Email = "admin@gmail.com",
+            Permissions = AdminPermissions.FullAccess
         };
         
         appService.AddAdminAsync(admin).GetAwaiter().GetResult();
@@ -53,6 +54,28 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
         var client = _mockAppBuilder.CreateClient();
         var response = await client.GetAsync("/api/Admin/profile");
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task TestUnauthorizedWhenNoPermissions()
+    {
+        var appService = _mockAppBuilder.Services.GetRequiredService<AppService>();
+        var admin = new Admin
+        {
+            Id = nameof(TestUnauthorizedWhenNoPermissions),
+            FirstName = "NoPerms",
+            LastName = "Admin",
+            CreatedAt = DateTimeOffset.UtcNow,
+            Email = "None@none.com",
+            Permissions = AdminPermissions.None
+        };
+        await appService.AddAdminAsync(admin);
+        
+        var client = _mockAppBuilder.CreateClient();
+        client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", nameof(TestUnauthorizedWhenNoPermissions));
+        var response = await client.GetAsync("/api/Admin/teachers");
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
 
     [Fact]
@@ -90,7 +113,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
         var createdTeacher = await response.Content.ReadFromJsonAsync<Teacher>();
         Assert.NotNull(createdTeacher);
         
-        Assert.Equal("New", createdTeacher!.FirstName);
+        Assert.Equal("New", createdTeacher.FirstName);
         Assert.Equal("Teacher", createdTeacher.LastName);
     }
 
@@ -101,6 +124,82 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "admin-1");
         var response = await client.GetAsync("/api/Admin/courses/CS101/2023/1");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task TestExportAttendanceWhenAdmin()
+    {
+        var client = _mockAppBuilder.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "admin-1");
+        var response = await client.GetAsync("/api/Admin/courses/CS101/2023/1/attendance/export");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("text/csv", response.Content.Headers.ContentType?.MediaType);
+    }
+    
+    [Fact] 
+    public async Task TestExportAttendanceWhenNoCourse()
+    {
+        var client = _mockAppBuilder.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "admin-1");
+        var response = await client.GetAsync("/api/Admin/courses/NOPE/2023/1/attendance/export");
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+    
+    [Fact]
+    public async Task TestGetAttendanceWhenAdmin()
+    {
+        var appService = _mockAppBuilder.Services.GetRequiredService<AppService>();
+        var newStudent = new Student
+        {
+            Id = nameof(TestGetCourseWhenAdmin),
+            FirstName = "Student",
+            LastName = "User",
+        };
+        await appService.AddStudentAsync(newStudent);
+        var newClass = new Class
+        {
+            Id = nameof(TestGetCourseWhenAdmin),
+            CourseCode = "CS101",
+            CourseYearId = 2023,
+            CourseSemesterCode = 1,
+            StartTime = DateTimeOffset.UtcNow.AddHours(-1),
+            EndTime = DateTimeOffset.UtcNow.AddHours(1)
+        };
+        await appService.AddClassAsync(newClass);
+        var newAttendance = new Attendance
+        {
+            StudentId = newStudent.Id,
+            ClassId = newClass.Id,
+            Timestamp = DateTimeOffset.UtcNow,
+        };
+        await appService.AddAttendanceAsync(newAttendance);
+        var client = _mockAppBuilder.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "admin-1");
+        var response = await client.GetAsync("/api/Admin/courses/CS101/2023/1/attendance/export");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var csvContent = await response.Content.ReadAsStringAsync();
+        Assert.Contains(newStudent.Id, csvContent);
+    }
+    
+    [Fact]
+    public async Task TestExportAttendanceWhenNoPerms()
+    {
+        var appService = _mockAppBuilder.Services.GetRequiredService<AppService>();
+        var admin = new Admin
+        {
+            Id = nameof(TestExportAttendanceWhenNoPerms),
+            FirstName = "NoPerms",
+            LastName = "Admin",
+            CreatedAt = DateTimeOffset.UtcNow,
+            Email = "none@none.com",
+            Permissions = AdminPermissions.FullAccess & ~AdminPermissions.ExportData
+        };
+        await appService.AddAdminAsync(admin);
+        
+        var client = _mockAppBuilder.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", nameof(TestExportAttendanceWhenNoPerms));
+        var response = await client.GetAsync("/api/Admin/courses/CS101/2023/1/attendance/export");
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
 
     [Fact]
@@ -120,7 +219,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
         
         var createdCourse = await response.Content.ReadFromJsonAsync<Course>();
         Assert.NotNull(createdCourse);
-        Assert.Equal("CS102", createdCourse!.Code);
+        Assert.Equal("CS102", createdCourse.Code);
         Assert.Equal(2023, createdCourse.Year);
         Assert.Equal(1, createdCourse.SemesterCode);
         Assert.Equal("Data Structures", createdCourse.Name);

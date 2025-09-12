@@ -183,7 +183,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Student"
+                    "$ref": "#/components/schemas/Student2"
                   }
                 }
               },
@@ -191,7 +191,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Student"
+                    "$ref": "#/components/schemas/Student2"
                   }
                 }
               },
@@ -199,7 +199,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Student"
+                    "$ref": "#/components/schemas/Student2"
                   }
                 }
               }
@@ -267,17 +267,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Course"
+                  "$ref": "#/components/schemas/Course6"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Course"
+                  "$ref": "#/components/schemas/Course6"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Course"
+                  "$ref": "#/components/schemas/Course6"
                 }
               }
             }
@@ -336,17 +336,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Course"
+                  "$ref": "#/components/schemas/Course6"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Course"
+                  "$ref": "#/components/schemas/Course6"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Course"
+                  "$ref": "#/components/schemas/Course6"
                 }
               }
             }
@@ -443,6 +443,86 @@
         }
       }
     },
+    "/api/Admin/courses/{courseCode}/{courseYear}/{courseSemesterCode}/attendance/export": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "courseCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courseYear",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "courseSemesterCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "byte"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Student/checkin": {
       "post": {
         "tags": [
@@ -506,17 +586,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Student"
+                  "$ref": "#/components/schemas/Student5"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Student"
+                  "$ref": "#/components/schemas/Student5"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Student"
+                  "$ref": "#/components/schemas/Student5"
                 }
               }
             }
@@ -557,7 +637,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Class"
+                    "$ref": "#/components/schemas/Class5"
                   }
                 }
               },
@@ -565,7 +645,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Class"
+                    "$ref": "#/components/schemas/Class5"
                   }
                 }
               },
@@ -573,7 +653,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Class"
+                    "$ref": "#/components/schemas/Class5"
                   }
                 }
               }
@@ -859,7 +939,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Student"
+                    "$ref": "#/components/schemas/Student2"
                   }
                 }
               },
@@ -867,7 +947,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Student"
+                    "$ref": "#/components/schemas/Student2"
                   }
                 }
               },
@@ -875,7 +955,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Student"
+                    "$ref": "#/components/schemas/Student2"
                   }
                 }
               }
@@ -928,7 +1008,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Class"
+                    "$ref": "#/components/schemas/Class5"
                   }
                 }
               },
@@ -936,7 +1016,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Class"
+                    "$ref": "#/components/schemas/Class5"
                   }
                 }
               },
@@ -944,7 +1024,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Class"
+                    "$ref": "#/components/schemas/Class5"
                   }
                 }
               }
@@ -1100,9 +1180,7 @@
       "Attendance": {
         "required": [
           "studentId",
-          "student",
-          "classId",
-          "class"
+          "classId"
         ],
         "type": "object",
         "properties": {
@@ -1111,14 +1189,14 @@
             "type": "string"
           },
           "student": {
-            "$ref": "#/components/schemas/Student"
+            "$ref": "#/components/schemas/Student8"
           },
           "classId": {
             "maxLength": 255,
             "type": "string"
           },
           "class": {
-            "$ref": "#/components/schemas/Class"
+            "$ref": "#/components/schemas/Class7"
           },
           "timestamp": {
             "type": "string",
@@ -1129,8 +1207,7 @@
       "Class": {
         "required": [
           "id",
-          "courseCode",
-          "course"
+          "courseCode"
         ],
         "type": "object",
         "properties": {
@@ -1151,7 +1228,7 @@
             "format": "int32"
           },
           "course": {
-            "$ref": "#/components/schemas/Course"
+            "$ref": "#/components/schemas/Course2"
           },
           "startTime": {
             "type": "string",
@@ -1166,6 +1243,247 @@
             "format": "date-time"
           }
         }
+      },
+      "Class2": {
+        "required": [
+          "id",
+          "courseCode"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course5"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "pattern": "^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$",
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Class3": {
+        "required": [
+          "id",
+          "courseCode"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course7"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "pattern": "^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$",
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Class4": {
+        "required": [
+          "id",
+          "courseCode"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course10"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "pattern": "^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$",
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Class5": {
+        "required": [
+          "id",
+          "courseCode"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course11"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "pattern": "^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$",
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Class6": {
+        "required": [
+          "id",
+          "courseCode"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course14"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "pattern": "^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$",
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Class7": {
+        "required": [
+          "id",
+          "courseCode"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "course": {
+            "$ref": "#/components/schemas/#/items/properties/student/properties/enrollments/items/properties/course/properties/classes/items/properties/course"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "duration": {
+            "pattern": "^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$",
+            "type": "string"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "nullable": true
       },
       "Course": {
         "required": [
@@ -1189,6 +1507,715 @@
           "name": {
             "maxLength": 255,
             "type": "string"
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Class"
+            },
+            "nullable": true
+          },
+          "enrollments": {
+            "$ref": "#/components/schemas/#/items/properties/classes/items/properties/course/properties/enrollments"
+          }
+        }
+      },
+      "Course10": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "$ref": "#/components/schemas/#/properties/enrollments/items/properties/course/properties/classes"
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/#/properties/enrollments/items"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "Course11": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/#/items"
+            },
+            "nullable": true
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Enrollment5"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "Course12": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "$ref": "#/components/schemas/#/items/properties/course/properties/classes"
+          },
+          "enrollments": {
+            "$ref": "#/components/schemas/#/items/properties/course/properties/enrollments"
+          }
+        },
+        "nullable": true
+      },
+      "Course13": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Class6"
+            },
+            "nullable": true
+          },
+          "enrollments": {
+            "$ref": "#/components/schemas/#/items/properties/student/properties/enrollments/items/properties/course/properties/classes/items/properties/course/properties/enrollments"
+          }
+        },
+        "nullable": true
+      },
+      "Course14": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "$ref": "#/components/schemas/#/items/properties/student/properties/enrollments/items/properties/course/properties/classes"
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/#/items/properties/student/properties/enrollments/items"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "Course2": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "$ref": "#/components/schemas/#/items/properties/classes"
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Enrollment"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "Course3": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "$ref": "#/components/schemas/#/items/properties/classes"
+          },
+          "enrollments": {
+            "$ref": "#/components/schemas/#/items/properties/classes/items/properties/course/properties/enrollments"
+          }
+        },
+        "nullable": true
+      },
+      "Course4": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Class2"
+            },
+            "nullable": true
+          },
+          "enrollments": {
+            "$ref": "#/components/schemas/#/items/properties/enrollments/items/properties/course/properties/classes/items/properties/course/properties/enrollments"
+          }
+        },
+        "nullable": true
+      },
+      "Course5": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "$ref": "#/components/schemas/#/items/properties/enrollments/items/properties/course/properties/classes"
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/#/items/properties/enrollments/items"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "Course6": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Class3"
+            },
+            "nullable": true
+          },
+          "enrollments": {
+            "$ref": "#/components/schemas/#/properties/classes/items/properties/course/properties/enrollments"
+          }
+        }
+      },
+      "Course7": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "$ref": "#/components/schemas/#/properties/classes"
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Enrollment3"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "Course8": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "$ref": "#/components/schemas/#/properties/classes"
+          },
+          "enrollments": {
+            "$ref": "#/components/schemas/#/properties/classes/items/properties/course/properties/enrollments"
+          }
+        },
+        "nullable": true
+      },
+      "Course9": {
+        "required": [
+          "code",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "semesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Class4"
+            },
+            "nullable": true
+          },
+          "enrollments": {
+            "$ref": "#/components/schemas/#/properties/enrollments/items/properties/course/properties/classes/items/properties/course/properties/enrollments"
+          }
+        },
+        "nullable": true
+      },
+      "Enrollment": {
+        "required": [
+          "studentId",
+          "courseCode",
+          "courseId"
+        ],
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "student": {
+            "$ref": "#/components/schemas/Student"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course3"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enrolledAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Enrollment2": {
+        "required": [
+          "studentId",
+          "courseCode",
+          "courseId"
+        ],
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "student": {
+            "$ref": "#/components/schemas/Student3"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course4"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enrolledAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Enrollment3": {
+        "required": [
+          "studentId",
+          "courseCode",
+          "courseId"
+        ],
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "student": {
+            "$ref": "#/components/schemas/Student4"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course8"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enrolledAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Enrollment4": {
+        "required": [
+          "studentId",
+          "courseCode",
+          "courseId"
+        ],
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "student": {
+            "$ref": "#/components/schemas/Student6"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course9"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enrolledAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Enrollment5": {
+        "required": [
+          "studentId",
+          "courseCode",
+          "courseId"
+        ],
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "student": {
+            "$ref": "#/components/schemas/Student7"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course12"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enrolledAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Enrollment6": {
+        "required": [
+          "studentId",
+          "courseCode",
+          "courseId"
+        ],
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "student": {
+            "$ref": "#/components/schemas/Student9"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course13"
+          },
+          "courseCode": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseId": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "courseYearId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseSemesterCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "enrolledAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -1277,8 +2304,242 @@
           "lastName": {
             "maxLength": 255,
             "type": "string"
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/#/items/properties/classes/items/properties/course/properties/enrollments/items"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "Student2": {
+        "required": [
+          "id",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "firstName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Enrollment2"
+            },
+            "nullable": true
           }
         }
+      },
+      "Student3": {
+        "required": [
+          "id",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "firstName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "enrollments": {
+            "$ref": "#/components/schemas/#/items/properties/enrollments"
+          }
+        },
+        "nullable": true
+      },
+      "Student4": {
+        "required": [
+          "id",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "firstName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/#/properties/classes/items/properties/course/properties/enrollments/items"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "Student5": {
+        "required": [
+          "id",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "firstName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Enrollment4"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "Student6": {
+        "required": [
+          "id",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "firstName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "enrollments": {
+            "$ref": "#/components/schemas/#/properties/enrollments"
+          }
+        },
+        "nullable": true
+      },
+      "Student7": {
+        "required": [
+          "id",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "firstName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/#/items/properties/course/properties/enrollments/items"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "Student8": {
+        "required": [
+          "id",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "firstName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "enrollments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Enrollment6"
+            },
+            "nullable": true
+          }
+        },
+        "nullable": true
+      },
+      "Student9": {
+        "required": [
+          "id",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "firstName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "enrollments": {
+            "$ref": "#/components/schemas/#/items/properties/student/properties/enrollments"
+          }
+        },
+        "nullable": true
       },
       "Teacher": {
         "required": [
