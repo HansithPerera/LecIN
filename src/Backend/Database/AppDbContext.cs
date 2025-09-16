@@ -16,6 +16,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration
     public DbSet<Attendance> Attendances => Set<Attendance>();
 
     public DbSet<Enrollment> Enrollments => Set<Enrollment>();
+    
+    public DbSet<Camera> Cameras => Set<Camera>();
 
     public DbSet<Admin> Admins => Set<Admin>();
 
@@ -29,6 +31,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration
         modelBuilder.Entity<Student>()
             .HasKey(s => s.Id);
 
+        modelBuilder.Entity<Camera>()
+            .HasKey(c => c.Id);
+        
         modelBuilder.Entity<Teacher>()
             .HasKey(t => t.Id);
 

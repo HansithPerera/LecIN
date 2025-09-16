@@ -21,6 +21,12 @@ public class AppService(
         return await ctx.Students.ToListAsync();
     }
     
+    public async Task<Camera?> GetCameraByApiKeyHashAsync(string apiKeyHash)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Cameras.FirstOrDefaultAsync(c => c.ApiKeyHash == apiKeyHash);
+    }
+    
     public async Task<Attendance> AddAttendanceAsync(Attendance attendance)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();

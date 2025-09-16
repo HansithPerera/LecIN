@@ -15,6 +15,8 @@ public class Class
     public int CourseSemesterCode { get; set; }
 
     public Course? Course { get; set; }
+    
+    [MaxLength(255)] public required string? Location { get; set; }
 
     public DateTimeOffset StartTime { get; set; }
 
