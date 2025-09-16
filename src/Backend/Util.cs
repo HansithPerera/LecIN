@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
+using Backend.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Backend;
@@ -15,9 +17,30 @@ public static class Util
         var bytes = Convert.FromBase64String(base64Secret);
         return new SymmetricSecurityKey(bytes);
     }
-    
+
     public static string GetCacheKey(string prefix, params object[] parts)
     {
         return $"{prefix}:{string.Join(":", parts)}";
+    }
+
+    public static dynamic FlattenAttendance(Attendance attendance)
+    {
+        dynamic result = new ExpandoObject();
+        result.StudentId = attendance.StudentId;
+        result.StudentFirstName = attendance.Student?.FirstName;
+        result.StudentLastName = attendance.Student?.LastName;
+
+        result.ClassId = attendance.ClassId;
+        result.ClassStartTime = attendance.Class?.StartTime;
+        result.ClassEndTime = attendance.Class?.EndTime;
+        result.ClassDuration = attendance.Class?.Duration;
+
+        result.CourseCode = attendance.Class?.CourseCode;
+        result.CourseYearId = attendance.Class?.CourseYearId;
+        result.CourseSemesterCode = attendance.Class?.CourseSemesterCode;
+        result.CourseName = attendance.Class?.Course?.Name;
+
+        result.Timestamp = attendance.Timestamp;
+        return result;
     }
 }

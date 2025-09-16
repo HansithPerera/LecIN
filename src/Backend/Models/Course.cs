@@ -13,4 +13,8 @@ public class Course
     public int SemesterCode { get; set; }
 
     [MaxLength(255)] public required string Name { get; set; }
+
+    public List<Class>? Classes { get; set; }
+
+    public List<Enrollment>? Enrollments { get; set; }
 }

@@ -2,6 +2,7 @@ using System.Reflection;
 using Backend;
 using Backend.Auth;
 using Backend.Database;
+using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,7 +21,7 @@ if (!isMock && !testing)
     builder.Services.AddDbContextFactory<AppDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
-    
+
     // Configure JWT Bearer authentication using the signing key from supabase.
     builder.Services.AddAuthentication().AddJwtBearer(o =>
     {
@@ -43,13 +44,32 @@ builder.Services.AddSingleton<AppCache>();
 
 // Define authorization policies based on user roles.
 builder.Services.AddSingleton<IAuthorizationHandler, UserTypeAuthorization>();
+builder.Services.AddSingleton<IAuthorizationHandler, AdminPermissionAuthorization>();
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(Constants.AdminAuthorizationPolicy,
         policy => policy.Requirements.Add(new ScopeRequirement(UserType.Admin)))
     .AddPolicy(Constants.TeacherAuthorizationPolicy,
         policy => policy.Requirements.Add(new ScopeRequirement(UserType.Teacher)))
     .AddPolicy(Constants.StudentAuthorizationPolicy,
-        policy => policy.Requirements.Add(new ScopeRequirement(UserType.Student)));
+        policy => policy.Requirements.Add(new ScopeRequirement(UserType.Student)))
+    .AddPolicy(Constants.AdminManageCoursesPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ManageCourses)))
+    .AddPolicy(Constants.AdminManageReportsPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ManageReports)))
+    .AddPolicy(Constants.AdminManageTeachersPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ManageTeachers)))
+    .AddPolicy(Constants.AdminManageStudentsPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ManageStudents)))
+    .AddPolicy(Constants.AdminExportDataPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ExportData)))
+    .AddPolicy(Constants.AdminReadTeachersPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ReadTeachers)))
+    .AddPolicy(Constants.AdminReadStudentsPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ReadStudents)))
+    .AddPolicy(Constants.AdminReadCoursesPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ReadCourses)))
+    .AddPolicy(Constants.AdminReadReportsPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ReadReports)));
 
 builder.Services.AddAuthorization();
 

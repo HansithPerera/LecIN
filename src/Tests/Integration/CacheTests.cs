@@ -63,4 +63,30 @@ public class CacheTests: IClassFixture<MockAppBuilder>
         Assert.Equal(fetched1.FirstName, cached.FirstName);
         Assert.Equal(fetched1.LastName, cached.LastName);
     }
+
+    [Fact]
+    public async Task TestAdminAddedToCacheOnFetch()
+    {
+        var service = _builder.Services.GetRequiredService<AppService>();
+        var appCache = _builder.Services.GetRequiredService<AppCache>();
+
+        var admin = new Admin
+        {
+            Id = nameof(TestAdminAddedToCacheOnFetch),
+            FirstName = "Alice",
+            LastName = "Smith",
+            CreatedAt = DateTimeOffset.UtcNow,
+            Email = "test@test.com",
+            Permissions = AdminPermissions.FullAccess
+        };
+        await service.AddAdminAsync(admin);
+        var fetched1 = await service.GetAdminByIdAsync(nameof(TestAdminAddedToCacheOnFetch));
+        Assert.NotNull(fetched1);
+        var cached = await appCache.GetAdminAsync(nameof(TestAdminAddedToCacheOnFetch));
+        Assert.NotNull(cached);
+        Assert.Equal(fetched1.Id, cached!.Id);
+        Assert.Equal(fetched1.FirstName, cached.FirstName);
+        Assert.Equal(fetched1.LastName, cached.LastName);
+        Assert.Equal(fetched1.Email, cached.Email);
+    }
 }

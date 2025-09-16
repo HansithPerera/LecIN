@@ -6,6 +6,8 @@ namespace Backend.Database;
 
 public class AppCache(IDistributedCache cache, ILogger<AppCache> logger)
 {
+    #region Teacher Cache
+
     private const string TeacherCacheKeyPrefix = "teacher-";
 
     public async Task<Teacher?> GetTeacherAsync(string teacherId)
@@ -24,9 +26,11 @@ public class AppCache(IDistributedCache cache, ILogger<AppCache> logger)
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed to deserialize teacher from cache. Removing corrupted entry {TeacherId}", teacherId);
+            logger.LogError(ex, "Failed to deserialize teacher from cache. Removing corrupted entry {TeacherId}",
+                teacherId);
             await cache.RemoveAsync(key);
         }
+
         return null;
     }
 
@@ -49,4 +53,55 @@ public class AppCache(IDistributedCache cache, ILogger<AppCache> logger)
         await cache.RemoveAsync(key);
         logger.LogDebug("Removed teacher {TeacherId} from cache", teacherId);
     }
+
+    #endregion
+
+    #region Admin Cache
+
+    private const string AdminCacheKeyPrefix = "admin-";
+
+    public async Task EvictAdminAsync(string adminId)
+    {
+        var key = Util.GetCacheKey(AdminCacheKeyPrefix, adminId);
+        await cache.RemoveAsync(key);
+        logger.LogDebug("Removed admin {AdminId} from cache", adminId);
+    }
+
+    public async Task<Admin?> GetAdminAsync(string adminId)
+    {
+        var key = Util.GetCacheKey(AdminCacheKeyPrefix, adminId);
+        var cached = await cache.GetStringAsync(key);
+        if (string.IsNullOrEmpty(cached)) return null;
+        try
+        {
+            var admin = JsonConvert.DeserializeObject<Admin>(cached);
+            if (admin != null)
+            {
+                logger.LogDebug("Cache hit for admin {AdminId}", adminId);
+                return admin;
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to deserialize admin from cache. Removing corrupted entry {AdminId}", adminId);
+            await cache.RemoveAsync(key);
+        }
+
+        return null;
+    }
+
+    public async Task SetAdminAsync(Admin admin)
+    {
+        var serialized = JsonConvert.SerializeObject(admin);
+        var options = new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10),
+            SlidingExpiration = TimeSpan.FromMinutes(5)
+        };
+        var key = Util.GetCacheKey(AdminCacheKeyPrefix, admin.Id);
+        await cache.SetStringAsync(key, serialized, options);
+        logger.LogDebug("Set admin {AdminId} in cache", admin.Id);
+    }
+
+    #endregion
 }

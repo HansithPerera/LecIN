@@ -6,11 +6,11 @@ namespace Backend.Models;
 [Table("Enrollments")]
 public class Enrollment
 {
-    [MaxLength(255)]
-    [ForeignKey(nameof(Student))]
-    public required string StudentId { get; set; }
+    [MaxLength(255)] public required string StudentId { get; set; }
 
-    public required Student Student { get; set; }
+    public Student? Student { get; set; }
+
+    public Course? Course { get; set; }
 
     [MaxLength(255)] public required string CourseCode { get; set; }
 

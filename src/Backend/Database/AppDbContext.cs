@@ -14,17 +14,41 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Course> Courses => Set<Course>();
 
     public DbSet<Attendance> Attendances => Set<Attendance>();
-    
+
     public DbSet<Enrollment> Enrollments => Set<Enrollment>();
-    
+
     public DbSet<Admin> Admins => Set<Admin>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("private");
 
+        modelBuilder.Entity<Admin>()
+            .HasKey(a => a.Id);
+
+        modelBuilder.Entity<Student>()
+            .HasKey(s => s.Id);
+
+        modelBuilder.Entity<Teacher>()
+            .HasKey(t => t.Id);
+
+        modelBuilder.Entity<Student>()
+            .HasMany(s => s.Enrollments)
+            .WithOne(e => e.Student)
+            .HasForeignKey(e => e.StudentId);
+
         modelBuilder.Entity<Course>()
             .HasKey(c => new { c.Code, c.Year, c.SemesterCode });
+
+        modelBuilder.Entity<Course>()
+            .HasMany(c => c.Classes)
+            .WithOne(cl => cl.Course)
+            .HasForeignKey(cl => new { cl.CourseCode, cl.CourseYearId, cl.CourseSemesterCode });
+
+        modelBuilder.Entity<Course>()
+            .HasMany(c => c.Enrollments)
+            .WithOne(e => e.Course)
+            .HasForeignKey(e => new { e.CourseCode, e.CourseYearId, e.CourseSemesterCode });
 
         modelBuilder.Entity<Class>()
             .HasKey(c => c.Id);
@@ -40,7 +64,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Attendance>()
             .HasOne(a => a.Student)
             .WithMany()
-            .HasForeignKey(a => a.StudentId)
+            .HasForeignKey(a => a.StudentId);
+
+        modelBuilder.Entity<Attendance>()
+            .HasOne(a => a.Class)
+            .WithMany()
             .HasForeignKey(a => a.ClassId);
 
         modelBuilder.Entity<Enrollment>()
