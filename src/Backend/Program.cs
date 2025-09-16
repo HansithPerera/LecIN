@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
 var isMock = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
-var testing = builder.Environment.IsEnvironment("Testing");
+var testing = builder.Environment.IsEnvironment(Constants.TestingEnv);
 
 // Configure the database context and authentication only if not in mock or testing mode.
 if (!isMock && !testing)
@@ -29,7 +29,7 @@ if (!isMock && !testing)
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = Util.GetSymmetricSecurityKey(builder.Configuration["SigningKey"] ?? string.Empty),
-            ValidAudiences = ["authenticated"],
+            ValidAudiences = [Constants.SupabaseAuthenticatedRole],
             ValidIssuer = Util.GetSupabaseIssuer(builder.Configuration["SupabaseProjectId"] ?? string.Empty)
         };
     });
@@ -79,7 +79,7 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-if (app.Environment.IsEnvironment("Dev")) app.MapOpenApi();
+if (app.Environment.IsEnvironment(Constants.DevelopmentEnv)) app.MapOpenApi();
 
 app.UseHttpsRedirection();
 

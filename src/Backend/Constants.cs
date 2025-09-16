@@ -5,6 +5,25 @@ namespace Backend;
 
 public static class Constants
 {
+
+    #region Environments
+
+    public const string DevelopmentEnv = "Dev";
+    
+    public const string ProductionEnv = "Prod";
+    
+    public const string TestingEnv = "Testing";
+
+    #endregion
+    
+    #region Supabase
+
+    public const string SupabaseAuthenticatedRole = "authenticated";
+
+    #endregion
+    
+    #region Policies
+
     public const string AdminAuthorizationPolicy = nameof(UserType.Admin);
     public const string TeacherAuthorizationPolicy = nameof(UserType.Teacher);
     public const string StudentAuthorizationPolicy = nameof(UserType.Student);
@@ -23,4 +42,8 @@ public static class Constants
     public const string AdminReadReportsPermission = nameof(AdminPermissions.ReadReports);
 
     #endregion
+
+    #endregion
+    
+
 }
