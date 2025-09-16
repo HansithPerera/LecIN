@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
+using System.Security.Cryptography;
+using System.Text;
 using Backend.Models;
 using Microsoft.IdentityModel.Tokens;
 
@@ -21,6 +23,13 @@ public static class Util
     public static string GetCacheKey(string prefix, params object[] parts)
     {
         return $"{prefix}:{string.Join(":", parts)}";
+    }
+    
+    public static string HashApiKey(string apiKey)
+    {
+        var bytes = Encoding.UTF8.GetBytes(apiKey);
+        var hash = SHA256.HashData(bytes);
+        return Convert.ToBase64String(hash);
     }
 
     public static dynamic FlattenAttendance(Attendance attendance)

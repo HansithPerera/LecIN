@@ -3,6 +3,7 @@ using Backend;
 using Backend.Auth;
 using Backend.Database;
 using Backend.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -22,17 +23,23 @@ if (!isMock && !testing)
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 
-    // Configure JWT Bearer authentication using the signing key from supabase.
-    builder.Services.AddAuthentication().AddJwtBearer(o =>
-    {
-        o.TokenValidationParameters = new TokenValidationParameters
+    builder.Services.AddAuthentication()
+        // Configure JWT Bearer authentication using the signing key from supabase.
+        .AddJwtBearer(o =>
         {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = Util.GetSymmetricSecurityKey(builder.Configuration["SigningKey"] ?? string.Empty),
-            ValidAudiences = [Constants.SupabaseAuthenticatedRole],
-            ValidIssuer = Util.GetSupabaseIssuer(builder.Configuration["SupabaseProjectId"] ?? string.Empty)
-        };
-    });
+            o.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = Util.GetSymmetricSecurityKey(builder.Configuration["SigningKey"] ?? string.Empty),
+                ValidAudiences = [Constants.SupabaseAuthenticatedRole],
+                ValidIssuer = Util.GetSupabaseIssuer(builder.Configuration["SupabaseProjectId"] ?? string.Empty)
+            };
+        })
+        // Configure API Key authentication using apiKey header.
+        .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(
+            "ApiKey",
+            _ => { }
+        );
 }
 
 // Repository service for data access.
