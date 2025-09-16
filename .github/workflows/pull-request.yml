@@ -1,0 +1,49 @@
+﻿name: Docker
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+on:
+  pull_request:
+    branches: [ "main" ]
+    tags: [ 'v*.*.*' ]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      # Setup .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      
+      # Restore, build, and test the .NET project
+      - name: Restore dependencies
+        working-directory: "./src"
+        run: dotnet restore
+      - name: Build
+        working-directory: "./src"
+        run: dotnet build --no-restore
+      - name: Test
+        working-directory: "./src"
+        run: dotnet test --no-build --verbosity normal
