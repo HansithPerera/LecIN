@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) : DbContext(options)
 {
     public DbSet<Student> Students => Set<Student>();
 
@@ -21,8 +21,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("private");
-
+        modelBuilder.HasDefaultSchema(configuration["DatabaseSchema"] ?? "public");
+        
         modelBuilder.Entity<Admin>()
             .HasKey(a => a.Id);
 

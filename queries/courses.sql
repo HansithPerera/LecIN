@@ -1,0 +1,22 @@
+﻿INSERT INTO "Courses" ("Code", "Year", "SemesterCode", "Name")
+VALUES
+    ('CS101', 2022, 1, 'Introduction to Computer Science'),
+    ('MA102', 2022, 1, 'Calculus I'),
+    ('PH103', 2022, 1, 'Physics Fundamentals'),
+    ('EN104', 2022, 1, 'English Composition'),
+    ('EC105', 2022, 1, 'Microeconomics'),
+    ('CS201', 2022, 2, 'Data Structures'),
+    ('MA202', 2022, 2, 'Calculus II'),
+    ('PH203', 2022, 2, 'Modern Physics'),
+    ('EN204', 2022, 2, 'Literature Studies'),
+    ('EC205', 2022, 2, 'Macroeconomics'),
+    ('CS301', 2023, 2, 'Algorithms'),
+    ('MA302', 2023, 2, 'Linear Algebra'),
+    ('PH303', 2023, 2, 'Electromagnetism'),
+    ('EN304', 2023, 2, 'Creative Writing'),
+    ('EC305', 2023, 2, 'Econometrics'),
+    ('CS401', 2023, 2, 'Operating Systems'),
+    ('MA402', 2023, 2, 'Statistics'),
+    ('PH403', 2023, 2, 'Quantum Mechanics'),
+    ('EN404', 2023, 2, 'Shakespearean Studies'),
+    ('EC405', 2023, 2, 'International Economics');
