@@ -16,8 +16,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration
     public DbSet<Attendance> Attendances => Set<Attendance>();
 
     public DbSet<Enrollment> Enrollments => Set<Enrollment>();
-    
+
     public DbSet<Camera> Cameras => Set<Camera>();
+    
+    public DbSet<ApiKey> ApiKeys => Set<ApiKey>();
+    
+    public DbSet<CameraApiKey> CameraApiKeys => Set<CameraApiKey>();
 
     public DbSet<Admin> Admins => Set<Admin>();
 
