@@ -6,7 +6,7 @@ namespace Backend.Models;
 [Table("Classes")]
 public class Class
 {
-    [MaxLength(255)] public required string Id { get; set; }
+    [MaxLength(255)] public required Guid Id { get; set; }
 
     [MaxLength(255)] public required string CourseCode { get; set; }
 
