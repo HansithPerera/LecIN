@@ -16,10 +16,10 @@ public class CameraTests : IClassFixture<MockAppBuilder>
     public CameraTests(MockAppBuilder mockAppBuilder)
     {
         _mockAppBuilder = mockAppBuilder;
-        _apiKey = SeedCamera(_mockAppBuilder.Services.GetRequiredService<AppService>());
+        _apiKey = SeedCamera(_mockAppBuilder.Services.GetRequiredService<Repository>());
     }
 
-    private static string SeedCamera(AppService appService)
+    private static string SeedCamera(Repository repository)
     {
         var camera = new Camera
         {
@@ -32,9 +32,9 @@ public class CameraTests : IClassFixture<MockAppBuilder>
 
         var apiKey = ApiKey.Create(out var key, "Camera API Key");
 
-        appService.CreateApiKeyAsync(apiKey).GetAwaiter().GetResult();
-        appService.CreateCameraAsync(camera).GetAwaiter().GetResult();
-        appService.SetCameraApiKeyAsync(camera.Id, apiKey.Id, ApiKeyRole.Primary).GetAwaiter().GetResult();
+        repository.CreateApiKeyAsync(apiKey).GetAwaiter().GetResult();
+        repository.CreateCameraAsync(camera).GetAwaiter().GetResult();
+        repository.SetCameraApiKeyAsync(camera.Id, apiKey.Id, ApiKeyRole.Primary).GetAwaiter().GetResult();
         return key;
     }
 
@@ -68,7 +68,7 @@ public class CameraTests : IClassFixture<MockAppBuilder>
     public async Task TestForbiddenWhenApiKeyNotCamera()
     {
         var apiKey = ApiKey.Create(out var unhashedKey, "Not a camera key");
-        var appService = _mockAppBuilder.Services.GetRequiredService<AppService>();
+        var appService = _mockAppBuilder.Services.GetRequiredService<Repository>();
         await appService.CreateApiKeyAsync(apiKey);
         var client = _mockAppBuilder.CreateClient();
         client.DefaultRequestHeaders.Add(Constants.ApiKeyHeaderName, unhashedKey);

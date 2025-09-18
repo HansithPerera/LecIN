@@ -19,13 +19,13 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     public AdminIntegrationTests(MockAppBuilder mockAppBuilder)
     {
         _mockAppBuilder = mockAppBuilder;
-        var dataService = _mockAppBuilder.Services.GetRequiredService<AppService>();
+        var dataService = _mockAppBuilder.Services.GetRequiredService<Repository>();
         SeedAdmin(dataService);
         SeedCourse(dataService);
         SeedCamera(dataService);
     }
     
-    private void SeedCourse(AppService appService)
+    private void SeedCourse(Repository repository)
     {
         var course = new Course
         {
@@ -35,10 +35,10 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
             Name = "Introduction to Computer Science"
         };
         
-        appService.AddCourseAsync(course).GetAwaiter().GetResult();
+        repository.AddCourseAsync(course).GetAwaiter().GetResult();
     }
     
-    private static void SeedCamera(AppService appService)
+    private static void SeedCamera(Repository repository)
     {
         var camera = new Camera
         {
@@ -50,10 +50,10 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
             UpdatedAt = DateTimeOffset.UtcNow
         };
         
-        appService.CreateCameraAsync(camera).GetAwaiter().GetResult();
+        repository.CreateCameraAsync(camera).GetAwaiter().GetResult();
     }
     
-    private static void SeedAdmin(AppService appService)
+    private static void SeedAdmin(Repository repository)
     {
         var admin = new Admin
         {
@@ -65,7 +65,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
             Permissions = AdminPermissions.FullAccess
         };
         
-        appService.AddAdminAsync(admin).GetAwaiter().GetResult();
+        repository.AddAdminAsync(admin).GetAwaiter().GetResult();
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     [Fact]
     public async Task TestUnauthorizedWhenNoPermissions()
     {
-        var appService = _mockAppBuilder.Services.GetRequiredService<AppService>();
+        var appService = _mockAppBuilder.Services.GetRequiredService<Repository>();
         var admin = new Admin
         {
             FirstName = "NoPerms",
@@ -167,7 +167,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     [Fact]
     public async Task TestGetAttendanceWhenAdmin()
     {
-        var appService = _mockAppBuilder.Services.GetRequiredService<AppService>();
+        var appService = _mockAppBuilder.Services.GetRequiredService<Repository>();
         var newStudent = new Student
         {
             FirstName = "Student",
@@ -202,7 +202,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     [Fact]
     public async Task TestExportAttendanceWhenNoPerms()
     {
-        var appService = _mockAppBuilder.Services.GetRequiredService<AppService>();
+        var appService = _mockAppBuilder.Services.GetRequiredService<Repository>();
         var admin = new Admin
         {
             FirstName = "NoPerms",

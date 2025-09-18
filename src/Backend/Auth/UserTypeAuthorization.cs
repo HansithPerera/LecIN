@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Auth;
 
-public class UserTypeAuthorization(AppService service) : AuthorizationHandler<ScopeRequirement>
+public class UserTypeAuthorization(Repository service) : AuthorizationHandler<ScopeRequirement>
 {
     protected override async Task HandleRequirementAsync(
         AuthorizationHandlerContext context,

@@ -17,7 +17,7 @@ public class CacheTests: IClassFixture<MockAppBuilder>
     [Fact]
     public async Task TestTeacherCacheEvictionOnDelete()
     {
-        var service = _builder.Services.GetRequiredService<AppService>();
+        var service = _builder.Services.GetRequiredService<Repository>();
         var teacher = new Teacher
         {
             Id = TeacherId,
@@ -40,7 +40,7 @@ public class CacheTests: IClassFixture<MockAppBuilder>
     [Fact]
     public async Task TestTeacherAddedToCacheOnFetch()
     {
-        var service = _builder.Services.GetRequiredService<AppService>();
+        var service = _builder.Services.GetRequiredService<Repository>();
         var appCache = _builder.Services.GetRequiredService<AppCache>();
         
         var teacher = new Teacher
@@ -67,7 +67,7 @@ public class CacheTests: IClassFixture<MockAppBuilder>
     [Fact]
     public async Task TestAdminAddedToCacheOnFetch()
     {
-        var service = _builder.Services.GetRequiredService<AppService>();
+        var service = _builder.Services.GetRequiredService<Repository>();
         var appCache = _builder.Services.GetRequiredService<AppCache>();
 
         var admin = new Admin

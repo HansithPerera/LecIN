@@ -2,7 +2,7 @@
 using Backend.Dto.Resp;
 using Backend.Face;
 using Backend.Models;
-using Backend.Rules;
+using Backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +11,7 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 [Authorize(Policy = Constants.CameraAuthorizationPolicy, AuthenticationSchemes = Constants.ApiKeyAuthScheme)]
 [ApiController]
-public class CameraController(AppService service, FaceService faceService) : ControllerBase
+public class CameraController(Repository service, CameraService cameraService, FaceService faceService) : ControllerBase
 {
     [HttpGet("details")]
     [ProducesResponseType(typeof(Camera), StatusCodes.Status200OK)]
@@ -33,7 +33,7 @@ public class CameraController(AppService service, FaceService faceService) : Con
     {
         if (!Guid.TryParse(HttpContext.User.Identity?.Name, out var apiKeyId)) return Unauthorized();
 
-        var classroomResult = await CameraRules.GetOngoingClass(apiKeyId, service);
+        var classroomResult = await CameraService.GetOngoingClass(apiKeyId, service);
         if (classroomResult.IsErr)
             return classroomResult.UnwrapErr() switch
             {
@@ -47,7 +47,7 @@ public class CameraController(AppService service, FaceService faceService) : Con
         var classroom = classroomResult.Unwrap();
 
         await using var stream = file.OpenReadStream();
-        var checkinResult = await CameraRules.CheckFaceIntoClass(classroom.Id, stream, service, faceService);
+        var checkinResult = await cameraService.CheckFaceIntoClass(classroom.Id, stream);
 
         if (checkinResult.IsErr)
             return checkinResult.UnwrapErr() switch

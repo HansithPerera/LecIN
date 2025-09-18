@@ -13,13 +13,13 @@ public class AuthIntegrationTests : IClassFixture<MockAppBuilder>
     public AuthIntegrationTests(MockAppBuilder mockAppBuilder)
     {
         _mockAppBuilder = mockAppBuilder;
-        var dataService = _mockAppBuilder.Services.GetRequiredService<AppService>();
+        var dataService = _mockAppBuilder.Services.GetRequiredService<Repository>();
         SeedTeacher(dataService);
     }
 
     private static readonly Guid TeacherId = Guid.NewGuid();
     
-    private static void SeedTeacher(AppService appService)
+    private static void SeedTeacher(Repository repository)
     {
         var teacher = new Teacher
         {
@@ -29,7 +29,7 @@ public class AuthIntegrationTests : IClassFixture<MockAppBuilder>
             CreatedAt = DateTimeOffset.UtcNow
         };
         
-        appService.AddTeacherAsync(teacher).GetAwaiter().GetResult();
+        repository.AddTeacherAsync(teacher).GetAwaiter().GetResult();
     }
 
 

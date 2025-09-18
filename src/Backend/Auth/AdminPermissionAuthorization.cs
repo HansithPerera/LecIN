@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Auth;
 
-public class AdminPermissionAuthorization(AppService service) : AuthorizationHandler<AdminPermRequirement>
+public class AdminPermissionAuthorization(Repository service) : AuthorizationHandler<AdminPermRequirement>
 {
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
         AdminPermRequirement requirement)

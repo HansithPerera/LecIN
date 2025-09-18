@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Auth;
 
-public class IntegrationAuthorizationHandler(AppService service) : AuthorizationHandler<IntegrationRequirement>
+public class IntegrationAuthorizationHandler(Repository service) : AuthorizationHandler<IntegrationRequirement>
 {
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
         IntegrationRequirement requirement)

@@ -3,9 +3,9 @@ using Backend.Dto.Req;
 using Backend.Models;
 using ResultSharp;
 
-namespace Backend.Rules;
+namespace Backend.Services;
 
-public static class TeacherRules
+public class TeacherService(Repository repo)
 {
     public static Result<NewTeacherReq, Errors.NewTeacherError> IsValidTeacher(NewTeacherReq teacher)
     {
@@ -34,15 +34,14 @@ public static class TeacherRules
         });
     }
 
-    public static async Task<Result<Teacher, Errors.NewTeacherError>> AddNewTeacherAsync(NewTeacherReq teacherReq,
-        AppService repository)
+    public async Task<Result<Teacher, Errors.NewTeacherError>> AddNewTeacherAsync(NewTeacherReq teacherReq)
     {
         var newTeacherResult = CreateTeacherFromReq(teacherReq);
         if (newTeacherResult.IsErr) return Result.Err<Teacher, Errors.NewTeacherError>(newTeacherResult.UnwrapErr());
 
         var newTeacher = newTeacherResult.Unwrap();
 
-        var createdTeacherResult = await repository.AddTeacherAsync(newTeacher);
+        var createdTeacherResult = await repo.AddTeacherAsync(newTeacher);
         if (createdTeacherResult.IsOk) return Result.Ok<Teacher, Errors.NewTeacherError>(newTeacher);
 
         var error = createdTeacherResult.UnwrapErr();
