@@ -36,8 +36,6 @@ jobs:
         with:
           path: |
             ~/.nuget/packages
-            ~/.dotnet/tools
-            ~/.dotnet/packs
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
