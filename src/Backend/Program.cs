@@ -64,6 +64,14 @@ builder.Services.AddAuthorizationBuilder()
         policy => policy.Requirements.Add(new ScopeRequirement(UserType.Teacher)))
     .AddPolicy(Constants.StudentAuthorizationPolicy,
         policy => policy.Requirements.Add(new ScopeRequirement(UserType.Student)))
+    .AddPolicy(Constants.AdminManageApiKeysPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ManageApiKeys)))
+    .AddPolicy(Constants.AdminReadApiKeysPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ReadApiKeys)))
+    .AddPolicy(Constants.AdminManageCamerasPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ManageCameras)))
+    .AddPolicy(Constants.AdminReadCamerasPermission,
+        policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ReadCameras)))
     .AddPolicy(Constants.AdminManageCoursesPermission,
         policy => policy.Requirements.Add(new AdminPermRequirement(AdminPermissions.ManageCourses)))
     .AddPolicy(Constants.AdminManageReportsPermission,

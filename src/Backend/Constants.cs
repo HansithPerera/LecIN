@@ -45,8 +45,12 @@ public static class Constants
     public const string AdminManageReportsPermission = nameof(AdminPermissions.ManageReports);
     public const string AdminManageTeachersPermission = nameof(AdminPermissions.ManageTeachers);
     public const string AdminManageStudentsPermission = nameof(AdminPermissions.ManageStudents);
+    public const string AdminManageApiKeysPermission = nameof(AdminPermissions.ManageApiKeys);
+    public const string AdminManageCamerasPermission = nameof(AdminPermissions.ManageCameras);
 
     public const string AdminReadTeachersPermission = nameof(AdminPermissions.ReadTeachers);
+    public const string AdminReadCamerasPermission = nameof(AdminPermissions.ReadCameras);
+    public const string AdminReadApiKeysPermission = nameof(AdminPermissions.ReadApiKeys);
     public const string AdminReadStudentsPermission = nameof(AdminPermissions.ReadStudents);
     public const string AdminReadCoursesPermission = nameof(AdminPermissions.ReadCourses);
     public const string AdminReadReportsPermission = nameof(AdminPermissions.ReadReports);
