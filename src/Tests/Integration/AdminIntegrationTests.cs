@@ -22,6 +22,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
         var dataService = _mockAppBuilder.Services.GetRequiredService<AppService>();
         SeedAdmin(dataService);
         SeedCourse(dataService);
+        SeedCamera(dataService);
     }
     
     private void SeedCourse(AppService appService)
