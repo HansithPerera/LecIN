@@ -51,6 +51,8 @@ jobs:
       - name: Restore dependencies
         working-directory: "./src"
         run: dotnet restore --locked-mode
+      - name: Restore workloads
+        run: dotnet workload restore
       - name: Build
         working-directory: "./src"
         run: dotnet build --no-restore
