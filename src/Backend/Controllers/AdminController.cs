@@ -2,7 +2,7 @@
 using Backend.Dto.Req;
 using Backend.Dto.Resp;
 using Backend.Models;
-using Backend.Rules;
+using Backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static System.DateTime;
@@ -12,7 +12,7 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Policy = Constants.AdminAuthorizationPolicy)]
-public class AdminController(AppService service) : ControllerBase
+public class AdminController(Repository repo, CourseService courseService, CameraService cameraService, TeacherService teacherService) : ControllerBase
 {
     [HttpGet("profile")]
     [ProducesResponseType(typeof(Admin), StatusCodes.Status200OK)]
@@ -22,7 +22,7 @@ public class AdminController(AppService service) : ControllerBase
         var userId = User.Identity?.Name;
         if (!Guid.TryParse(userId, out var guid))
             return NotFound("User ID not found in token.");
-        var admin = await service.GetAdminByIdAsync(guid);
+        var admin = await repo.GetAdminByIdAsync(guid);
         return admin == null
             ? NotFound("Admin not found.")
             : Ok(admin);
@@ -34,7 +34,7 @@ public class AdminController(AppService service) : ControllerBase
     [Authorize(Policy = Constants.AdminReadTeachersPermission)]
     public async Task<IActionResult> GetAllTeachers()
     {
-        return Ok(await service.GetAllTeachersAsync());
+        return Ok(await repo.GetAllTeachersAsync());
     }
 
     [HttpGet("courses")]
@@ -43,7 +43,7 @@ public class AdminController(AppService service) : ControllerBase
     [Authorize(Policy = Constants.AdminReadCoursesPermission)]
     public async Task<IActionResult> GetAllCourses()
     {
-        return Ok(await service.GetAllCoursesAsync());
+        return Ok(await repo.GetAllCoursesAsync());
     }
 
     [HttpGet("cameras")]
@@ -52,7 +52,7 @@ public class AdminController(AppService service) : ControllerBase
     [Authorize(Policy = Constants.AdminReadCamerasPermission)]
     public async Task<IActionResult> GetAllCameras()
     {
-        return Ok(await service.GetAllCamerasAsync());
+        return Ok(await repo.GetAllCamerasAsync());
     }
 
     [HttpGet("cameras/{id}")]
@@ -61,7 +61,7 @@ public class AdminController(AppService service) : ControllerBase
     [Authorize(Policy = Constants.AdminReadCamerasPermission)]
     public async Task<IActionResult> GetCameraById(Guid id)
     {
-        var camera = await service.GetCameraByIdAsync(id);
+        var camera = await repo.GetCameraByIdAsync(id);
         return camera == null
             ? NotFound("Camera not found.")
             : Ok(camera);
@@ -73,7 +73,7 @@ public class AdminController(AppService service) : ControllerBase
     [Authorize(Policy = Constants.AdminManageCamerasPermission)]
     public async Task<IActionResult> CreateCamera([FromBody] NewCameraReq req)
     {
-        var creationResult = await CameraRules.CreateCameraAsync(req.Name, req.Location, service);
+        var creationResult = await cameraService.CreateCameraAsync(req.Name, req.Location);
         if (creationResult.IsErr)
             return creationResult.UnwrapErr() switch
             {
@@ -95,7 +95,7 @@ public class AdminController(AppService service) : ControllerBase
         if (!Enum.IsDefined(typeof(ApiKeyRole), role))
             return BadRequest("Invalid role specified. Must be 1 (Primary) or 2 (Secondary).");
 
-        var generateResult = await CameraRules.RegenerateCameraApiKeyAsync(cameraId, (ApiKeyRole) role, service);
+        var generateResult = await cameraService.RegenerateCameraApiKeyAsync(cameraId, (ApiKeyRole) role);
         if (generateResult.IsErr)
             return generateResult.UnwrapErr() switch
             {
@@ -118,7 +118,7 @@ public class AdminController(AppService service) : ControllerBase
     [Authorize(Policy = Constants.AdminReadStudentsPermission)]
     public async Task<IActionResult> GetAllStudents()
     {
-        return Ok(await service.GetAllStudentsAsync());
+        return Ok(await repo.GetAllStudentsAsync());
     }
 
     [HttpGet("courses/{courseCode}/{courseYear}/{courseSemesterCode}")]
@@ -127,7 +127,7 @@ public class AdminController(AppService service) : ControllerBase
     [Authorize(Policy = Constants.AdminReadCoursesPermission)]
     public async Task<IActionResult> GetCourse(string courseCode, int courseYear, int courseSemesterCode)
     {
-        var course = await service.GetCourseAsync(courseCode, courseYear, courseSemesterCode);
+        var course = await repo.GetCourseAsync(courseCode, courseYear, courseSemesterCode);
         return course == null
             ? NotFound("Course not found.")
             : Ok(course);
@@ -140,7 +140,7 @@ public class AdminController(AppService service) : ControllerBase
     [Authorize(Policy = Constants.AdminManageCoursesPermission)]
     public async Task<IActionResult> CreateCourse([FromBody] NewCourseReq course)
     {
-        var creationResult = await CourseRules.AddNewCourse(course, service);
+        var creationResult = await courseService.AddNewCourse(course);
         if (creationResult.IsErr)
             return creationResult.UnwrapErr() switch
             {
@@ -163,7 +163,7 @@ public class AdminController(AppService service) : ControllerBase
     [Authorize(Policy = Constants.AdminManageTeachersPermission)]
     public async Task<IActionResult> CreateTeacher([FromBody] NewTeacherReq teacher)
     {
-        var creationResult = await TeacherRules.AddNewTeacherAsync(teacher, service);
+        var creationResult = await teacherService.AddNewTeacherAsync(teacher);
         if (creationResult.IsErr)
             return creationResult.UnwrapErr() switch
             {
@@ -184,7 +184,7 @@ public class AdminController(AppService service) : ControllerBase
     public async Task<IActionResult> ExportCourseAttendanceCsv(string courseCode, int courseYear,
         int courseSemesterCode)
     {
-        var result = await CourseRules.ExportCourseAttendanceToCsv(courseCode, courseYear, courseSemesterCode, service);
+        var result = await courseService.ExportCourseAttendanceToCsv(courseCode, courseYear, courseSemesterCode);
         if (result.IsErr)
             return result.UnwrapErr() switch
             {

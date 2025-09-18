@@ -6,9 +6,9 @@ using Backend.Models;
 using CsvHelper;
 using ResultSharp;
 
-namespace Backend.Rules;
+namespace Backend.Services;
 
-public static class CourseRules
+public class CourseService(Repository repo)
 {
     public static Result<NewCourseReq, Errors.NewCourseError> IsValidCourse(NewCourseReq course)
     {
@@ -37,15 +37,15 @@ public static class CourseRules
         });
     }
 
-    public static async Task<Result<Stream, Errors.GetError>> ExportCourseAttendanceToCsv(string courseCode,
+    public async Task<Result<Stream, Errors.GetError>> ExportCourseAttendanceToCsv(string courseCode,
         int courseYear,
-        int courseSemesterCode, AppService service)
+        int courseSemesterCode)
     {
-        var course = await service.GetCourseAsync(courseCode, courseYear, courseSemesterCode);
+        var course = await repo.GetCourseAsync(courseCode, courseYear, courseSemesterCode);
         if (course == null)
             return Result.Err<Stream, Errors.GetError>(Errors.GetError.NotFound);
 
-        var attendanceData = await service.GetCourseAttendance(courseCode, courseYear, courseSemesterCode);
+        var attendanceData = await repo.GetCourseAttendance(courseCode, courseYear, courseSemesterCode);
 
         var flattenedRecords = attendanceData.Select(a => Util.FlattenAttendance(a)).ToList();
 
@@ -61,15 +61,14 @@ public static class CourseRules
         return Result.Ok<Stream, Errors.GetError>(stream);
     }
 
-    public static async Task<Result<Course, Errors.NewCourseError>> AddNewCourse(NewCourseReq courseReq,
-        AppService service)
+    public async Task<Result<Course, Errors.NewCourseError>> AddNewCourse(NewCourseReq courseReq)
     {
         var newCourseResult = CreateCourseFromReq(courseReq);
         if (newCourseResult.IsErr) return Result.Err<Course, Errors.NewCourseError>(newCourseResult.UnwrapErr());
 
         var newCourse = newCourseResult.Unwrap();
 
-        var createdCourseResult = await service.AddCourseAsync(newCourse);
+        var createdCourseResult = await repo.AddCourseAsync(newCourse);
         if (!createdCourseResult.IsErr) return Result.Ok<Course, Errors.NewCourseError>(newCourse);
 
         var error = createdCourseResult.UnwrapErr();

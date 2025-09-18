@@ -10,7 +10,7 @@ public class ApiKeyAuthenticationHandler(
     IOptionsMonitor<AuthenticationSchemeOptions> options,
     ILoggerFactory logger,
     UrlEncoder encoder,
-    AppService service)
+    Repository service)
     : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
 {
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()

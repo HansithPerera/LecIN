@@ -3,11 +3,10 @@ using Backend.Face;
 using Backend.Models;
 using ResultSharp;
 
-namespace Backend.Rules;
+namespace Backend.Services;
 
-public class CameraRules
+public class CameraService(Repository repo, FaceService faceService) 
 {
-    
     public static Result<Camera, Errors.NewCameraError> ValidateNewCamera(string name, string location)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -17,14 +16,14 @@ public class CameraRules
         return Result.Ok<Camera, Errors.NewCameraError>(new Camera { Name = name, Location = location });
     }
     
-    public static async Task<Result<Camera, Errors.NewCameraError>> CreateCameraAsync(string name, string location, AppService service)
+    public async Task<Result<Camera, Errors.NewCameraError>> CreateCameraAsync(string name, string location)
     {
         var validationResult = ValidateNewCamera(name, location);
         if (validationResult.IsErr) 
             return validationResult;
         
         var camera = validationResult.Unwrap();
-        var result = await service.CreateCameraAsync(camera);
+        var result = await repo.CreateCameraAsync(camera);
         if (result.IsErr)
             return result.UnwrapErr() switch
             {
@@ -35,12 +34,11 @@ public class CameraRules
         return Result.Ok<Camera, Errors.NewCameraError>(camera);
     }
 
-    public static async Task<Result<RecognizedFace, Errors.FaceRecognitionError>> AnalyzeFace(Stream imageStream,
-        FaceService service)
+    public async Task<Result<RecognizedFace, Errors.FaceRecognitionError>> AnalyzeFace(Stream imageStream)
     {
         try
         {
-            var recognizedFaces = await service.RecognizeFacesAsync(imageStream);
+            var recognizedFaces = await faceService.RecognizeFacesAsync(imageStream);
             return recognizedFaces.Count switch
             {
                 0 => Result.Err<RecognizedFace, Errors.FaceRecognitionError>(
@@ -62,7 +60,7 @@ public class CameraRules
     }
 
 
-    public static async Task<Result<Class, Errors.ClassRetrievalError>> GetOngoingClass(Guid apiKeyId, AppService service)
+    public static async Task<Result<Class, Errors.ClassRetrievalError>> GetOngoingClass(Guid apiKeyId, Repository service)
     {
         var camera = await service.GetCameraByApiKeyIdAsync(apiKeyId);
         if (camera == null) return Result.Err<Class, Errors.ClassRetrievalError>(Errors.ClassRetrievalError.NoCameraFound);
@@ -72,12 +70,11 @@ public class CameraRules
             : Result.Ok<Class, Errors.ClassRetrievalError>(classroom);
     }
 
-    public static async Task<Result<Attendance, Errors.CheckInError>> CheckFaceIntoClass(Guid classId, Stream imageStream,
-        AppService service, FaceService faceService)
+    public async Task<Result<Attendance, Errors.CheckInError>> CheckFaceIntoClass(Guid classId, Stream imageStream)
     {
-        var classroom = await service.GetClassByIdAsync(classId);
+        var classroom = await repo.GetClassByIdAsync(classId);
         if (classroom == null) return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.ClassNotFound);
-        var analysisResult = await AnalyzeFace(imageStream, faceService);
+        var analysisResult = await AnalyzeFace(imageStream);
         if (analysisResult.IsErr)
             return Result.Err<Attendance, Errors.CheckInError>(
                 analysisResult.UnwrapErr() == Errors.FaceRecognitionError.UnknownError
@@ -86,14 +83,14 @@ public class CameraRules
             );
 
         var recognizedFace = analysisResult.Unwrap();
-        var student = await service.GetStudentByFaceId(recognizedFace.PersonId);
+        var student = await repo.GetStudentByFaceId(recognizedFace.PersonId);
         if (student == null) return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.StudentNotFound);
 
-        var enrolled = await service.IsStudentEnrolledInCourseAsync(student.Id, classroom.CourseCode,
+        var enrolled = await repo.IsStudentEnrolledInCourseAsync(student.Id, classroom.CourseCode,
             classroom.CourseYearId, classroom.CourseSemesterCode);
         if (!enrolled) return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.StudentNotEnrolled);
 
-        var attendance = await service.CreateAttendanceAsync(student.Id, classroom.Id);
+        var attendance = await repo.CreateAttendanceAsync(student.Id, classroom.Id);
         return Result.Ok<Attendance, Errors.CheckInError>(attendance);
     }
     
@@ -103,15 +100,15 @@ public class CameraRules
         public required string UnhashedKey { get; set; }
     }
 
-    public static async Task<Result<GeneratedApiKey, Errors.GenerateCameraApiKeyError>> RegenerateCameraApiKeyAsync(Guid cameraId, ApiKeyRole role, AppService service)
+    public async Task<Result<GeneratedApiKey, Errors.GenerateCameraApiKeyError>> RegenerateCameraApiKeyAsync(Guid cameraId, ApiKeyRole role)
     {
-        var camera = await service.GetCameraByIdAsync(cameraId);
+        var camera = await repo.GetCameraByIdAsync(cameraId);
         if (camera == null)
             return Result.Err<GeneratedApiKey, Errors.GenerateCameraApiKeyError>(Errors.GenerateCameraApiKeyError.CameraNotFound);
 
         var newApiKey = ApiKey.Create(out var unhashedKey, "Camera API Key");
-        newApiKey = await service.CreateApiKeyAsync(newApiKey);
-        var generatedCameraKey = await service.SetCameraApiKeyAsync(cameraId, newApiKey.Id, ApiKeyRole.Primary);
+        newApiKey = await repo.CreateApiKeyAsync(newApiKey);
+        var generatedCameraKey = await repo.SetCameraApiKeyAsync(cameraId, newApiKey.Id, role);
         generatedCameraKey.ApiKey = newApiKey;
         return Result.Ok<GeneratedApiKey, Errors.GenerateCameraApiKeyError>(new GeneratedApiKey
         {

@@ -4,6 +4,7 @@ using Backend.Auth;
 using Backend.Database;
 using Backend.Face;
 using Backend.Models;
+using Backend.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -43,8 +44,13 @@ if (!isMock && !testing)
 }
 
 // Repository service for data access.
-builder.Services.AddSingleton<AppService>();
+builder.Services.AddSingleton<Repository>();
 builder.Services.AddSingleton<FaceService>();
+
+// Application services.
+builder.Services.AddSingleton<TeacherService>();
+builder.Services.AddSingleton<CourseService>();
+builder.Services.AddSingleton<CameraService>();
 
 // In-memory caching service.
 builder.Services.AddDistributedMemoryCache();

@@ -4,10 +4,10 @@ using ResultSharp;
 
 namespace Backend.Database;
 
-public class AppService(
+public class Repository(
     IDbContextFactory<AppDbContext> dbContextFactory,
     AppCache appCache,
-    ILogger<AppService> logger)
+    ILogger<Repository> logger)
 {
     public async Task<Student?> GetStudentByIdAsync(Guid studentId)
     {

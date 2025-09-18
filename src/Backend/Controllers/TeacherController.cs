@@ -8,7 +8,7 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Policy = Constants.TeacherAuthorizationPolicy)]
-public class TeacherController(AppService repository) : ControllerBase
+public class TeacherController(Repository repository) : ControllerBase
 {
     #region GET
 
