@@ -48,7 +48,7 @@ jobs:
       
       - name: Restore dependencies
         working-directory: "./src"
-        run: dotnet restore --locked-mode
+        run: dotnet restore
 
       - name: Build
         working-directory: "./src"
