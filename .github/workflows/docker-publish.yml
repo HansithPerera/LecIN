@@ -20,7 +20,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
       contents: read
       packages: write
@@ -32,6 +32,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
       # Setup .NET SDK
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -39,9 +46,14 @@ jobs:
           dotnet-version: 9.0.x
           
       # Restore, build, and test the .NET project
+      - name: Restore workloads
+        working-directory: "./src"
+        run: dotnet workload restore
+        
       - name: Restore dependencies
         working-directory: "./src"
         run: dotnet restore
+
       - name: Build
         working-directory: "./src"
         run: dotnet build --no-restore
