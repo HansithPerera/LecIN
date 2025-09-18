@@ -24,11 +24,16 @@
         <Content Include="..\.dockerignore">
             <Link>.dockerignore</Link>
         </Content>
+        <Content Include="packages.lock.json" />
     </ItemGroup>
 
     <PropertyGroup>
         <OpenApiGenerateDocumentsOptions>--file-name OpenApi</OpenApiGenerateDocumentsOptions>
         <OpenApiDocumentsDirectory>.</OpenApiDocumentsDirectory>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>
 
 </Project>

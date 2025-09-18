@@ -75,4 +75,8 @@
         <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.4"/>
     </ItemGroup>
 
+    <PropertyGroup>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    </PropertyGroup>
+
 </Project>
