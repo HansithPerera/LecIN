@@ -254,12 +254,16 @@ public class AppService(
         return cameraApiKey?.Camera;
     }
 
-    public async Task<Camera> CreateCameraAsync(Camera camera)
+    public async Task<Result<Camera, Errors.InsertError>> CreateCameraAsync(Camera camera)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        
+        var existing = await ctx.Cameras.AnyAsync(c => c.Id == camera.Id);
+        if (existing) return Result.Err<Camera, Errors.InsertError>(Errors.InsertError.Conflict);
+            
         ctx.Cameras.Add(camera);
         await ctx.SaveChangesAsync();
-        return camera;
+        return Result.Ok<Camera, Errors.InsertError>(camera);
     }
     
     public async Task<ApiKey> CreateApiKeyAsync(ApiKey key)

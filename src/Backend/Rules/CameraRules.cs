@@ -24,7 +24,14 @@ public class CameraRules
             return validationResult;
         
         var camera = validationResult.Unwrap();
-        await service.CreateCameraAsync(camera);
+        var result = await service.CreateCameraAsync(camera);
+        if (result.IsErr)
+            return result.UnwrapErr() switch
+            {
+                Errors.InsertError.Conflict =>
+                    Result.Err<Camera, Errors.NewCameraError>(Errors.NewCameraError.Conflict),
+                _ => Result.Err<Camera, Errors.NewCameraError>(Errors.NewCameraError.UnknownError)
+            };
         return Result.Ok<Camera, Errors.NewCameraError>(camera);
     }
 
