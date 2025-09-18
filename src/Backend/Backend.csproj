@@ -7,6 +7,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="Azure.AI.Vision.Face" Version="1.0.0-beta.2"/>
         <PackageReference Include="CsvHelper" Version="33.1.0"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.8"/>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.8"/>
@@ -23,9 +24,6 @@
         <Content Include="..\.dockerignore">
             <Link>.dockerignore</Link>
         </Content>
-    </ItemGroup>
-    <ItemGroup>
-        <Folder Include="Dto\Resp\"/>
     </ItemGroup>
 
     <PropertyGroup>

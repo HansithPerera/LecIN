@@ -17,17 +17,51 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration
 
     public DbSet<Enrollment> Enrollments => Set<Enrollment>();
 
+    public DbSet<Camera> Cameras => Set<Camera>();
+
+    public DbSet<ApiKey> ApiKeys => Set<ApiKey>();
+
+    public DbSet<CameraApiKey> CameraApiKeys => Set<CameraApiKey>();
+
     public DbSet<Admin> Admins => Set<Admin>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(configuration["DatabaseSchema"] ?? "public");
+
+        modelBuilder.Entity<ApiKey>()
+            .HasKey(k => k.Id);
+
+        modelBuilder.Entity<CameraApiKey>()
+            .HasKey(k => new { k.CameraId, k.Role });
         
+        modelBuilder.Entity<CameraApiKey>()
+            .HasIndex(k => k.ApiKeyId)
+            .IsUnique();
+        
+        modelBuilder.Entity<CameraApiKey>()
+            .HasOne(k => k.ApiKey)
+            .WithMany()
+            .HasForeignKey(k => k.ApiKeyId);
+        
+        modelBuilder.Entity<CameraApiKey>()
+            .HasOne(k => k.Camera)
+            .WithMany(c => c.CameraApiKeys)
+            .HasForeignKey(k => k.CameraId);
+
         modelBuilder.Entity<Admin>()
             .HasKey(a => a.Id);
 
         modelBuilder.Entity<Student>()
             .HasKey(s => s.Id);
+
+        modelBuilder.Entity<Camera>()
+            .HasKey(c => c.Id);
+
+        modelBuilder.Entity<Camera>()
+            .HasMany(c => c.CameraApiKeys)
+            .WithOne(k => k.Camera)
+            .HasForeignKey(k => k.CameraId);
 
         modelBuilder.Entity<Teacher>()
             .HasKey(t => t.Id);

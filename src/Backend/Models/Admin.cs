@@ -7,7 +7,7 @@ namespace Backend.Models;
 public enum AdminPermissions
 {
     None = 0,
-    FullAccess = ManageCourses | ManageReports | ManageTeachers | ManageStudents | ExportData,
+    FullAccess = ManageCourses | ManageReports | ManageTeachers | ManageStudents | ExportData | ManageApiKeys | ManageCameras,
 
     #region Export
 
@@ -21,7 +21,9 @@ public enum AdminPermissions
     ManageReports = (1 << 2) | ReadReports,
     ManageTeachers = (1 << 3) | ReadTeachers,
     ManageStudents = (1 << 4) | ReadStudents,
-
+    ManageApiKeys = (1 << 11) | ReadApiKeys,
+    ManageCameras = (1 << 12) | ReadCameras,
+    
     #endregion
 
     #region Read
@@ -30,6 +32,8 @@ public enum AdminPermissions
     ReadStudents = 1 << 6,
     ReadCourses = 1 << 7,
     ReadReports = 1 << 8,
+    ReadApiKeys = 1 << 9,
+    ReadCameras = 1 << 10,
 
     #endregion
 }
@@ -37,7 +41,7 @@ public enum AdminPermissions
 [Table("Admins")]
 public class Admin
 {
-    [MaxLength(255)] public required string Id { get; set; }
+    [MaxLength(255)] public Guid Id { get; set; } = Guid.NewGuid();
 
     [MaxLength(255)] public required string FirstName { get; set; }
 

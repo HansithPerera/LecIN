@@ -6,7 +6,7 @@ namespace Backend.Models;
 [Table("Enrollments")]
 public class Enrollment
 {
-    [MaxLength(255)] public required string StudentId { get; set; }
+    [MaxLength(255)] public Guid StudentId { get; set; }
 
     public Student? Student { get; set; }
 

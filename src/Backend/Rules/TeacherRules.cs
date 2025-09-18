@@ -27,7 +27,7 @@ public static class TeacherRules
 
         return Result.Ok<Teacher, Errors.NewTeacherError>(new Teacher
         {
-            Id = Guid.NewGuid().ToString(),
+            Id = Guid.NewGuid(),
             FirstName = teacherReq.FirstName,
             LastName = teacherReq.LastName,
             CreatedAt = DateTimeOffset.UtcNow

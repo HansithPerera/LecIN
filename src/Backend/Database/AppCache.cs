@@ -10,7 +10,7 @@ public class AppCache(IDistributedCache cache, ILogger<AppCache> logger)
 
     private const string TeacherCacheKeyPrefix = "teacher-";
 
-    public async Task<Teacher?> GetTeacherAsync(string teacherId)
+    public async Task<Teacher?> GetTeacherAsync(Guid teacherId)
     {
         var key = Util.GetCacheKey(TeacherCacheKeyPrefix, teacherId);
         var cached = await cache.GetStringAsync(key);
@@ -47,7 +47,7 @@ public class AppCache(IDistributedCache cache, ILogger<AppCache> logger)
         logger.LogDebug("Set teacher {TeacherId} in cache", teacher.Id);
     }
 
-    public async Task EvictTeacherAsync(string teacherId)
+    public async Task EvictTeacherAsync(Guid teacherId)
     {
         var key = Util.GetCacheKey(TeacherCacheKeyPrefix, teacherId);
         await cache.RemoveAsync(key);
@@ -60,14 +60,14 @@ public class AppCache(IDistributedCache cache, ILogger<AppCache> logger)
 
     private const string AdminCacheKeyPrefix = "admin-";
 
-    public async Task EvictAdminAsync(string adminId)
+    public async Task EvictAdminAsync(Guid adminId)
     {
         var key = Util.GetCacheKey(AdminCacheKeyPrefix, adminId);
         await cache.RemoveAsync(key);
         logger.LogDebug("Removed admin {AdminId} from cache", adminId);
     }
 
-    public async Task<Admin?> GetAdminAsync(string adminId)
+    public async Task<Admin?> GetAdminAsync(Guid adminId)
     {
         var key = Util.GetCacheKey(AdminCacheKeyPrefix, adminId);
         var cached = await cache.GetStringAsync(key);

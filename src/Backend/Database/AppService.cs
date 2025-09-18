@@ -9,7 +9,7 @@ public class AppService(
     AppCache appCache,
     ILogger<AppService> logger)
 {
-    public async Task<Student?> GetStudentByIdAsync(string studentId)
+    public async Task<Student?> GetStudentByIdAsync(Guid studentId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Students.FirstOrDefaultAsync(s => s.Id == studentId);
@@ -20,7 +20,19 @@ public class AppService(
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Students.ToListAsync();
     }
-    
+
+    public async Task<bool> IsCameraApiKey(Guid apiKeyId)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.CameraApiKeys.AnyAsync(k => k.ApiKeyId == apiKeyId);
+    }
+
+    public async Task<ApiKey?> GetApiKeyByHashAsync(string apiKeyHash)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.ApiKeys.FirstOrDefaultAsync(k => k.Hash == apiKeyHash && k.IsActive);
+    }
+
     public async Task<Attendance> AddAttendanceAsync(Attendance attendance)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
@@ -34,7 +46,7 @@ public class AppService(
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Courses.ToListAsync();
     }
-    
+
     public async Task<Student> AddStudentAsync(Student student)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
@@ -65,9 +77,45 @@ public class AppService(
             .ToListAsync();
     }
 
+    public async Task<Student?> GetStudentByFaceId(string recognizedFacePersonId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> IsStudentEnrolledInCourseAsync(Guid studentId, string courseCode, int courseYearId,
+        int courseSemesterCode)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Enrollments.AnyAsync(e =>
+            e.StudentId == studentId &&
+            e.CourseCode == courseCode &&
+            e.CourseYearId == courseYearId &&
+            e.CourseSemesterCode == courseSemesterCode);
+    }
+
+    public async Task<Attendance> CreateAttendanceAsync(Guid studentId, Guid classId)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        var attendance = new Attendance
+        {
+            StudentId = studentId,
+            ClassId = classId,
+            Timestamp = DateTimeOffset.UtcNow
+        };
+        ctx.Attendances.Add(attendance);
+        await ctx.SaveChangesAsync();
+        return attendance;
+    }
+
     #region Teacher
 
-    public async Task<Teacher?> GetTeacherByIdAsync(string teacherId)
+    public async Task<Class?> GetClassByIdAsync(Guid classId)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Classes.Include(c => c.Course).FirstOrDefaultAsync(c => c.Id == classId);
+    }
+
+    public async Task<Teacher?> GetTeacherByIdAsync(Guid teacherId)
     {
         var fromCache = await appCache.GetTeacherAsync(teacherId);
         if (fromCache != null) return fromCache;
@@ -95,7 +143,7 @@ public class AppService(
         await appCache.EvictTeacherAsync(teacher.Id);
         return Result.Ok<Teacher, Errors.UpdateError>(teacher);
     }
-    
+
     public async Task<Result<Class, Errors.InsertError>> AddClassAsync(Class @class)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
@@ -118,7 +166,7 @@ public class AppService(
         return Result.Ok<Teacher, Errors.InsertError>(teacher);
     }
 
-    public async Task<Result<bool, Errors.DeleteError>> DeleteTeacherAsync(string teacherId)
+    public async Task<Result<bool, Errors.DeleteError>> DeleteTeacherAsync(Guid teacherId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         var teacher = await ctx.Teachers.FirstOrDefaultAsync(t => t.Id == teacherId);
@@ -130,7 +178,7 @@ public class AppService(
         return Result.Ok<bool, Errors.DeleteError>(true);
     }
 
-    public async Task<bool> TeacherExistsAsync(string teacherId)
+    public async Task<bool> TeacherExistsAsync(Guid teacherId)
     {
         var teacher = await GetTeacherByIdAsync(teacherId);
         return teacher != null;
@@ -159,16 +207,16 @@ public class AppService(
             c.Code == courseCode && c.Year == courseYear && c.SemesterCode == courseSemesterCode);
     }
 
-    public async Task<Admin?> GetAdminByIdAsync(string adminId)
+    public async Task<Admin?> GetAdminByIdAsync(Guid adminId)
     {
         var fromCache = await appCache.GetAdminAsync(adminId);
         if (fromCache != null) return fromCache;
-        
+
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Admins.FirstOrDefaultAsync(a => a.Id == adminId);
     }
 
-    public async Task<bool> AdminExistsAsync(string adminId)
+    public async Task<bool> AdminExistsAsync(Guid adminId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Admins.AnyAsync(a => a.Id == adminId);
@@ -187,4 +235,78 @@ public class AppService(
     }
 
     #endregion
+
+    #region Camera
+
+    public async Task<Class?> GetClassByLocationTimeAsync(string location, DateTimeOffset time)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Classes.Include(c => c.Course)
+            .FirstOrDefaultAsync(c => c.Location == location && c.StartTime <= time && c.EndTime >= time);
+    }
+
+    public async Task<Camera?> GetCameraByApiKeyIdAsync(Guid apiKeyId)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        var cameraApiKey = await ctx.CameraApiKeys
+            .Include(k => k.Camera)
+            .FirstOrDefaultAsync(k => k.ApiKeyId == apiKeyId);
+        return cameraApiKey?.Camera;
+    }
+
+    public async Task<Result<Camera, Errors.InsertError>> CreateCameraAsync(Camera camera)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        
+        var existing = await ctx.Cameras.AnyAsync(c => c.Id == camera.Id);
+        if (existing) return Result.Err<Camera, Errors.InsertError>(Errors.InsertError.Conflict);
+            
+        ctx.Cameras.Add(camera);
+        await ctx.SaveChangesAsync();
+        return Result.Ok<Camera, Errors.InsertError>(camera);
+    }
+    
+    public async Task<ApiKey> CreateApiKeyAsync(ApiKey key)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        ctx.ApiKeys.Add(key);
+        await ctx.SaveChangesAsync();
+        return key;
+    }
+
+    public async Task<CameraApiKey> SetCameraApiKeyAsync(Guid cameraId, Guid apiKeyId, ApiKeyRole role)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        var existing = await ctx.CameraApiKeys.FirstOrDefaultAsync(k => k.CameraId == cameraId && k.Role == role);
+        if (existing != null)
+        {
+            existing.ApiKeyId = apiKeyId;
+            ctx.CameraApiKeys.Update(existing);
+            await ctx.SaveChangesAsync();
+            return existing;
+        }
+        var cameraApiKey = new CameraApiKey
+        {
+            CameraId = cameraId,
+            ApiKeyId = apiKeyId,
+            Role = role
+        };
+        ctx.CameraApiKeys.Add(cameraApiKey);
+        await ctx.SaveChangesAsync();
+        return cameraApiKey;
+    }
+
+    #endregion
+
+    public async Task<List<Camera>?> GetAllCamerasAsync()
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Cameras.ToListAsync();
+    }
+
+    public async Task<Camera?> GetCameraByIdAsync(Guid id)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Cameras.FirstOrDefaultAsync(c => c.Id == id);
+    }
 }

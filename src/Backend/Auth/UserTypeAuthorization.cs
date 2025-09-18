@@ -10,7 +10,7 @@ public class UserTypeAuthorization(AppService service) : AuthorizationHandler<Sc
         ScopeRequirement requirement)
     {
         var userId = context.User.Identity?.Name;
-        if (string.IsNullOrEmpty(userId))
+        if (!Guid.TryParse(userId, out var userGuid))
         {
             context.Fail();
             return;
@@ -18,9 +18,9 @@ public class UserTypeAuthorization(AppService service) : AuthorizationHandler<Sc
 
         var hasRole = requirement.Scope switch
         {
-            UserType.Admin => await service.GetAdminByIdAsync(userId) != null,
-            UserType.Teacher => await service.GetTeacherByIdAsync(userId) != null,
-            UserType.Student => await service.GetStudentByIdAsync(userId) != null,
+            UserType.Admin => await service.GetAdminByIdAsync(userGuid) != null,
+            UserType.Teacher => await service.GetTeacherByIdAsync(userGuid) != null,
+            UserType.Student => await service.GetStudentByIdAsync(userGuid) != null,
             _ => false
         };
 

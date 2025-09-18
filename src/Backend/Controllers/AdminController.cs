@@ -1,5 +1,6 @@
 ﻿using Backend.Database;
 using Backend.Dto.Req;
+using Backend.Dto.Resp;
 using Backend.Models;
 using Backend.Rules;
 using Microsoft.AspNetCore.Authorization;
@@ -19,9 +20,9 @@ public class AdminController(AppService service) : ControllerBase
     public async Task<IActionResult> GetProfile()
     {
         var userId = User.Identity?.Name;
-        if (string.IsNullOrEmpty(userId))
+        if (!Guid.TryParse(userId, out var guid))
             return NotFound("User ID not found in token.");
-        var admin = await service.GetAdminByIdAsync(userId);
+        var admin = await service.GetAdminByIdAsync(guid);
         return admin == null
             ? NotFound("Admin not found.")
             : Ok(admin);
@@ -43,6 +44,72 @@ public class AdminController(AppService service) : ControllerBase
     public async Task<IActionResult> GetAllCourses()
     {
         return Ok(await service.GetAllCoursesAsync());
+    }
+
+    [HttpGet("cameras")]
+    [ProducesResponseType(typeof(List<Camera>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = Constants.AdminReadCamerasPermission)]
+    public async Task<IActionResult> GetAllCameras()
+    {
+        return Ok(await service.GetAllCamerasAsync());
+    }
+
+    [HttpGet("cameras/{id}")]
+    [ProducesResponseType(typeof(Camera), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = Constants.AdminReadCamerasPermission)]
+    public async Task<IActionResult> GetCameraById(Guid id)
+    {
+        var camera = await service.GetCameraByIdAsync(id);
+        return camera == null
+            ? NotFound("Camera not found.")
+            : Ok(camera);
+    }
+    
+    [HttpPost("cameras")]
+    [ProducesResponseType(typeof(Camera), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Authorize(Policy = Constants.AdminManageCamerasPermission)]
+    public async Task<IActionResult> CreateCamera([FromBody] NewCameraReq req)
+    {
+        var creationResult = await CameraRules.CreateCameraAsync(req.Name, req.Location, service);
+        if (creationResult.IsErr)
+            return creationResult.UnwrapErr() switch
+            {
+                Errors.NewCameraError.MissingLocation => BadRequest("Camera location is required."),
+                Errors.NewCameraError.MissingName => BadRequest("Camera name is required."),
+                Errors.NewCameraError.Conflict => Conflict("A camera at the same location already exists."),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, "An unknown error occurred.")
+            };
+        var createdCamera = creationResult.Unwrap();
+        return CreatedAtAction(nameof(GetCameraById), new { id = createdCamera.Id }, createdCamera);
+    }
+
+    [HttpPost("cameras/{cameraId:guid}/regenerate-key/{role:int}")]
+    [ProducesResponseType(typeof(Camera), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = Constants.AdminManageCamerasPermission)]
+    public async Task<IActionResult> RegenerateCameraApiKey(Guid cameraId, int role)
+    {
+        if (!Enum.IsDefined(typeof(ApiKeyRole), role))
+            return BadRequest("Invalid role specified. Must be 1 (Primary) or 2 (Secondary).");
+
+        var generateResult = await CameraRules.RegenerateCameraApiKeyAsync(cameraId, (ApiKeyRole) role, service);
+        if (generateResult.IsErr)
+            return generateResult.UnwrapErr() switch
+            {
+                Errors.GenerateCameraApiKeyError.CameraNotFound => NotFound("Camera not found."),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, "An unknown error occurred.")
+            };
+        
+        var generatedKey = generateResult.Unwrap();
+        return Ok(new GeneratedApiKeyDto
+        {
+            ApiKeyId = generatedKey.CameraApiKey.ApiKeyId,
+            ApiKey = generatedKey.UnhashedKey,
+            Prefix = generatedKey.CameraApiKey.ApiKey!.Prefix
+        });
     }
 
     [HttpGet("students")]
