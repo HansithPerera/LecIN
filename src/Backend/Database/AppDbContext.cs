@@ -29,6 +29,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration
     {
         modelBuilder.HasDefaultSchema(configuration["DatabaseSchema"] ?? "public");
         
+        modelBuilder.Entity<ApiKey>()
+            .HasKey(k => k.Id);
+        
+        modelBuilder.Entity<CameraApiKey>()
+            .HasKey(k => k.ApiKeyId);
+        
         modelBuilder.Entity<Admin>()
             .HasKey(a => a.Id);
 
@@ -37,6 +43,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration
 
         modelBuilder.Entity<Camera>()
             .HasKey(c => c.Id);
+        
+        modelBuilder.Entity<Camera>()
+            .HasMany(c => c.CameraApiKeys)
+            .WithOne(k => k.Camera)
+            .HasForeignKey(k => k.CameraId);
         
         modelBuilder.Entity<Teacher>()
             .HasKey(t => t.Id);

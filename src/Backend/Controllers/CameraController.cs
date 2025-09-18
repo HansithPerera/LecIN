@@ -1,11 +1,11 @@
-﻿using Backend.Rules;
+﻿using Backend.Face;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CameraController: ControllerBase
+public class CameraController(FaceService faceService): ControllerBase
 {
     [HttpPost("face")]
     [ProducesResponseType(StatusCodes.Status200OK)]

@@ -22,13 +22,6 @@ public class CameraRules
         public required float Confidence { get; set; }
     }
     
-    public static async Task<bool> IsCameraAuthorized(string apiKeyHash, AppService service)
-    {
-        var camera = await service.GetCameraByApiKeyHashAsync(apiKeyHash);
-        return camera is { IsActive: true };
-    }
-
-    
     public static async Task<Result<RecognizedFace, FaceRecognitionError>> AnalyzeFace(Stream imageStream)
     {
         throw new NotImplementedException();   
