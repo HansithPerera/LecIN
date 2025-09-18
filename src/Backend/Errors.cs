@@ -40,4 +40,38 @@ public static class Errors
         NotFound,
         Conflict
     }
+    
+    public enum CheckInError
+    {
+        FaceRecognitionFailed,
+        StudentNotFound,
+        AlreadyCheckedIn,
+        ClassNotFound,
+        StudentNotEnrolled,
+        UnknownError
+    }
+
+    public enum ClassRetrievalError
+    {
+        NoCameraFound,
+        NoClassFound,
+        UnknownError
+    }
+
+    public enum FaceRecognitionError
+    {
+        NoFaceDetected,
+        MultipleFacesDetected,
+        RecognitionFailed,
+        InvalidImageFormat,
+        UnknownError
+    }
+
+    public enum NewCameraError
+    {
+        MissingLocation,
+        MissingName,
+        Conflict,
+        UnknownError,
+    }
 }

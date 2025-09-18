@@ -293,4 +293,16 @@ public class AppService(
     }
 
     #endregion
+
+    public async Task<List<Camera>?> GetAllCamerasAsync()
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Cameras.ToListAsync();
+    }
+
+    public async Task<Camera?> GetCameraByIdAsync(Guid id)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Cameras.FirstOrDefaultAsync(c => c.Id == id);
+    }
 }

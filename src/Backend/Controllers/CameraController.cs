@@ -37,9 +37,9 @@ public class CameraController(AppService service, FaceService faceService) : Con
         if (classroomResult.IsErr)
             return classroomResult.UnwrapErr() switch
             {
-                CameraRules.ClassRetrievalError.NoCameraFound =>
+                Errors.ClassRetrievalError.NoCameraFound =>
                     Unauthorized(),
-                CameraRules.ClassRetrievalError.NoClassFound =>
+                Errors.ClassRetrievalError.NoClassFound =>
                     NotFound("No class found at this location and time."),
                 _ => StatusCode(500, "An unknown error occurred.")
             };
@@ -52,13 +52,13 @@ public class CameraController(AppService service, FaceService faceService) : Con
         if (checkinResult.IsErr)
             return checkinResult.UnwrapErr() switch
             {
-                CameraRules.CheckInError.ClassNotFound =>
+                Errors.CheckInError.ClassNotFound =>
                     NotFound("Class not found."),
-                CameraRules.CheckInError.StudentNotFound =>
+                Errors.CheckInError.StudentNotFound =>
                     NotFound("Student not found."),
-                CameraRules.CheckInError.StudentNotEnrolled =>
+                Errors.CheckInError.StudentNotEnrolled =>
                     BadRequest("Student is not enrolled in this class."),
-                CameraRules.CheckInError.FaceRecognitionFailed =>
+                Errors.CheckInError.FaceRecognitionFailed =>
                     BadRequest("Face recognition failed. Ensure the image is clear and contains a single face."),
                 _ => StatusCode(500, "An unknown error occurred.")
             };

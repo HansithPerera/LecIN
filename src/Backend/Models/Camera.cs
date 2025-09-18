@@ -14,7 +14,7 @@ public class Camera
 
     [Column("IsActive")] public bool IsActive { get; set; }
 
-    [Column("CreatedAt")] public DateTimeOffset CreatedAt { get; set; }
+    [Column("CreatedAt")] public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
     [Column("UpdatedAt")] public DateTimeOffset UpdatedAt { get; set; }
 
