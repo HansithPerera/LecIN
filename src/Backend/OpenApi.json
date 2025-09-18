@@ -523,6 +523,144 @@
         }
       }
     },
+    "/api/Camera/details": {
+      "get": {
+        "tags": [
+          "Camera"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Camera"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Camera"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Camera"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Camera/face": {
+      "post": {
+        "tags": [
+          "Camera"
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ContentType": {
+                    "type": "string"
+                  },
+                  "ContentDisposition": {
+                    "type": "string"
+                  },
+                  "Headers": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "Length": {
+                    "type": "integer",
+                    "format": "int64"
+                  },
+                  "Name": {
+                    "type": "string"
+                  },
+                  "FileName": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Student/checkin": {
       "post": {
         "tags": [
@@ -1136,7 +1274,6 @@
     "schemas": {
       "Admin": {
         "required": [
-          "id",
           "firstName",
           "lastName",
           "email",
@@ -1146,7 +1283,8 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "firstName": {
             "maxLength": 255,
@@ -1177,6 +1315,9 @@
       "AdminPermissions": {
         "type": "integer"
       },
+      "ApiKeyRole": {
+        "type": "integer"
+      },
       "Attendance": {
         "required": [
           "studentId",
@@ -1186,14 +1327,16 @@
         "properties": {
           "studentId": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "student": {
             "$ref": "#/components/schemas/Student8"
           },
           "classId": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "class": {
             "$ref": "#/components/schemas/Class7"
@@ -1204,16 +1347,116 @@
           }
         }
       },
+      "Camera": {
+        "required": [
+          "name",
+          "location"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "location": {
+            "maxLength": 2048,
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "cameraApiKeys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CameraApiKey"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "Camera2": {
+        "required": [
+          "name",
+          "location"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "location": {
+            "maxLength": 2048,
+            "type": "string"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "cameraApiKeys": {
+            "$ref": "#/components/schemas/#/properties/cameraApiKeys"
+          }
+        },
+        "nullable": true
+      },
+      "CameraApiKey": {
+        "required": [
+          "cameraId",
+          "apiKeyId",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "cameraId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "camera": {
+            "$ref": "#/components/schemas/Camera2"
+          },
+          "apiKeyId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ApiKeyRole"
+          }
+        }
+      },
       "Class": {
         "required": [
-          "id",
-          "courseCode"
+          "courseCode",
+          "location"
         ],
         "type": "object",
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "courseCode": {
             "maxLength": 255,
@@ -1229,6 +1472,11 @@
           },
           "course": {
             "$ref": "#/components/schemas/Course2"
+          },
+          "location": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
           },
           "startTime": {
             "type": "string",
@@ -1246,14 +1494,15 @@
       },
       "Class2": {
         "required": [
-          "id",
-          "courseCode"
+          "courseCode",
+          "location"
         ],
         "type": "object",
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "courseCode": {
             "maxLength": 255,
@@ -1269,6 +1518,11 @@
           },
           "course": {
             "$ref": "#/components/schemas/Course5"
+          },
+          "location": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
           },
           "startTime": {
             "type": "string",
@@ -1286,14 +1540,15 @@
       },
       "Class3": {
         "required": [
-          "id",
-          "courseCode"
+          "courseCode",
+          "location"
         ],
         "type": "object",
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "courseCode": {
             "maxLength": 255,
@@ -1309,6 +1564,11 @@
           },
           "course": {
             "$ref": "#/components/schemas/Course7"
+          },
+          "location": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
           },
           "startTime": {
             "type": "string",
@@ -1326,14 +1586,15 @@
       },
       "Class4": {
         "required": [
-          "id",
-          "courseCode"
+          "courseCode",
+          "location"
         ],
         "type": "object",
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "courseCode": {
             "maxLength": 255,
@@ -1349,6 +1610,11 @@
           },
           "course": {
             "$ref": "#/components/schemas/Course10"
+          },
+          "location": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
           },
           "startTime": {
             "type": "string",
@@ -1366,14 +1632,15 @@
       },
       "Class5": {
         "required": [
-          "id",
-          "courseCode"
+          "courseCode",
+          "location"
         ],
         "type": "object",
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "courseCode": {
             "maxLength": 255,
@@ -1389,6 +1656,11 @@
           },
           "course": {
             "$ref": "#/components/schemas/Course11"
+          },
+          "location": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
           },
           "startTime": {
             "type": "string",
@@ -1406,14 +1678,15 @@
       },
       "Class6": {
         "required": [
-          "id",
-          "courseCode"
+          "courseCode",
+          "location"
         ],
         "type": "object",
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "courseCode": {
             "maxLength": 255,
@@ -1429,6 +1702,11 @@
           },
           "course": {
             "$ref": "#/components/schemas/Course14"
+          },
+          "location": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
           },
           "startTime": {
             "type": "string",
@@ -1446,14 +1724,15 @@
       },
       "Class7": {
         "required": [
-          "id",
-          "courseCode"
+          "courseCode",
+          "location"
         ],
         "type": "object",
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "courseCode": {
             "maxLength": 255,
@@ -1469,6 +1748,11 @@
           },
           "course": {
             "$ref": "#/components/schemas/#/items/properties/student/properties/enrollments/items/properties/course/properties/classes/items/properties/course"
+          },
+          "location": {
+            "maxLength": 255,
+            "type": "string",
+            "nullable": true
           },
           "startTime": {
             "type": "string",
@@ -1981,7 +2265,6 @@
       },
       "Enrollment": {
         "required": [
-          "studentId",
           "courseCode",
           "courseId"
         ],
@@ -1989,7 +2272,8 @@
         "properties": {
           "studentId": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "student": {
             "$ref": "#/components/schemas/Student"
@@ -2021,7 +2305,6 @@
       },
       "Enrollment2": {
         "required": [
-          "studentId",
           "courseCode",
           "courseId"
         ],
@@ -2029,7 +2312,8 @@
         "properties": {
           "studentId": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "student": {
             "$ref": "#/components/schemas/Student3"
@@ -2061,7 +2345,6 @@
       },
       "Enrollment3": {
         "required": [
-          "studentId",
           "courseCode",
           "courseId"
         ],
@@ -2069,7 +2352,8 @@
         "properties": {
           "studentId": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "student": {
             "$ref": "#/components/schemas/Student4"
@@ -2101,7 +2385,6 @@
       },
       "Enrollment4": {
         "required": [
-          "studentId",
           "courseCode",
           "courseId"
         ],
@@ -2109,7 +2392,8 @@
         "properties": {
           "studentId": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "student": {
             "$ref": "#/components/schemas/Student6"
@@ -2141,7 +2425,6 @@
       },
       "Enrollment5": {
         "required": [
-          "studentId",
           "courseCode",
           "courseId"
         ],
@@ -2149,7 +2432,8 @@
         "properties": {
           "studentId": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "student": {
             "$ref": "#/components/schemas/Student7"
@@ -2181,7 +2465,6 @@
       },
       "Enrollment6": {
         "required": [
-          "studentId",
           "courseCode",
           "courseId"
         ],
@@ -2189,7 +2472,8 @@
         "properties": {
           "studentId": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "student": {
             "$ref": "#/components/schemas/Student9"
@@ -2287,7 +2571,6 @@
       },
       "Student": {
         "required": [
-          "id",
           "firstName",
           "lastName"
         ],
@@ -2295,7 +2578,8 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "firstName": {
             "maxLength": 255,
@@ -2317,7 +2601,6 @@
       },
       "Student2": {
         "required": [
-          "id",
           "firstName",
           "lastName"
         ],
@@ -2325,7 +2608,8 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "firstName": {
             "maxLength": 255,
@@ -2346,7 +2630,6 @@
       },
       "Student3": {
         "required": [
-          "id",
           "firstName",
           "lastName"
         ],
@@ -2354,7 +2637,8 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "firstName": {
             "maxLength": 255,
@@ -2372,7 +2656,6 @@
       },
       "Student4": {
         "required": [
-          "id",
           "firstName",
           "lastName"
         ],
@@ -2380,7 +2663,8 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "firstName": {
             "maxLength": 255,
@@ -2402,7 +2686,6 @@
       },
       "Student5": {
         "required": [
-          "id",
           "firstName",
           "lastName"
         ],
@@ -2410,7 +2693,8 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "firstName": {
             "maxLength": 255,
@@ -2431,7 +2715,6 @@
       },
       "Student6": {
         "required": [
-          "id",
           "firstName",
           "lastName"
         ],
@@ -2439,7 +2722,8 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "firstName": {
             "maxLength": 255,
@@ -2457,7 +2741,6 @@
       },
       "Student7": {
         "required": [
-          "id",
           "firstName",
           "lastName"
         ],
@@ -2465,7 +2748,8 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "firstName": {
             "maxLength": 255,
@@ -2487,7 +2771,6 @@
       },
       "Student8": {
         "required": [
-          "id",
           "firstName",
           "lastName"
         ],
@@ -2495,7 +2778,8 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "firstName": {
             "maxLength": 255,
@@ -2517,7 +2801,6 @@
       },
       "Student9": {
         "required": [
-          "id",
           "firstName",
           "lastName"
         ],
@@ -2525,7 +2808,8 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "firstName": {
             "maxLength": 255,
@@ -2543,7 +2827,6 @@
       },
       "Teacher": {
         "required": [
-          "id",
           "firstName",
           "lastName",
           "createdAt"
@@ -2552,7 +2835,8 @@
         "properties": {
           "id": {
             "maxLength": 255,
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "firstName": {
             "maxLength": 255,
@@ -2578,6 +2862,9 @@
   "tags": [
     {
       "name": "Admin"
+    },
+    {
+      "name": "Camera"
     },
     {
       "name": "Student"

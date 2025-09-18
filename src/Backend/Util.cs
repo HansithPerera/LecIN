@@ -24,7 +24,17 @@ public static class Util
     {
         return $"{prefix}:{string.Join(":", parts)}";
     }
-    
+
+    public static string GenerateApiKey()
+    {
+        return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+    }
+
+    public static string GetApiKeyPrefix(string apiKey)
+    {
+        return apiKey[..8];
+    }
+
     public static string HashApiKey(string apiKey)
     {
         var bytes = Encoding.UTF8.GetBytes(apiKey);
