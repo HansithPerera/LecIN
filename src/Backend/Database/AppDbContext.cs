@@ -18,9 +18,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration
     public DbSet<Enrollment> Enrollments => Set<Enrollment>();
 
     public DbSet<Camera> Cameras => Set<Camera>();
-    
+
     public DbSet<ApiKey> ApiKeys => Set<ApiKey>();
-    
+
     public DbSet<CameraApiKey> CameraApiKeys => Set<CameraApiKey>();
 
     public DbSet<Admin> Admins => Set<Admin>();
@@ -28,13 +28,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(configuration["DatabaseSchema"] ?? "public");
-        
+
         modelBuilder.Entity<ApiKey>()
             .HasKey(k => k.Id);
-        
+
         modelBuilder.Entity<CameraApiKey>()
-            .HasKey(k => k.ApiKeyId);
-        
+            .HasKey(k => new { k.CameraId, k.Role });
+
         modelBuilder.Entity<Admin>()
             .HasKey(a => a.Id);
 
@@ -43,12 +43,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration
 
         modelBuilder.Entity<Camera>()
             .HasKey(c => c.Id);
-        
+
         modelBuilder.Entity<Camera>()
             .HasMany(c => c.CameraApiKeys)
             .WithOne(k => k.Camera)
             .HasForeignKey(k => k.CameraId);
-        
+
         modelBuilder.Entity<Teacher>()
             .HasKey(t => t.Id);
 
