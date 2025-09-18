@@ -12,7 +12,7 @@ public class CacheTests: IClassFixture<MockAppBuilder>
         _builder = mockAppBuilder;
     }
     
-    private const string TeacherId = "teacher-2";
+    private static readonly Guid TeacherId = Guid.NewGuid();
     
     [Fact]
     public async Task TestTeacherCacheEvictionOnDelete()
@@ -72,7 +72,6 @@ public class CacheTests: IClassFixture<MockAppBuilder>
 
         var admin = new Admin
         {
-            Id = nameof(TestAdminAddedToCacheOnFetch),
             FirstName = "Alice",
             LastName = "Smith",
             CreatedAt = DateTimeOffset.UtcNow,
@@ -80,9 +79,9 @@ public class CacheTests: IClassFixture<MockAppBuilder>
             Permissions = AdminPermissions.FullAccess
         };
         await service.AddAdminAsync(admin);
-        var fetched1 = await service.GetAdminByIdAsync(nameof(TestAdminAddedToCacheOnFetch));
+        var fetched1 = await service.GetAdminByIdAsync(admin.Id);
         Assert.NotNull(fetched1);
-        var cached = await appCache.GetAdminAsync(nameof(TestAdminAddedToCacheOnFetch));
+        var cached = await appCache.GetAdminAsync(admin.Id);
         Assert.NotNull(cached);
         Assert.Equal(fetched1.Id, cached!.Id);
         Assert.Equal(fetched1.FirstName, cached.FirstName);

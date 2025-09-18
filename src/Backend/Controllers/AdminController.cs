@@ -19,9 +19,9 @@ public class AdminController(AppService service) : ControllerBase
     public async Task<IActionResult> GetProfile()
     {
         var userId = User.Identity?.Name;
-        if (string.IsNullOrEmpty(userId))
+        if (!Guid.TryParse(userId, out var guid))
             return NotFound("User ID not found in token.");
-        var admin = await service.GetAdminByIdAsync(userId);
+        var admin = await service.GetAdminByIdAsync(guid);
         return admin == null
             ? NotFound("Admin not found.")
             : Ok(admin);

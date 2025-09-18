@@ -9,7 +9,7 @@ public class AppService(
     AppCache appCache,
     ILogger<AppService> logger)
 {
-    public async Task<Student?> GetStudentByIdAsync(string studentId)
+    public async Task<Student?> GetStudentByIdAsync(Guid studentId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Students.FirstOrDefaultAsync(s => s.Id == studentId);
@@ -21,10 +21,16 @@ public class AppService(
         return await ctx.Students.ToListAsync();
     }
     
-    public async Task<Camera?> GetCameraByApiKeyHashAsync(string apiKeyHash)
+    public async Task<bool> IsCameraApiKey(Guid apiKeyId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
-        return await ctx.Cameras.FirstOrDefaultAsync(c => c.ApiKeyHash == apiKeyHash);
+        return await ctx.CameraApiKeys.AnyAsync(k => k.ApiKeyId == apiKeyId);
+    }
+    
+    public async Task<ApiKey?> GetApiKeyByHashAsync(string apiKeyHash)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.ApiKeys.FirstOrDefaultAsync(k => k.Hash == apiKeyHash && k.IsActive);
     }
     
     public async Task<Attendance> AddAttendanceAsync(Attendance attendance)
@@ -73,7 +79,7 @@ public class AppService(
 
     #region Teacher
 
-    public async Task<Teacher?> GetTeacherByIdAsync(string teacherId)
+    public async Task<Teacher?> GetTeacherByIdAsync(Guid teacherId)
     {
         var fromCache = await appCache.GetTeacherAsync(teacherId);
         if (fromCache != null) return fromCache;
@@ -124,7 +130,7 @@ public class AppService(
         return Result.Ok<Teacher, Errors.InsertError>(teacher);
     }
 
-    public async Task<Result<bool, Errors.DeleteError>> DeleteTeacherAsync(string teacherId)
+    public async Task<Result<bool, Errors.DeleteError>> DeleteTeacherAsync(Guid teacherId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         var teacher = await ctx.Teachers.FirstOrDefaultAsync(t => t.Id == teacherId);
@@ -136,7 +142,7 @@ public class AppService(
         return Result.Ok<bool, Errors.DeleteError>(true);
     }
 
-    public async Task<bool> TeacherExistsAsync(string teacherId)
+    public async Task<bool> TeacherExistsAsync(Guid teacherId)
     {
         var teacher = await GetTeacherByIdAsync(teacherId);
         return teacher != null;
@@ -165,7 +171,7 @@ public class AppService(
             c.Code == courseCode && c.Year == courseYear && c.SemesterCode == courseSemesterCode);
     }
 
-    public async Task<Admin?> GetAdminByIdAsync(string adminId)
+    public async Task<Admin?> GetAdminByIdAsync(Guid adminId)
     {
         var fromCache = await appCache.GetAdminAsync(adminId);
         if (fromCache != null) return fromCache;
@@ -174,7 +180,7 @@ public class AppService(
         return await ctx.Admins.FirstOrDefaultAsync(a => a.Id == adminId);
     }
 
-    public async Task<bool> AdminExistsAsync(string adminId)
+    public async Task<bool> AdminExistsAsync(Guid adminId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Admins.AnyAsync(a => a.Id == adminId);

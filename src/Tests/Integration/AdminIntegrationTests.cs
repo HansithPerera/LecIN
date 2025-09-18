@@ -11,7 +11,9 @@ namespace Tests.Integration;
 public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
 {
     private readonly MockAppBuilder _mockAppBuilder;
-
+    
+    private static readonly Guid AdminId = Guid.NewGuid();
+    
     public AdminIntegrationTests(MockAppBuilder mockAppBuilder)
     {
         _mockAppBuilder = mockAppBuilder;
@@ -37,7 +39,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     {
         var admin = new Admin
         {
-            Id = "admin-1",
+            Id = AdminId,
             FirstName = "Admin",
             LastName = "User",
             CreatedAt = DateTimeOffset.UtcNow,
@@ -62,7 +64,6 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
         var appService = _mockAppBuilder.Services.GetRequiredService<AppService>();
         var admin = new Admin
         {
-            Id = nameof(TestUnauthorizedWhenNoPermissions),
             FirstName = "NoPerms",
             LastName = "Admin",
             CreatedAt = DateTimeOffset.UtcNow,
@@ -91,7 +92,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     public async Task TestSuccessWhenAdmin()
     {
         var client = _mockAppBuilder.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "admin-1");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminId.ToString());
         var response = await client.GetAsync("/api/Admin/profile");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -100,7 +101,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     public async Task TestAddTeacherWhenAdmin()
     {
         var client = _mockAppBuilder.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "admin-1");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminId.ToString());
         var newTeacher = new NewTeacherReq
         {
             FirstName = "New",
@@ -121,7 +122,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     public async Task TestGetCourseWhenAdmin()
     {
         var client = _mockAppBuilder.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "admin-1");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminId.ToString());
         var response = await client.GetAsync("/api/Admin/courses/CS101/2023/1");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
@@ -130,7 +131,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     public async Task TestExportAttendanceWhenAdmin()
     {
         var client = _mockAppBuilder.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "admin-1");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminId.ToString());
         var response = await client.GetAsync("/api/Admin/courses/CS101/2023/1/attendance/export");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("text/csv", response.Content.Headers.ContentType?.MediaType);
@@ -140,7 +141,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     public async Task TestExportAttendanceWhenNoCourse()
     {
         var client = _mockAppBuilder.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "admin-1");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminId.ToString());
         var response = await client.GetAsync("/api/Admin/courses/NOPE/2023/1/attendance/export");
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -151,19 +152,18 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
         var appService = _mockAppBuilder.Services.GetRequiredService<AppService>();
         var newStudent = new Student
         {
-            Id = nameof(TestGetCourseWhenAdmin),
             FirstName = "Student",
             LastName = "User",
         };
         await appService.AddStudentAsync(newStudent);
         var newClass = new Class
         {
-            Id = nameof(TestGetCourseWhenAdmin),
             CourseCode = "CS101",
             CourseYearId = 2023,
             CourseSemesterCode = 1,
             StartTime = DateTimeOffset.UtcNow.AddHours(-1),
-            EndTime = DateTimeOffset.UtcNow.AddHours(1)
+            EndTime = DateTimeOffset.UtcNow.AddHours(1),
+            Location = "Room 101"
         };
         await appService.AddClassAsync(newClass);
         var newAttendance = new Attendance
@@ -174,11 +174,11 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
         };
         await appService.AddAttendanceAsync(newAttendance);
         var client = _mockAppBuilder.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "admin-1");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminId.ToString());
         var response = await client.GetAsync("/api/Admin/courses/CS101/2023/1/attendance/export");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var csvContent = await response.Content.ReadAsStringAsync();
-        Assert.Contains(newStudent.Id, csvContent);
+        Assert.Contains(newStudent.Id.ToString(), csvContent);
     }
     
     [Fact]
@@ -187,7 +187,6 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
         var appService = _mockAppBuilder.Services.GetRequiredService<AppService>();
         var admin = new Admin
         {
-            Id = nameof(TestExportAttendanceWhenNoPerms),
             FirstName = "NoPerms",
             LastName = "Admin",
             CreatedAt = DateTimeOffset.UtcNow,
@@ -206,7 +205,7 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     public async Task TestAddCourseSuccessWhenAdmin()
     {
         var client = _mockAppBuilder.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "admin-1");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminId.ToString());
         var newCourseReq = new NewCourseReq
         {
             Code = "CS102",

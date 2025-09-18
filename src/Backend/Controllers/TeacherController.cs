@@ -20,8 +20,11 @@ public class TeacherController(AppService repository) : ControllerBase
         var userId = User.Identity?.Name;
         if (string.IsNullOrEmpty(userId))
             return NotFound("User ID not found in token.");
+        
+        if (!Guid.TryParse(userId, out var userGuid))
+            return BadRequest("Invalid User ID format.");
 
-        var teacher = await repository.GetTeacherByIdAsync(userId);
+        var teacher = await repository.GetTeacherByIdAsync(userGuid);
         return teacher == null
             ? NotFound("Teacher not found.")
             : Ok(teacher);

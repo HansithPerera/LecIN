@@ -17,11 +17,13 @@ public class AuthIntegrationTests : IClassFixture<MockAppBuilder>
         SeedTeacher(dataService);
     }
 
+    private static readonly Guid TeacherId = Guid.NewGuid();
+    
     private static void SeedTeacher(AppService appService)
     {
         var teacher = new Teacher
         {
-            Id = "teacher-1",
+            Id = TeacherId,
             FirstName = "Alice",
             LastName = "Smith",
             CreatedAt = DateTimeOffset.UtcNow
@@ -52,7 +54,7 @@ public class AuthIntegrationTests : IClassFixture<MockAppBuilder>
     public async Task TestSuccessWhenTeacher()
     {
         var client = _mockAppBuilder.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "teacher-1");
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TeacherId.ToString());
         var response = await client.GetAsync("/api/Teacher/profile");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }

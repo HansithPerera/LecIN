@@ -10,13 +10,13 @@ public class AdminPermissionAuthorization(AppService service) : AuthorizationHan
         AdminPermRequirement requirement)
     {
         var userId = context.User.Identity?.Name;
-        if (string.IsNullOrEmpty(userId))
+        if (!Guid.TryParse(userId, out var userGuid))
         {
             context.Fail();
             return;
         }
 
-        var admin = await service.GetAdminByIdAsync(userId);
+        var admin = await service.GetAdminByIdAsync(userGuid);
         if (admin != null && (admin.Permissions & requirement.Perms) == requirement.Perms)
             context.Succeed(requirement);
         else

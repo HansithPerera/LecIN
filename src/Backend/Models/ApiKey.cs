@@ -6,7 +6,7 @@ namespace Backend.Models;
 [Table("ApiKeys")]
 public class ApiKey
 {
-    public required Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
     
     [MaxLength(128)]
     public required string Hash { get; set; }
