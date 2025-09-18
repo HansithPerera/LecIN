@@ -14,6 +14,8 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
     
     private static readonly Guid AdminId = Guid.NewGuid();
     
+    private static readonly Guid CameraId = Guid.NewGuid();
+    
     public AdminIntegrationTests(MockAppBuilder mockAppBuilder)
     {
         _mockAppBuilder = mockAppBuilder;
@@ -33,6 +35,21 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
         };
         
         appService.AddCourseAsync(course).GetAwaiter().GetResult();
+    }
+    
+    private static void SeedCamera(AppService appService)
+    {
+        var camera = new Camera
+        {
+            Id = CameraId,
+            Name = "Test Camera",
+            Location = "Test Location",
+            IsActive = true,
+            CreatedAt = DateTimeOffset.UtcNow,
+            UpdatedAt = DateTimeOffset.UtcNow
+        };
+        
+        appService.CreateCameraAsync(camera).GetAwaiter().GetResult();
     }
     
     private static void SeedAdmin(AppService appService)
@@ -222,5 +239,42 @@ public class AdminIntegrationTests: IClassFixture<MockAppBuilder>
         Assert.Equal(2023, createdCourse.Year);
         Assert.Equal(1, createdCourse.SemesterCode);
         Assert.Equal("Data Structures", createdCourse.Name);
+    }
+    
+    [Fact]
+    public async Task CreateCameraSucceeds()
+    {
+        var client = _mockAppBuilder.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminId.ToString());
+
+        var newCamera = new NewCameraReq()
+        {
+            Name = "New Camera",
+            Location = "New Location"
+        };
+        var response = await client.PostAsJsonAsync("/api/Admin/cameras", newCamera);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        
+        var createdCamera = await response.Content.ReadFromJsonAsync<Camera>();
+        Assert.NotNull(createdCamera);
+    }
+    
+    [Fact]
+    public async Task GenerateCameraApiKeySucceeds()
+    {
+        var client = _mockAppBuilder.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminId.ToString());
+        
+        var response = await client.PostAsync($"/api/Admin/cameras/{CameraId}/regenerate-key/{0}", null);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GenerateCameraApiKeyFailsWhenNoCamera()
+    {
+        var client = _mockAppBuilder.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AdminId.ToString());
+        var response = await client.PostAsync($"/api/Admin/cameras/{Guid.NewGuid()}/regenerate-key/{0}", null);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 }

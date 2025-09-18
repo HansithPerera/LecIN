@@ -74,4 +74,10 @@ public static class Errors
         Conflict,
         UnknownError,
     }
+    
+    public enum GenerateCameraApiKeyError
+    {
+        CameraNotFound,
+        UnknownError
+    }
 }

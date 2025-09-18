@@ -89,4 +89,27 @@ public class CameraRules
         var attendance = await service.CreateAttendanceAsync(student.Id, classroom.Id);
         return Result.Ok<Attendance, Errors.CheckInError>(attendance);
     }
+    
+    public class GeneratedApiKey
+    {
+        public required CameraApiKey CameraApiKey { get; set; }
+        public required string UnhashedKey { get; set; }
+    }
+
+    public static async Task<Result<GeneratedApiKey, Errors.GenerateCameraApiKeyError>> RegenerateCameraApiKeyAsync(Guid cameraId, ApiKeyRole role, AppService service)
+    {
+        var camera = await service.GetCameraByIdAsync(cameraId);
+        if (camera == null)
+            return Result.Err<GeneratedApiKey, Errors.GenerateCameraApiKeyError>(Errors.GenerateCameraApiKeyError.CameraNotFound);
+
+        var newApiKey = ApiKey.Create(out var unhashedKey, "Camera API Key");
+        newApiKey = await service.CreateApiKeyAsync(newApiKey);
+        var generatedCameraKey = await service.SetCameraApiKeyAsync(cameraId, newApiKey.Id, ApiKeyRole.Primary);
+        generatedCameraKey.ApiKey = newApiKey;
+        return Result.Ok<GeneratedApiKey, Errors.GenerateCameraApiKeyError>(new GeneratedApiKey
+        {
+            CameraApiKey = generatedCameraKey,
+            UnhashedKey = unhashedKey
+        });
+    }
 }

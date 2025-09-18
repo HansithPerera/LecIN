@@ -34,6 +34,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration
 
         modelBuilder.Entity<CameraApiKey>()
             .HasKey(k => new { k.CameraId, k.Role });
+        
+        modelBuilder.Entity<CameraApiKey>()
+            .HasIndex(k => k.ApiKeyId)
+            .IsUnique();
+        
+        modelBuilder.Entity<CameraApiKey>()
+            .HasOne(k => k.ApiKey)
+            .WithMany()
+            .HasForeignKey(k => k.ApiKeyId);
+        
+        modelBuilder.Entity<CameraApiKey>()
+            .HasOne(k => k.Camera)
+            .WithMany(c => c.CameraApiKeys)
+            .HasForeignKey(k => k.CameraId);
 
         modelBuilder.Entity<Admin>()
             .HasKey(a => a.Id);

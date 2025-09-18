@@ -11,11 +11,15 @@ public enum ApiKeyRole
 [Table("CameraApiKeys")]
 public class CameraApiKey
 {
-    [ForeignKey(nameof(Camera))] public required Guid CameraId { get; set; }
+    [ForeignKey(nameof(Camera))] 
+    public required Guid CameraId { get; set; }
 
     public Camera? Camera { get; set; }
 
+    [ForeignKey(nameof(ApiKey))]
     public required Guid ApiKeyId { get; set; }
 
     public required ApiKeyRole Role { get; set; }
+    
+    public ApiKey? ApiKey { get; set; }
 }

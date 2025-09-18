@@ -1,5 +1,6 @@
 ﻿using Backend.Database;
 using Backend.Dto.Req;
+using Backend.Dto.Resp;
 using Backend.Models;
 using Backend.Rules;
 using Microsoft.AspNetCore.Authorization;
@@ -83,6 +84,32 @@ public class AdminController(AppService service) : ControllerBase
             };
         var createdCamera = creationResult.Unwrap();
         return CreatedAtAction(nameof(GetCameraById), new { id = createdCamera.Id }, createdCamera);
+    }
+
+    [HttpPost("cameras/{cameraId:guid}/regenerate-key/{role:int}")]
+    [ProducesResponseType(typeof(Camera), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = Constants.AdminManageCamerasPermission)]
+    public async Task<IActionResult> RegenerateCameraApiKey(Guid cameraId, int role)
+    {
+        if (!Enum.IsDefined(typeof(ApiKeyRole), role))
+            return BadRequest("Invalid role specified. Must be 1 (Primary) or 2 (Secondary).");
+
+        var generateResult = await CameraRules.RegenerateCameraApiKeyAsync(cameraId, (ApiKeyRole) role, service);
+        if (generateResult.IsErr)
+            return generateResult.UnwrapErr() switch
+            {
+                Errors.GenerateCameraApiKeyError.CameraNotFound => NotFound("Camera not found."),
+                _ => StatusCode(StatusCodes.Status500InternalServerError, "An unknown error occurred.")
+            };
+        
+        var generatedKey = generateResult.Unwrap();
+        return Ok(new GeneratedApiKeyDto
+        {
+            ApiKeyId = generatedKey.CameraApiKey.ApiKeyId,
+            ApiKey = generatedKey.UnhashedKey,
+            Prefix = generatedKey.CameraApiKey.ApiKey!.Prefix
+        });
     }
 
     [HttpGet("students")]
