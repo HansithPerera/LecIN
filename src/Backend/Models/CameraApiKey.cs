@@ -2,7 +2,7 @@
 
 namespace Backend.Models;
 
-public enum KeyRole
+public enum ApiKeyRole
 {
     Primary,
     Secondary
@@ -11,12 +11,11 @@ public enum KeyRole
 [Table("CameraApiKeys")]
 public class CameraApiKey
 {
-    [ForeignKey(nameof(Camera))]
-    public required Guid CameraId { get; set; }
-    
+    [ForeignKey(nameof(Camera))] public required Guid CameraId { get; set; }
+
     public Camera? Camera { get; set; }
-    
+
     public required Guid ApiKeyId { get; set; }
-    
-    public required KeyRole Role { get; set; }
+
+    public required ApiKeyRole Role { get; set; }
 }
