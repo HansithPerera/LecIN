@@ -2,6 +2,7 @@ using System.Reflection;
 using Backend;
 using Backend.Auth;
 using Backend.Database;
+using Backend.Face;
 using Backend.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -23,9 +24,8 @@ if (!isMock && !testing)
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 
-    builder.Services.AddAuthentication()
-        // Configure JWT Bearer authentication using the signing key from supabase.
-        .AddJwtBearer(o =>
+    builder.Services.AddAuthentication(o => { o.DefaultAuthenticateScheme = Constants.JwtAuthScheme; })
+        .AddJwtBearer(Constants.JwtAuthScheme, o =>
         {
             o.TokenValidationParameters = new TokenValidationParameters
             {
@@ -37,13 +37,14 @@ if (!isMock && !testing)
         })
         // Configure API Key authentication using apiKey header.
         .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(
-            "ApiKey",
+            Constants.ApiKeyAuthScheme,
             _ => { }
         );
 }
 
 // Repository service for data access.
 builder.Services.AddSingleton<AppService>();
+builder.Services.AddSingleton<FaceService>();
 
 // In-memory caching service.
 builder.Services.AddDistributedMemoryCache();
@@ -52,7 +53,11 @@ builder.Services.AddSingleton<AppCache>();
 // Define authorization policies based on user roles.
 builder.Services.AddSingleton<IAuthorizationHandler, UserTypeAuthorization>();
 builder.Services.AddSingleton<IAuthorizationHandler, AdminPermissionAuthorization>();
+builder.Services.AddSingleton<IAuthorizationHandler, IntegrationAuthorizationHandler>();
+
 builder.Services.AddAuthorizationBuilder()
+    .AddPolicy(Constants.CameraAuthorizationPolicy,
+        policy => policy.Requirements.Add(new IntegrationRequirement(IntegrationType.Camera)))
     .AddPolicy(Constants.AdminAuthorizationPolicy,
         policy => policy.Requirements.Add(new ScopeRequirement(UserType.Admin)))
     .AddPolicy(Constants.TeacherAuthorizationPolicy,

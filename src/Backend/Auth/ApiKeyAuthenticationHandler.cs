@@ -15,18 +15,13 @@ public class ApiKeyAuthenticationHandler(
 {
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        if (!Request.Headers.TryGetValue("X-Api-Key", out var apiKey))
-        {
+        if (!Request.Headers.TryGetValue(Constants.ApiKeyHeaderName, out var apiKey))
             return AuthenticateResult.Fail("Missing or invalid API Key.");
-        }
-        
+
         var hash = Util.HashApiKey(apiKey!);
         var camera = await service.GetApiKeyByHashAsync(hash);
-        if (camera == null)
-        {
-            return AuthenticateResult.Fail("Invalid API Key.");
-        }
-        
+        if (camera == null) return AuthenticateResult.Fail("Invalid API Key.");
+
         var claims = new[] { new Claim(ClaimTypes.Name, camera.Id.ToString()) };
         var identity = new ClaimsIdentity(claims, Scheme.Name);
         var principal = new ClaimsPrincipal(identity);
