@@ -7,24 +7,12 @@
     xmlns:pages="clr-namespace:Lecin.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="Lecin">
-
+    
     <ShellContent
         Title="Dashboard"
         Icon="{StaticResource IconDashboard}"
         ContentTemplate="{DataTemplate pages:MainPage}"
         Route="main" />
-
-    <ShellContent
-        Title="Projects"
-        Icon="{StaticResource IconProjects}"
-        ContentTemplate="{DataTemplate pages:ProjectListPage}"
-        Route="projects" />
-
-    <ShellContent
-        Title="Manage Meta"
-        Icon="{StaticResource IconMeta}"
-        ContentTemplate="{DataTemplate pages:ManageMetaPage}"
-        Route="manage" />
 
     <Shell.FlyoutFooter>
         <Grid Padding="15">
