@@ -117,6 +117,8 @@
         "tags": [
           "Admin"
         ],
+        "description": "Retrieve a list of all courses.",
+        "operationId": "GetAllCourses",
         "responses": {
           "200": {
             "description": "OK",
