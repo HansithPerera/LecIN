@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Buffers.Text;
+using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Security.Cryptography;
 using System.Text;
@@ -14,9 +15,9 @@ public static class Util
         return $"https://{projectRef}.supabase.co/auth/v1";
     }
 
-    public static SymmetricSecurityKey GetSymmetricSecurityKey([Base64String] string base64Secret)
+    public static SymmetricSecurityKey GetSymmetricSecurityKey(string signingKey)
     {
-        var bytes = Convert.FromBase64String(base64Secret);
+        var bytes = Encoding.UTF8.GetBytes(signingKey);
         return new SymmetricSecurityKey(bytes);
     }
 
