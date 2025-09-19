@@ -1,4 +1,5 @@
-﻿using Backend.Database;
+﻿using System.Security.Claims;
+using Backend.Database;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Auth;
@@ -8,7 +9,7 @@ public class IntegrationAuthorizationHandler(Repository service) : Authorization
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
         IntegrationRequirement requirement)
     {
-        var userId = context.User.Identity?.Name;
+        var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (!Guid.TryParse(userId, out var apiKeyId)) context.Fail();
         var authorized = requirement.Type switch
         {
