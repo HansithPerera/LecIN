@@ -1,5 +1,4 @@
-﻿using Backend.Api;
-using Supabase;
+﻿using Supabase;
 
 namespace Lecin.Pages;
 

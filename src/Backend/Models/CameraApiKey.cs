@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models;
 
@@ -9,17 +10,15 @@ public enum ApiKeyRole
 }
 
 [Table("CameraApiKeys")]
+[PrimaryKey(nameof(CameraId), nameof(Role))]
+[Index(nameof(ApiKeyId), IsUnique = true)]
 public class CameraApiKey
 {
-    [ForeignKey(nameof(Camera))] 
-    public required Guid CameraId { get; set; }
+    [ForeignKey("CameraApiKeyId")] public Guid CameraId { get; set; }
+
+    public Guid ApiKeyId { get; set; }
+
+    public ApiKeyRole Role { get; set; }
 
     public Camera? Camera { get; set; }
-
-    [ForeignKey(nameof(ApiKey))]
-    public required Guid ApiKeyId { get; set; }
-
-    public required ApiKeyRole Role { get; set; }
-    
-    public ApiKey? ApiKey { get; set; }
 }

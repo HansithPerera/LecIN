@@ -4,7 +4,7 @@
              xmlns:pageModels="clr-namespace:Lecin.PageModels"             
              xmlns:pullToRefresh="clr-namespace:Syncfusion.Maui.Toolkit.PullToRefresh;assembly=Syncfusion.Maui.Toolkit"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:models="clr-namespace:Backend.Api;assembly=Backend.Api"
+             xmlns:models="using:Lecin.Models"
              x:Class="Lecin.Pages.MainPage"
              x:DataType="pageModels:MainPageModel">
 

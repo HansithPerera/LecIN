@@ -41,6 +41,7 @@ public partial class LoginPageModel: ObservableObject
             if (session != null)
             {
                 StatusMessage = $"Welcome, {session.User?.Email}";
+                await SecureStorage.Default.SetAsync("jwt_token", session.AccessToken);
                 await Shell.Current.GoToAsync("//main");
             }
             else

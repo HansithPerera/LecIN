@@ -6,7 +6,7 @@ namespace Backend.Models;
 [Table("Classes")]
 public class Class
 {
-    [MaxLength(255)] public Guid Id { get; set; } = Guid.NewGuid();
+    [MaxLength(255)] [Key] public Guid Id { get; set; } = Guid.NewGuid();
 
     [MaxLength(255)] public required string CourseCode { get; set; }
 
@@ -14,9 +14,7 @@ public class Class
 
     public int CourseSemesterCode { get; set; }
 
-    public Course? Course { get; set; }
-    
-    [MaxLength(255)] public required string? Location { get; set; }
+    [MaxLength(255)] public string? Location { get; set; }
 
     public DateTimeOffset StartTime { get; set; }
 

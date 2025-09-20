@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Backend.Api;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -34,25 +33,12 @@ public static class MauiProgram
         builder.Logging.AddDebug();
         builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
-        using var devStream = Assembly.GetExecutingAssembly()
-            .GetManifestResourceStream($"{nameof(Lecin)}.appsettings.dev.json");
         using var stream = Assembly.GetExecutingAssembly()
             .GetManifestResourceStream($"{nameof(Lecin)}.appsettings.json");
         
-        IConfiguration config;
-        if (devStream != null)
-        {
-            config = new ConfigurationBuilder()
-                .AddJsonStream(stream!)
-                .AddJsonStream(devStream)
-                .Build();
-        }
-        else
-        {
-            config = new ConfigurationBuilder()
-                .AddJsonStream(stream!)
-                .Build();
-        }
+        var config = new ConfigurationBuilder()
+            .AddJsonStream(stream!)
+            .Build();
         
         builder.Configuration.AddConfiguration(config);
         
@@ -62,13 +48,6 @@ public static class MauiProgram
                 builder.Configuration["Supabase:Key"] ?? throw new InvalidOperationException("Supabase Key is not configured.")
             )
         );
-        builder.Services.AddTransient<OpenApiClient>();
-        builder.Services.AddTransient<AuthHandler>();
-        builder.Services.AddHttpClient<OpenApiClient>(client =>
-        {
-            client.BaseAddress = new Uri(builder.Configuration["Api:Url"] ?? throw new InvalidOperationException("API URL is not configured."));
-        }).AddHttpMessageHandler<AuthHandler>();
-        
         builder.Services.AddSingleton<ModalErrorHandler>();
         builder.Services.AddSingleton<MainPageModel>();
 
