@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Backend.Api;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -62,13 +61,6 @@ public static class MauiProgram
                 builder.Configuration["Supabase:Key"] ?? throw new InvalidOperationException("Supabase Key is not configured.")
             )
         );
-        builder.Services.AddTransient<OpenApiClient>();
-        builder.Services.AddTransient<AuthHandler>();
-        builder.Services.AddHttpClient<OpenApiClient>(client =>
-        {
-            client.BaseAddress = new Uri(builder.Configuration["Api:Url"] ?? throw new InvalidOperationException("API URL is not configured."));
-        }).AddHttpMessageHandler<AuthHandler>();
-        
         builder.Services.AddSingleton<ModalErrorHandler>();
         builder.Services.AddSingleton<MainPageModel>();
 

@@ -5,35 +5,8 @@ using ResultSharp;
 
 namespace Backend.Services;
 
-public class CameraService(Repository repo, FaceService faceService) 
+public class CameraService(Repository repo, FaceService faceService)
 {
-    public static Result<Camera, Errors.NewCameraError> ValidateNewCamera(string name, string location)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-            return Result.Err<Camera, Errors.NewCameraError>(Errors.NewCameraError.MissingName);
-        if (string.IsNullOrWhiteSpace(location) || location.Length < 3)
-            return Result.Err<Camera, Errors.NewCameraError>(Errors.NewCameraError.MissingLocation);
-        return Result.Ok<Camera, Errors.NewCameraError>(new Camera { Name = name, Location = location });
-    }
-    
-    public async Task<Result<Camera, Errors.NewCameraError>> CreateCameraAsync(string name, string location)
-    {
-        var validationResult = ValidateNewCamera(name, location);
-        if (validationResult.IsErr) 
-            return validationResult;
-        
-        var camera = validationResult.Unwrap();
-        var result = await repo.CreateCameraAsync(camera);
-        if (result.IsErr)
-            return result.UnwrapErr() switch
-            {
-                Errors.InsertError.Conflict =>
-                    Result.Err<Camera, Errors.NewCameraError>(Errors.NewCameraError.Conflict),
-                _ => Result.Err<Camera, Errors.NewCameraError>(Errors.NewCameraError.UnknownError)
-            };
-        return Result.Ok<Camera, Errors.NewCameraError>(camera);
-    }
-
     public async Task<Result<RecognizedFace, Errors.FaceRecognitionError>> AnalyzeFace(Stream imageStream)
     {
         try
@@ -51,7 +24,8 @@ public class CameraService(Repository repo, FaceService faceService)
         }
         catch (FormatException)
         {
-            return Result.Err<RecognizedFace, Errors.FaceRecognitionError>(Errors.FaceRecognitionError.InvalidImageFormat);
+            return Result.Err<RecognizedFace, Errors.FaceRecognitionError>(Errors.FaceRecognitionError
+                .InvalidImageFormat);
         }
         catch (Exception)
         {
@@ -59,11 +33,12 @@ public class CameraService(Repository repo, FaceService faceService)
         }
     }
 
-
-    public static async Task<Result<Class, Errors.ClassRetrievalError>> GetOngoingClass(Guid apiKeyId, Repository service)
+    public static async Task<Result<Class, Errors.ClassRetrievalError>> GetOngoingClass(Guid apiKeyId,
+        Repository service)
     {
         var camera = await service.GetCameraByApiKeyIdAsync(apiKeyId);
-        if (camera == null) return Result.Err<Class, Errors.ClassRetrievalError>(Errors.ClassRetrievalError.NoCameraFound);
+        if (camera == null)
+            return Result.Err<Class, Errors.ClassRetrievalError>(Errors.ClassRetrievalError.NoCameraFound);
         var classroom = await service.GetClassByLocationTimeAsync(camera.Location, DateTime.UtcNow);
         return classroom == null
             ? Result.Err<Class, Errors.ClassRetrievalError>(Errors.ClassRetrievalError.NoClassFound)
@@ -92,28 +67,5 @@ public class CameraService(Repository repo, FaceService faceService)
 
         var attendance = await repo.CreateAttendanceAsync(student.Id, classroom.Id);
         return Result.Ok<Attendance, Errors.CheckInError>(attendance);
-    }
-    
-    public class GeneratedApiKey
-    {
-        public required CameraApiKey CameraApiKey { get; set; }
-        public required string UnhashedKey { get; set; }
-    }
-
-    public async Task<Result<GeneratedApiKey, Errors.GenerateCameraApiKeyError>> RegenerateCameraApiKeyAsync(Guid cameraId, ApiKeyRole role)
-    {
-        var camera = await repo.GetCameraByIdAsync(cameraId);
-        if (camera == null)
-            return Result.Err<GeneratedApiKey, Errors.GenerateCameraApiKeyError>(Errors.GenerateCameraApiKeyError.CameraNotFound);
-
-        var newApiKey = ApiKey.Create(out var unhashedKey, "Camera API Key");
-        newApiKey = await repo.CreateApiKeyAsync(newApiKey);
-        var generatedCameraKey = await repo.SetCameraApiKeyAsync(cameraId, newApiKey.Id, role);
-        generatedCameraKey.ApiKey = newApiKey;
-        return Result.Ok<GeneratedApiKey, Errors.GenerateCameraApiKeyError>(new GeneratedApiKey
-        {
-            CameraApiKey = generatedCameraKey,
-            UnhashedKey = unhashedKey
-        });
     }
 }

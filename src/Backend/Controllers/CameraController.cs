@@ -1,5 +1,5 @@
 ﻿using Backend.Database;
-using Backend.Dto.Resp;
+using Backend.Dto;
 using Backend.Face;
 using Backend.Models;
 using Backend.Services;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Backend.Controllers;
 
 [Route("api/[controller]")]
-[Authorize(Policy = Constants.CameraAuthorizationPolicy, AuthenticationSchemes = Constants.ApiKeyAuthScheme)]
+[Authorize(Policy = Constants.CameraAuthorizationPolicy)]
 [ApiController]
 public class CameraController(Repository service, CameraService cameraService, FaceService faceService) : ControllerBase
 {

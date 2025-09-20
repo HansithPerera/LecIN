@@ -1,18 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Models;
 
 [Table("Attendance")]
+[PrimaryKey(nameof(StudentId), nameof(ClassId))]
 public class Attendance
 {
-    [MaxLength(255)] public required Guid StudentId { get; set; }
+    [MaxLength(255)] public Guid StudentId { get; set; }
 
-    public Student? Student { get; set; }
-
-    [MaxLength(255)] public required Guid ClassId { get; set; }
-
-    public Class? Class { get; set; }
+    [MaxLength(255)] public Guid ClassId { get; set; }
 
     public DateTimeOffset Timestamp { get; set; }
 }

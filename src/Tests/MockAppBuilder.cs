@@ -19,9 +19,7 @@ public class MockAppBuilder : WebApplicationFactory<Program>
         {
             services.AddDbContextFactory<AppDbContext>(options => { options.UseInMemoryDatabase("TestDb"); });
 
-            services.AddAuthentication(Constants.JwtAuthScheme)
-                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
-                    Constants.JwtAuthScheme, options => { })
+            services.AddAuthentication(Constants.ApiKeyAuthScheme)
                 .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(
                     Constants.ApiKeyAuthScheme, options => { }
                 );

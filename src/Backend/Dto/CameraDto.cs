@@ -1,6 +1,6 @@
 ﻿using Backend.Models;
 
-namespace Backend.Dto.Resp;
+namespace Backend.Dto;
 
 public class CameraDto
 {

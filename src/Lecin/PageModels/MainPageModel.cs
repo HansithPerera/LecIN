@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Backend.Api;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Lecin.Models;
 
 namespace Lecin.PageModels;
 
@@ -21,10 +21,10 @@ public partial class MainPageModel : ObservableObject
 
     public ICommand RefreshCommand { get; set; }
     
-    private readonly OpenApiClient _client;
+    private readonly Supabase.Client _client;
 
     /// <inheritdoc/>
-    public MainPageModel(ModalErrorHandler errorHandler, OpenApiClient client)
+    public MainPageModel(ModalErrorHandler errorHandler, Supabase.Client client)
     {
         _client = client;
         RefreshCommand = new AsyncRelayCommand(Refresh);
@@ -45,8 +45,11 @@ public partial class MainPageModel : ObservableObject
         IsBusy = true;
         try
         {
-            var courses = await _client.GetAllCoursesAsync();
-            Courses = new ObservableCollection<Course>(courses);
+            var courses = await _client.From<Course>()
+                .Select("*")
+                .Get();
+            
+            Courses = new ObservableCollection<Course>(courses.Models);
             _dataLoaded = true;
         }
         catch (Exception ex)

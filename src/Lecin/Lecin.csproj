@@ -85,14 +85,6 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
-    
-    <ItemGroup>
-      <ProjectReference Include="..\Backend.Api\Backend.Api.csproj" />
-    </ItemGroup>
-    
-    <ItemGroup>
-      <Folder Include="Pages\Controls\" />
-    </ItemGroup>
 
     <PropertyGroup>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
