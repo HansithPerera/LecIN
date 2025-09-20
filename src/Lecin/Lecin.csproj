@@ -81,9 +81,6 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </EmbeddedResource>
       <None Remove="appsettings.dev.json" />
-      <EmbeddedResource Include="appsettings.dev.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
     </ItemGroup>
 
     <PropertyGroup>

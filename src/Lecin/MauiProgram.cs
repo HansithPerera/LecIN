@@ -33,25 +33,12 @@ public static class MauiProgram
         builder.Logging.AddDebug();
         builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
-        using var devStream = Assembly.GetExecutingAssembly()
-            .GetManifestResourceStream($"{nameof(Lecin)}.appsettings.dev.json");
         using var stream = Assembly.GetExecutingAssembly()
             .GetManifestResourceStream($"{nameof(Lecin)}.appsettings.json");
         
-        IConfiguration config;
-        if (devStream != null)
-        {
-            config = new ConfigurationBuilder()
-                .AddJsonStream(stream!)
-                .AddJsonStream(devStream)
-                .Build();
-        }
-        else
-        {
-            config = new ConfigurationBuilder()
-                .AddJsonStream(stream!)
-                .Build();
-        }
+        var config = new ConfigurationBuilder()
+            .AddJsonStream(stream!)
+            .Build();
         
         builder.Configuration.AddConfiguration(config);
         
