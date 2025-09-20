@@ -1,4 +1,5 @@
-﻿using Backend.Database;
+﻿using System.Security.Claims;
+using Backend.Database;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Auth;
@@ -9,7 +10,7 @@ public class UserTypeAuthorization(Repository service) : AuthorizationHandler<Sc
         AuthorizationHandlerContext context,
         ScopeRequirement requirement)
     {
-        var userId = context.User.Identity?.Name;
+        var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (!Guid.TryParse(userId, out var userGuid))
         {
             context.Fail();

@@ -1,4 +1,5 @@
-﻿using Backend.Database;
+﻿using System.Security.Claims;
+using Backend.Database;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ public class TeacherController(Repository repository) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProfile()
     {
-        var userId = User.Identity?.Name;
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
             return NotFound("User ID not found in token.");
         

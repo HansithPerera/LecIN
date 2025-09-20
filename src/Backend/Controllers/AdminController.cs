@@ -1,4 +1,5 @@
-﻿using Backend.Database;
+﻿using System.Security.Claims;
+using Backend.Database;
 using Backend.Dto.Req;
 using Backend.Dto.Resp;
 using Backend.Models;
@@ -19,7 +20,7 @@ public class AdminController(Repository repo, CourseService courseService, Camer
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetProfile()
     {
-        var userId = User.Identity?.Name;
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (!Guid.TryParse(userId, out var guid))
             return NotFound("User ID not found in token.");
         var admin = await repo.GetAdminByIdAsync(guid);
@@ -38,6 +39,8 @@ public class AdminController(Repository repo, CourseService courseService, Camer
     }
 
     [HttpGet("courses")]
+    [EndpointDescription("Retrieve a list of all courses.")]
+    [EndpointName("GetAllCourses")]
     [ProducesResponseType(typeof(List<Course>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize(Policy = Constants.AdminReadCoursesPermission)]

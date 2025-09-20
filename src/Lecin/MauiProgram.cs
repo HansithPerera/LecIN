@@ -1,4 +1,7 @@
-﻿using CommunityToolkit.Maui;
+﻿using System.Reflection;
+using Backend.Api;
+using CommunityToolkit.Maui;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
 
@@ -31,19 +34,45 @@ public static class MauiProgram
         builder.Logging.AddDebug();
         builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
-
-        builder.Services.AddSingleton<ProjectRepository>();
-        builder.Services.AddSingleton<TaskRepository>();
-        builder.Services.AddSingleton<CategoryRepository>();
-        builder.Services.AddSingleton<TagRepository>();
-        builder.Services.AddSingleton<SeedDataService>();
+        using var devStream = Assembly.GetExecutingAssembly()
+            .GetManifestResourceStream($"{nameof(Lecin)}.appsettings.dev.json");
+        using var stream = Assembly.GetExecutingAssembly()
+            .GetManifestResourceStream($"{nameof(Lecin)}.appsettings.json");
+        
+        IConfiguration config;
+        if (devStream != null)
+        {
+            config = new ConfigurationBuilder()
+                .AddJsonStream(stream!)
+                .AddJsonStream(devStream)
+                .Build();
+        }
+        else
+        {
+            config = new ConfigurationBuilder()
+                .AddJsonStream(stream!)
+                .Build();
+        }
+        
+        builder.Configuration.AddConfiguration(config);
+        
+        builder.Services.AddSingleton<Supabase.Client>(sp =>
+            new Supabase.Client(
+                builder.Configuration["Supabase:Url"] ?? throw new InvalidOperationException("Supabase URL is not configured."),
+                builder.Configuration["Supabase:Key"] ?? throw new InvalidOperationException("Supabase Key is not configured.")
+            )
+        );
+        builder.Services.AddTransient<OpenApiClient>();
+        builder.Services.AddTransient<AuthHandler>();
+        builder.Services.AddHttpClient<OpenApiClient>(client =>
+        {
+            client.BaseAddress = new Uri(builder.Configuration["Api:Url"] ?? throw new InvalidOperationException("API URL is not configured."));
+        }).AddHttpMessageHandler<AuthHandler>();
+        
         builder.Services.AddSingleton<ModalErrorHandler>();
         builder.Services.AddSingleton<MainPageModel>();
-        builder.Services.AddSingleton<ProjectListPageModel>();
-        builder.Services.AddSingleton<ManageMetaPageModel>();
 
-        builder.Services.AddTransientWithShellRoute<ProjectDetailPage, ProjectDetailPageModel>("project");
-        builder.Services.AddTransientWithShellRoute<TaskDetailPage, TaskDetailPageModel>("task");
+        builder.Services.AddTransientWithShellRoute<LoginPage, LoginPageModel>("login");
 
         return builder.Build();
     }

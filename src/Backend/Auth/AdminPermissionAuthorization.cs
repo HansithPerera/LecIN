@@ -1,4 +1,5 @@
-﻿using Backend.Database;
+﻿using System.Security.Claims;
+using Backend.Database;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 
@@ -9,7 +10,7 @@ public class AdminPermissionAuthorization(Repository service) : AuthorizationHan
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
         AdminPermRequirement requirement)
     {
-        var userId = context.User.Identity?.Name;
+        var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (!Guid.TryParse(userId, out var userGuid))
         {
             context.Fail();
