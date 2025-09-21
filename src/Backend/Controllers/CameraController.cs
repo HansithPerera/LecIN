@@ -26,42 +26,43 @@ public class CameraController(Repository service, CameraService cameraService, F
             : Ok(CameraDto.FromModel(camera));
     }
 
-    [HttpPost("face")]
+    [HttpPost("UploadFaces")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RecognizeFace([FromForm] IFormFile file)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> RecognizeFace([FromForm] FaceUploadModel file)
     {
         if (!Guid.TryParse(HttpContext.User.Identity?.Name, out var apiKeyId)) return Unauthorized();
 
-        var classroomResult = await CameraService.GetOngoingClass(apiKeyId, service);
-        if (classroomResult.IsErr)
-            return classroomResult.UnwrapErr() switch
-            {
-                Errors.ClassRetrievalError.NoCameraFound =>
-                    Unauthorized(),
-                Errors.ClassRetrievalError.NoClassFound =>
-                    NotFound("No class found at this location and time."),
-                _ => StatusCode(500, "An unknown error occurred.")
-            };
-
-        var classroom = classroomResult.Unwrap();
-
-        await using var stream = file.OpenReadStream();
-        var checkinResult = await cameraService.CheckFaceIntoClass(classroom.Id, stream);
-
-        if (checkinResult.IsErr)
-            return checkinResult.UnwrapErr() switch
-            {
-                Errors.CheckInError.ClassNotFound =>
-                    NotFound("Class not found."),
-                Errors.CheckInError.StudentNotFound =>
-                    NotFound("Student not found."),
-                Errors.CheckInError.StudentNotEnrolled =>
-                    BadRequest("Student is not enrolled in this class."),
-                Errors.CheckInError.FaceRecognitionFailed =>
-                    BadRequest("Face recognition failed. Ensure the image is clear and contains a single face."),
-                _ => StatusCode(500, "An unknown error occurred.")
-            };
+        // var classroomResult = await CameraService.GetOngoingClass(apiKeyId, service);
+        // if (classroomResult.IsErr)
+        //     return classroomResult.UnwrapErr() switch
+        //     {
+        //         Errors.ClassRetrievalError.NoCameraFound =>
+        //             Unauthorized(),
+        //         Errors.ClassRetrievalError.NoClassFound =>
+        //             NotFound("No class found at this location and time."),
+        //         _ => StatusCode(500, "An unknown error occurred.")
+        //     };
+        //
+        // var classroom = classroomResult.Unwrap();
+        //
+        // await using var stream = file.OpenReadStream();
+        // var checkinResult = await cameraService.CheckFaceIntoClass(classroom.Id, stream);
+        //
+        // if (checkinResult.IsErr)
+        //     return checkinResult.UnwrapErr() switch
+        //     {
+        //         Errors.CheckInError.ClassNotFound =>
+        //             NotFound("Class not found."),
+        //         Errors.CheckInError.StudentNotFound =>
+        //             NotFound("Student not found."),
+        //         Errors.CheckInError.StudentNotEnrolled =>
+        //             BadRequest("Student is not enrolled in this class."),
+        //         Errors.CheckInError.FaceRecognitionFailed =>
+        //             BadRequest("Face recognition failed. Ensure the image is clear and contains a single face."),
+        //         _ => StatusCode(500, "An unknown error occurred.")
+        //     };
 
         return Ok();
     }

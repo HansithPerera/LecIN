@@ -22,7 +22,7 @@ public class CameraTests : IClassFixture<MockAppBuilder>
     {
         using var ctx = context.CreateDbContext();
         
-        var camera = new Camera
+        var camera = new Backend.Models.Camera
         {
             Name = "Test Camera",
             Location = "Test Location",
