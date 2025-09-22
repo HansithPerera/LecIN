@@ -72,6 +72,14 @@ public class Repository(
         return cameraApiKey?.Camera;
     }
 
+    public async Task<Attendance?> GetAttendanceAsync(Guid studentId, Guid classId)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+        return await ctx.Attendances
+            .OrderByDescending(a => a.Timestamp)
+            .FirstOrDefaultAsync(a => a.StudentId == studentId && a.ClassId == classId);
+    }
+
     public async Task<Class?> GetClassByIdAsync(Guid classId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();

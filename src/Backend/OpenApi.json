@@ -142,6 +142,55 @@
           }
         }
       }
+    },
+    "/api/attendance/check-in": {
+      "post": {
+        "tags": [
+          "StudentCheckIn"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckInRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckInRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckInRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckInResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckInResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckInResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -178,6 +227,42 @@
           }
         }
       },
+      "CheckInRequest": {
+        "required": [
+          "classId"
+        ],
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "CheckInResponse": {
+        "required": [
+          "message",
+          "courseCode",
+          "timestamp",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "courseCode": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
       "ProblemDetails": {
         "type": "object",
         "properties": {
@@ -209,6 +294,9 @@
   "tags": [
     {
       "name": "Camera"
+    },
+    {
+      "name": "StudentCheckIn"
     }
   ]
 }
