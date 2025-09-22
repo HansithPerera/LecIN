@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Lecin.Pages.AdminDashboardPage"
+             Title="Admin Dashboard">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Label Text="Welcome Admin!"
+               FontSize="24"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
+
+        <Label Text="You can manage users, courses, and system settings here."
+               FontSize="16"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
+    </VerticalStackLayout>
+</ContentPage>

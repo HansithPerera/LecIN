@@ -7,12 +7,33 @@
     xmlns:pages="clr-namespace:Lecin.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="Lecin">
-    
+
+    <!-- Default Main Dashboard -->
     <ShellContent
         Title="Dashboard"
         Icon="{StaticResource IconDashboard}"
         ContentTemplate="{DataTemplate pages:MainPage}"
         Route="main" />
+
+    <!-- Role-based Dashboards -->
+    <ShellContent
+        Title="Admin"
+        ContentTemplate="{DataTemplate pages:AdminDashboardPage}"
+        Route="adminDashboard"
+        IsVisible="{Binding IsAdmin}" />
+
+    <ShellContent
+        Title="Teacher"
+        ContentTemplate="{DataTemplate pages:TeacherDashboardPage}"
+        Route="teacherDashboard"
+        IsVisible="{Binding IsTeacher}" />
+
+    <ShellContent
+        Title="Student"
+        ContentTemplate="{DataTemplate pages:StudentDashboardPage}"
+        Route="studentDashboard"
+        IsVisible="{Binding IsStudent}" />
+
 
     <Shell.FlyoutFooter>
         <Grid Padding="15">

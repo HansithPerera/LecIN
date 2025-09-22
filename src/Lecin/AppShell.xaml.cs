@@ -1,14 +1,20 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using Font = Microsoft.Maui.Font;
+using Lecin.ViewModels;
 
 namespace Lecin;
 
 public partial class AppShell : Shell
 {
-    public AppShell()
+    public AppShell(string role)
     {
         InitializeComponent();
+
+        // Apply role-based visibility through ViewModel binding
+        BindingContext = new AppShellViewModel(role);
+
+        // Init theme control
         var currentTheme = Application.Current!.RequestedTheme;
         ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
     }
