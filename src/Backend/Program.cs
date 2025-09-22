@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
+builder.Configuration.AddUserSecrets<Backend.Program>();
 
 var isMock = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
 var testing = builder.Environment.IsEnvironment(Constants.TestingEnv);

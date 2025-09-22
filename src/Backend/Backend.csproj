@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<UserSecretsId>Backend-Local-Dev-b20a26b5-3b3f-4895-8d82-db134ba4beb5</UserSecretsId>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Azure.AI.Vision.Face" Version="1.0.0-beta.2"/>

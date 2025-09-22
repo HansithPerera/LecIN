@@ -12,7 +12,7 @@ namespace Backend.Controllers;
 public class StudentCheckInController(Repository repo) : ControllerBase
 {
     
-    [Authorize]
+    //[Authorize]
     [HttpPost("check-in")]
     public async Task<ActionResult<CheckInResponse>> CheckIn([FromBody] CheckInRequest req)
     {
