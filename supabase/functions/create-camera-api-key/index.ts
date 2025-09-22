@@ -1,28 +1,25 @@
-import { encodeHex } from "https://deno.land/std@0.224.0/encoding/hex.ts";
-import {isAdmin} from "../_shared/auth.ts";
+import { isAdmin } from "../_shared/auth.ts";
 import { createClient } from 'npm:@supabase/supabase-js@2'
 
-function toHex(bytes: Uint8Array): string {
-    return encodeHex(bytes);
-}
-
-function randomHex(size: number): string {
-    const bytes = new Uint8Array(size);
-    crypto.getRandomValues(bytes);
-    return toHex(bytes);
-}
-
-async function sha256Hex(input: string): Promise<string> {
-    const data = new TextEncoder().encode(input);
-    const digest = await crypto.subtle.digest("SHA-256", data);
-    return toHex(new Uint8Array(digest));
-}
-
-async function getKey(){
-    const prefix = randomHex(8); // 16 hex chars
-    const token = randomHex(32); // 64 hex chars
+async function getKey(supabaseClient){
+    let key_resp = await supabaseClient.rpc('create_api_key');
+    
+    if (key_resp.error) {
+        throw new Error('Failed to create API key: ' + key_resp.error);
+    }
+    
+    let resp_hash = await supabaseClient.rpc('hash_apikey',
+        { input_text: key_resp.data }
+    );
+    
+    if (resp_hash.error) {
+        throw new Error('Failed to hash API key: ' + resp_hash.error);
+    }
+    
+    const token = key_resp.data;
+    const hash = resp_hash.data;
+    const prefix = token.slice(0, 8);
     const plaintextKey = `${prefix}_${token}`;
-    const hash = await sha256Hex(plaintextKey);
     return { prefix, plaintextKey, hash };
 }
 
@@ -31,7 +28,7 @@ Deno.serve(async (req: Request) => {
         const authHeader = req.headers.get('Authorization')!
         const token = authHeader.replace('Bearer ', '')
         const authorized = await isAdmin(token)
-        if (authorized) {
+        if (!authorized) {
             return new Response(
                 JSON.stringify({ error: "Unauthorized" }),
                 { status: 401, headers: { "Content-Type": "application/json" } },
@@ -45,45 +42,88 @@ Deno.serve(async (req: Request) => {
             );
         }
 
-        const body = await req.json().catch(() => ({}));
+        const { CameraId, Primary } = await req.json().catch(() => ({}));
         
-        const name =
-            typeof body.name === "string" && body.name.trim().length
-                ? body.name.trim()
-                : null;
-
-        const { prefix, plaintextKey, hash } = await getKey()
-
+        if (typeof Primary !== "boolean") {
+            return new Response(
+                JSON.stringify({ error: "Primary must be boolean" }),
+                { status: 400, headers: { "Content-Type": "application/json" } },
+            );
+        }
+        
+        if (typeof CameraId !== "string") {
+            return new Response(
+                JSON.stringify({ error: "CameraId must be string" }),
+                { status: 400, headers: { "Content-Type": "application/json" } },
+            );
+        }
+        
         const supabaseClient = createClient(
             Deno.env.get('SUPABASE_URL') ?? '',
             Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
         );
+
+        const { prefix, plaintextKey, hash } = await getKey(supabaseClient)
         
-        let resp = await supabaseClient
+        let camera_resp = await supabaseClient
+            .from('Cameras')
+            .select('*')
+            .eq('Id', CameraId)
+            .single();
+        
+        if (camera_resp.error || !camera_resp.data) {
+            return new Response(
+                JSON.stringify({ error: "Camera not found", detail: camera_resp.error }),
+                { status: 404, headers: { "Content-Type": "application/json" } },
+            );
+        }
+
+        let apiKeyResp = await supabaseClient
             .from('ApiKeys')
             .insert({
-                Name: name,
+                Name: camera_resp.data.Name + (Primary ? " Primary" : " Secondary"),
                 Prefix: prefix,
                 Hash: hash,
                 IsActive: true,
             })
             .select()
             .single();
-        
-        console.log(resp)
 
-        if (!resp.data) {
+        if (!apiKeyResp.data) {
             return new Response(
-                JSON.stringify({ error: "Insert failed", detail: resp.error }),
+                JSON.stringify({ error: "Insert failed", detail: apiKeyResp.error }),
                 {
-                    status: resp.status || 500,
+                    status: apiKeyResp.status || 500,
                     headers: { "Content-Type": "application/json" },
                 },
             );
         }
+
+        let cameraApiKeyResp = await supabaseClient
+            .from('CameraApiKeys')
+            .upsert({
+                CameraId: CameraId,
+                ApiKeyId: apiKeyResp.data.Id,
+                Role: Primary ? 1 : 2,
+            })
+            .select()
+        
+        console.log(cameraApiKeyResp.data);
+        
+        if (cameraApiKeyResp.error || !cameraApiKeyResp.data) {
+            return new Response(
+                JSON.stringify({ error: "Insert failed", detail: cameraApiKeyResp.error }),
+                {
+                    status: cameraApiKeyResp.status || 500,
+                    headers: { "Content-Type": "application/json" },
+                },
+            );
+        }
+        
         return new Response(
             JSON.stringify({ 
-                key: plaintextKey 
+                Key: plaintextKey,
+                CameraApiKey: cameraApiKeyResp.data
             }), 
             {
                 status: 201,

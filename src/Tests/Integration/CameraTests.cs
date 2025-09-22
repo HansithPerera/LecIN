@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Backend;
+using Backend.Api.Models;
 using Backend.Database;
-using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,14 +15,12 @@ public class CameraTests : IClassFixture<MockAppBuilder>
     public CameraTests(MockAppBuilder mockAppBuilder)
     {
         _mockAppBuilder = mockAppBuilder;
-        _apiKey = SeedCamera(_mockAppBuilder.Services.GetRequiredService<IDbContextFactory<AppDbContext>>());
+        _apiKey = SeedCamera(_mockAppBuilder.Services.GetRequiredService<Supabase.Client>());
     }
 
-    private static string SeedCamera(IDbContextFactory<AppDbContext> context)
+    private static string SeedCamera(Supabase.Client client)
     {
-        using var ctx = context.CreateDbContext();
-        
-        var camera = new Backend.Models.Camera
+        var camera = new Backend.Api.Models.Camera
         {
             Name = "Test Camera",
             Location = "Test Location",
@@ -31,17 +29,15 @@ public class CameraTests : IClassFixture<MockAppBuilder>
             UpdatedAt = DateTimeOffset.UtcNow
         };
 
-        var apiKey = ApiKey.Create(out var key, "Camera API Key");
-
-        ctx.Cameras.Add(camera);
-        ctx.ApiKeys.Add(apiKey);
-        ctx.CameraApiKeys.Add(new CameraApiKey
+        var apiKey = new ApiKey
         {
-            Role = ApiKeyRole.Primary,
-            CameraId = camera.Id,
-            ApiKeyId = apiKey.Id
-        });
-        ctx.SaveChanges();
+            Prefix = "test-prefix",
+            Hash = "test-hash",
+            IsActive = true,
+            CreatedAt = DateTimeOffset.UtcNow,
+            Name = "Test API Key"
+        };
+        client.From<Backend.Api.Camera>().Insert(camera).Wait();
         return key;
     }
 

@@ -33,9 +33,17 @@ public class Worker(FaceService service, OpenApiClient client, ILogger<Worker> l
                     ms.Position = 0;
                     files.Add(new FileParameter(ms, $"{Guid.NewGuid()}.png", "image/png"));
                 }
-                await client.UploadFacesAsync(files, stoppingToken);
+                try
+                {
+                    await client.UploadFacesAsync(files, stoppingToken);
+                }
+                catch (Exception e)
+                {
+                    logger.LogError("Error uploading faces: {message}", e.Message);
+                }
             }
             logger.LogInformation("Detected {count} faces", processedFaces.Count);
+            await Task.Delay(1000, stoppingToken);
         }
     }
 }

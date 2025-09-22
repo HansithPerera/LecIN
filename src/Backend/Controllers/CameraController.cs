@@ -1,7 +1,8 @@
-﻿using Backend.Database;
+﻿using System.Security.Claims;
+using Backend.Api.Models;
+using Backend.Database;
 using Backend.Dto;
 using Backend.Face;
-using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ namespace Backend.Controllers;
 [Route("api/[controller]")]
 [Authorize(Policy = Constants.CameraAuthorizationPolicy)]
 [ApiController]
-public class CameraController(Repository service, CameraService cameraService, FaceService faceService) : ControllerBase
+public class CameraController(Repository service, CameraService cameraService, ILogger<CameraController> logger) : ControllerBase
 {
     [HttpGet("details")]
     [ProducesResponseType(typeof(Camera), StatusCodes.Status200OK)]
@@ -30,40 +31,36 @@ public class CameraController(Repository service, CameraService cameraService, F
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Consumes("multipart/form-data")]
-    public async Task<IActionResult> RecognizeFace([FromForm] FaceUploadModel file)
+    public async Task<IActionResult> RecognizeFace([FromForm] FaceUploadModel faceUpload)
     {
-        if (!Guid.TryParse(HttpContext.User.Identity?.Name, out var apiKeyId)) return Unauthorized();
+        if (!Guid.TryParse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), out var apiKeyId)) 
+            return Unauthorized();
 
-        // var classroomResult = await CameraService.GetOngoingClass(apiKeyId, service);
-        // if (classroomResult.IsErr)
-        //     return classroomResult.UnwrapErr() switch
-        //     {
-        //         Errors.ClassRetrievalError.NoCameraFound =>
-        //             Unauthorized(),
-        //         Errors.ClassRetrievalError.NoClassFound =>
-        //             NotFound("No class found at this location and time."),
-        //         _ => StatusCode(500, "An unknown error occurred.")
-        //     };
-        //
-        // var classroom = classroomResult.Unwrap();
-        //
-        // await using var stream = file.OpenReadStream();
-        // var checkinResult = await cameraService.CheckFaceIntoClass(classroom.Id, stream);
-        //
-        // if (checkinResult.IsErr)
-        //     return checkinResult.UnwrapErr() switch
-        //     {
-        //         Errors.CheckInError.ClassNotFound =>
-        //             NotFound("Class not found."),
-        //         Errors.CheckInError.StudentNotFound =>
-        //             NotFound("Student not found."),
-        //         Errors.CheckInError.StudentNotEnrolled =>
-        //             BadRequest("Student is not enrolled in this class."),
-        //         Errors.CheckInError.FaceRecognitionFailed =>
-        //             BadRequest("Face recognition failed. Ensure the image is clear and contains a single face."),
-        //         _ => StatusCode(500, "An unknown error occurred.")
-        //     };
-
+        var tasks = new List<Task>();
+        if (faceUpload.Faces.Count == 0)
+            return BadRequest("No faces uploaded.");
+        
+        foreach (var face in faceUpload.Faces)
+        {
+            tasks.Add(Task.Run(async () =>
+            {
+                await using var stream = face.OpenReadStream();
+                var faceDetectionResult = await cameraService.CheckFaceIntoClass(apiKeyId, stream);
+                if (faceDetectionResult.IsErr)
+                {
+                    logger.LogWarning("Face recognition failed for uploaded face: {Error}",
+                        faceDetectionResult.UnwrapErr());
+                }
+                else
+                {
+                    var attendance = faceDetectionResult.Unwrap();
+                    logger.LogInformation("Student {StudentId} checked in successfully for class {ClassId}",
+                        attendance.StudentId, attendance.ClassId);
+                }
+            }));
+        }
+        
+        await Task.WhenAll(tasks);
         return Ok();
     }
 }

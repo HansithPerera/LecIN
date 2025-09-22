@@ -129,10 +129,6 @@
   "components": {
     "schemas": {
       "Camera": {
-        "required": [
-          "name",
-          "location"
-        ],
         "type": "object",
         "properties": {
           "id": {
@@ -140,11 +136,9 @@
             "format": "uuid"
           },
           "name": {
-            "maxLength": 255,
             "type": "string"
           },
           "location": {
-            "maxLength": 2048,
             "type": "string"
           },
           "isActive": {
@@ -156,9 +150,46 @@
           },
           "updatedAt": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
+          },
+          "baseUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "requestClientOptions": {
+            "$ref": "#/components/schemas/ClientOptions"
+          },
+          "tableName": {
+            "type": "string",
+            "nullable": true
+          },
+          "primaryKey": {
+            "type": "object",
+            "nullable": true
           }
         }
+      },
+      "ClientOptions": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "type": "string"
+          },
+          "headers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "queryParams": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "nullable": true
       },
       "ProblemDetails": {
         "type": "object",

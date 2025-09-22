@@ -3,6 +3,7 @@ using Camera;
 using Camera.Services;
 using Emgu.CV;
 using Emgu.CV.Structure;
+using FaceService = Backend.Face.FaceService;
 
 namespace Tests.Unit;
 

@@ -1,5 +1,8 @@
 ﻿using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Encodings.Web;
+using Backend.Api;
 using Backend.Database;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
@@ -17,15 +20,18 @@ public class ApiKeyAuthenticationHandler(
     {
         if (!Request.Headers.TryGetValue(Constants.ApiKeyHeaderName, out var apiKey))
             return AuthenticateResult.Fail("Missing or invalid API Key.");
-
-        var hash = Util.HashApiKey(apiKey!);
-        var camera = await service.GetApiKeyByHashAsync(hash);
+        
+        var apiKeyHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(apiKey)));
+        var camera = await service.GetApiKeyByHashAsync(apiKeyHash);
+        
         if (camera == null) return AuthenticateResult.Fail("Invalid API Key.");
 
         var claims = new[]
         {
-            new Claim(ClaimTypes.Name, camera.Id.ToString()), new Claim(ClaimTypes.NameIdentifier, camera.Id.ToString())
+            new Claim(ClaimTypes.Name, camera.Id.ToString()), 
+            new Claim(ClaimTypes.NameIdentifier, camera.Id.ToString())
         };
+        
         var identity = new ClaimsIdentity(claims, Scheme.Name);
         var principal = new ClaimsPrincipal(identity);
         var ticket = new AuthenticationTicket(principal, Scheme.Name);

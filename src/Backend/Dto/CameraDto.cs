@@ -1,4 +1,4 @@
-﻿using Backend.Models;
+﻿using Backend.Api.Models;
 
 namespace Backend.Dto;
 

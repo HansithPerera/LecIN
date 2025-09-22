@@ -1,71 +1,55 @@
-﻿using Backend.Database;
+﻿using Backend.Api.Models;
+using Backend.Database;
 using Backend.Face;
-using Backend.Models;
 using ResultSharp;
 
 namespace Backend.Services;
 
 public class CameraService(Repository repo, FaceService faceService)
 {
-    public async Task<Result<RecognizedFace, Errors.FaceRecognitionError>> AnalyzeFace(Stream imageStream)
+    private async Task<Result<Class, Errors.ClassRetrievalError>> GetOngoingClass(Guid apiKeyId)
     {
-        try
-        {
-            var recognizedFaces = await faceService.RecognizeFacesAsync(imageStream);
-            return recognizedFaces.Count switch
-            {
-                0 => Result.Err<RecognizedFace, Errors.FaceRecognitionError>(
-                    Errors.FaceRecognitionError.NoFaceDetected),
-                > 1 => Result.Err<RecognizedFace, Errors.FaceRecognitionError>(
-                    Errors.FaceRecognitionError.MultipleFacesDetected),
-                _ => Result.Ok<RecognizedFace, Errors.FaceRecognitionError>(
-                    recognizedFaces.First())
-            };
-        }
-        catch (FormatException)
-        {
-            return Result.Err<RecognizedFace, Errors.FaceRecognitionError>(Errors.FaceRecognitionError
-                .InvalidImageFormat);
-        }
-        catch (Exception)
-        {
-            return Result.Err<RecognizedFace, Errors.FaceRecognitionError>(Errors.FaceRecognitionError.UnknownError);
-        }
-    }
-
-    public static async Task<Result<Class, Errors.ClassRetrievalError>> GetOngoingClass(Guid apiKeyId,
-        Repository service)
-    {
-        var camera = await service.GetCameraByApiKeyIdAsync(apiKeyId);
+        var camera = await repo.GetCameraByApiKeyIdAsync(apiKeyId);
         if (camera == null)
             return Result.Err<Class, Errors.ClassRetrievalError>(Errors.ClassRetrievalError.NoCameraFound);
-        var classroom = await service.GetClassByLocationTimeAsync(camera.Location, DateTime.UtcNow);
+        var classroom = await repo.GetClassByLocationTimeAsync(camera.Location, DateTime.UtcNow);
         return classroom == null
             ? Result.Err<Class, Errors.ClassRetrievalError>(Errors.ClassRetrievalError.NoClassFound)
             : Result.Ok<Class, Errors.ClassRetrievalError>(classroom);
     }
-
-    public async Task<Result<Attendance, Errors.CheckInError>> CheckFaceIntoClass(Guid classId, Stream imageStream)
+    
+    public async Task<Result<Attendance, Errors.CheckInError>> CheckFaceIntoClass(Guid apiKeyId, Stream imageStream)
     {
-        var classroom = await repo.GetClassByIdAsync(classId);
-        if (classroom == null) return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.ClassNotFound);
-        var analysisResult = await AnalyzeFace(imageStream);
-        if (analysisResult.IsErr)
-            return Result.Err<Attendance, Errors.CheckInError>(
-                analysisResult.UnwrapErr() == Errors.FaceRecognitionError.UnknownError
-                    ? Errors.CheckInError.UnknownError
-                    : Errors.CheckInError.FaceRecognitionFailed
-            );
-
-        var recognizedFace = analysisResult.Unwrap();
-        var student = await repo.GetStudentByFaceId(recognizedFace.PersonId);
+        var classResult = await GetOngoingClass(apiKeyId);
+        if (classResult.IsErr)
+            return classResult.UnwrapErr() switch
+            {
+                Errors.ClassRetrievalError.NoCameraFound =>
+                    Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.NoCameraFound),
+                Errors.ClassRetrievalError.NoClassFound =>
+                    Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.ClassNotFound),
+                _ => Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.UnknownError)
+            };
+        
+        var classValue = classResult.Unwrap();
+        
+        var recognizedFace = await faceService.RecognizeFaceAsync(imageStream);
+        if (recognizedFace == null) return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.FaceRecognitionFailed);
+        
+        var student = await repo.GetStudentById(recognizedFace.PersonId);
         if (student == null) return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.StudentNotFound);
 
-        var enrolled = await repo.IsStudentEnrolledInCourseAsync(student.Id, classroom.CourseCode,
-            classroom.CourseYearId, classroom.CourseSemesterCode);
-        if (!enrolled) return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.StudentNotEnrolled);
-
-        var attendance = await repo.CreateAttendanceAsync(student.Id, classroom.Id);
+        var enrolled = await repo.IsStudentEnrolledInCourseAsync(
+            student.Id, 
+            classValue.CourseCode,
+            classValue.CourseYear, 
+            classValue.CourseSemesterCode);
+        
+        if (!enrolled)
+            return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.StudentNotEnrolled);
+        
+        var attendance = await repo.UpsertAttendanceAsync(student.Id, classValue.Id);
+        
         return Result.Ok<Attendance, Errors.CheckInError>(attendance);
     }
 }
