@@ -70,6 +70,31 @@
           "Npgsql": "9.0.3"
         }
       },
+      "OpenCvSharp4": {
+        "type": "Direct",
+        "requested": "[4.11.0.20250507, )",
+        "resolved": "4.11.0.20250507",
+        "contentHash": "j/R+G6xGC5IV2wGRU0/GF5qG/FrP+Uxp8dmNnXFlIdiw8Gfo4mtvKcBOBfS/bn4pP/7FNHLFX/xvMtgPJeDjAA==",
+        "dependencies": {
+          "System.Memory": "4.6.3"
+        }
+      },
+      "OpenCvSharp4.Extensions": {
+        "type": "Direct",
+        "requested": "[4.11.0.20250507, )",
+        "resolved": "4.11.0.20250507",
+        "contentHash": "xVA5xpgvI6cWBx+Zf+kL7NIVc8dpT6ScgHq3nV5tlMBpoG2aClKaLSFHtlPAE99ASfqNieaDzeOduJTe4V1aGw==",
+        "dependencies": {
+          "OpenCvSharp4": "4.11.0.20250507",
+          "System.Drawing.Common": "8.0.11"
+        }
+      },
+      "OpenCvSharp4.runtime.win": {
+        "type": "Direct",
+        "requested": "[4.11.0.20250507, )",
+        "resolved": "4.11.0.20250507",
+        "contentHash": "3PxMXyzR+pkL9UOx2PiBjZm+/iyCIu5D6OlA1sq9MH7oWrfvVnCXJlUYhIJv67F7SLUwUuGwXDIQBfdsL/54lg=="
+      },
       "ResultSharp": {
         "type": "Direct",
         "requested": "[0.3.1, )",
@@ -487,6 +512,11 @@
         "resolved": "1.6.17",
         "contentHash": "Le+kehlmrlQfuDFUt1zZ2dVwrhFQtKREdKBo+rexOwaCoYP0/qpgT9tLxCsZjsgR5Itk1UKPcbgO+FyaNid/bA=="
       },
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw=="
+      },
       "Npgsql": {
         "type": "Transitive",
         "resolved": "9.0.3",
@@ -517,6 +547,14 @@
         "resolved": "9.0.9",
         "contentHash": "wpsUfnyv8E5K4WQaok6weewvAbQhcLwXFcHBm5U0gdEaBs85N//ssuYvRPFWwz2rO/9/DFP3A1sGMzUFBj8y3w=="
       },
+      "System.Drawing.Common": {
+        "type": "Transitive",
+        "resolved": "8.0.11",
+        "contentHash": "AVyutHHKrX0Mt9C9T8W3Ccat3cVauUwvN+EqnVpSQi92nwBqoQ+2ZRvGP1S+rKK+6TGXmRflSYNShVjl2mMBlw==",
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "8.0.0"
+        }
+      },
       "System.IdentityModel.Tokens.Jwt": {
         "type": "Transitive",
         "resolved": "8.0.1",
@@ -525,6 +563,11 @@
           "Microsoft.IdentityModel.JsonWebTokens": "8.0.1",
           "Microsoft.IdentityModel.Tokens": "8.0.1"
         }
+      },
+      "System.Memory": {
+        "type": "Transitive",
+        "resolved": "4.6.3",
+        "contentHash": "qdcDOgnFZY40+Q9876JUHnlHu7bosOHX8XISRoH94fwk6hgaeQGSgfZd8srWRZNt5bV9ZW2TljcegDNxsf+96A=="
       },
       "System.Memory.Data": {
         "type": "Transitive",
