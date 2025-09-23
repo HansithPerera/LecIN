@@ -30,6 +30,15 @@
           "System.Text.Json": "9.0.0"
         }
       },
+      "Emgu.CV.runtime.ubuntu-x64": {
+        "type": "Direct",
+        "requested": "[4.12.0.5764, )",
+        "resolved": "4.12.0.5764",
+        "contentHash": "BOZ7WcNyphqi6xV5EGWOj5mpmT909lc2MyUZneD+LEjD68+L+mSJZBxBiu3CaFltfwqdZdfQd/yjY5kxjLm6yw==",
+        "dependencies": {
+          "Emgu.CV": "4.12.0.5764"
+        }
+      },
       "Emgu.CV.runtime.windows": {
         "type": "Direct",
         "requested": "[4.12.0.5764, )",

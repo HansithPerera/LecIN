@@ -10,6 +10,7 @@
     <ItemGroup>
         <PackageReference Include="Emgu.CV" Version="4.12.0.5764" />
         <PackageReference Include="Emgu.CV.Bitmap" Version="4.12.0.5764" />
+        <PackageReference Include="Emgu.CV.runtime.ubuntu-x64" Version="4.12.0.5764" />
         <PackageReference Include="Emgu.CV.runtime.windows" Version="4.12.0.5764" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.9"/>
         <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.9" />
