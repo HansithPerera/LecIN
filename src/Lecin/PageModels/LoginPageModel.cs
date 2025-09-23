@@ -48,9 +48,10 @@ public partial class LoginPageModel : ObservableObject
                 string role = "Unknown";
 
                 // Student
-                var studentResponse = await _supabase.From<Student>()
-                    .Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, userId)
-                    .Get();
+                var studentResponse = await _supabase.From<Lecin.Models.Student>()
+        .Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, userId)
+        .Get();
+
 
                 var student = studentResponse.Models.FirstOrDefault();
                 if (student != null)

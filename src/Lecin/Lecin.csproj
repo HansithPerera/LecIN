@@ -90,6 +90,12 @@
       <MauiXaml Update="Pages\StudentDashboardPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
+      <MauiXaml Update="Pages\Student\AttendanceHistoryPage.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
+      <MauiXaml Update="Pages\Student\AttendanceStreaksPage.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </MauiXaml>
       <MauiXaml Update="Pages\TeacherDashboardPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>

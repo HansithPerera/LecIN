@@ -5,14 +5,16 @@
              Title="Student Dashboard">
 
     <VerticalStackLayout Padding="20" Spacing="15">
-        <Label Text="Welcome Student!"
+		<Label Text="Welcome Student!"
                FontSize="24"
-               HorizontalOptions="Center"
-               VerticalOptions="Center" />
+               HorizontalOptions="Center" />
 
-        <Label Text="You can view your courses, check attendance, and track progress here."
-               FontSize="16"
-               HorizontalOptions="Center"
-               VerticalOptions="Center" />
+		<Button Text="View Attendance History"
+                Clicked="OnHistoryClicked"
+                HorizontalOptions="Fill" />
+
+		<Button Text="View Attendance Streaks"
+                Clicked="OnStreaksClicked"
+                HorizontalOptions="Fill" />
     </VerticalStackLayout>
 </ContentPage>
