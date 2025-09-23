@@ -56,10 +56,6 @@ jobs:
           
       - name: Start Supabase local development
         run: supabase start
-        
-      - name: Run Supabase functions deploy
-        run: supabase functions serve
-        
           
       - name: Setup Deno Imports
         working-directory: "./supabase/functions"
