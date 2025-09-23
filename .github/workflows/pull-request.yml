@@ -48,9 +48,7 @@ jobs:
         uses: docker/setup-docker-action@v4
 
       - name: Setup Supabase CLI
-        uses: supabase/setup-supabase@v1
-        with:
-          version: '3.0.0'
+        uses: supabase/setup-cli@v1
           
       - name: Install Deno
         uses: denoland/setup-deno@v2
