@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
-using Backend.Api.Models;
 using Backend.Database;
 using Backend.Dto;
 using Backend.Face;
 using Backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SupabaseShared.Models;
 
 namespace Backend.Controllers;
 

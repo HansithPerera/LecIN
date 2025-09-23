@@ -1,7 +1,7 @@
 ﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace Backend.Api.Models;
+namespace SupabaseShared.Models;
 
 public enum ApiKeyRole
 {
@@ -12,7 +12,7 @@ public enum ApiKeyRole
 [Table("CameraApiKeys")]
 public class CameraApiKey: BaseModel
 {
-    [Column]
+    [PrimaryKey(shouldInsert: true)]
     public Guid CameraId { get; set; }
 
     [Column]
@@ -21,5 +21,6 @@ public class CameraApiKey: BaseModel
     [Column]
     public ApiKeyRole Role { get; set; }
     
+    [Reference(typeof(Camera))]
     public Camera? Camera { get; set; }
 }

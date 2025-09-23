@@ -1,9 +1,10 @@
 ﻿using System.Net;
 using Backend;
-using Backend.Api.Models;
-using Backend.Database;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SupabaseShared.Models;
+using static System.Security.Cryptography.SHA256;
+using static System.Text.Encoding;
+using Convert = System.Convert;
 
 namespace Tests.Integration;
 
@@ -20,7 +21,7 @@ public class CameraTests : IClassFixture<MockAppBuilder>
 
     private static string SeedCamera(Supabase.Client client)
     {
-        var camera = new Backend.Api.Models.Camera
+        var camera = new SupabaseShared.Models.Camera
         {
             Name = "Test Camera",
             Location = "Test Location",
@@ -29,15 +30,26 @@ public class CameraTests : IClassFixture<MockAppBuilder>
             UpdatedAt = DateTimeOffset.UtcNow
         };
 
+        var key = Guid.NewGuid().ToString();
+        var bas64Sha256 = Convert.ToBase64String(HashData(UTF8.GetBytes(key)));
         var apiKey = new ApiKey
         {
-            Prefix = "test-prefix",
-            Hash = "test-hash",
+            Prefix = key[..8],
+            Hash = bas64Sha256,
             IsActive = true,
             CreatedAt = DateTimeOffset.UtcNow,
             Name = "Test API Key"
         };
-        client.From<Backend.Api.Camera>().Insert(camera).Wait();
+        
+        var cameraApiKey = new CameraApiKey
+        {
+            CameraId = camera.Id,
+            ApiKeyId = apiKey.Id,
+            Role = ApiKeyRole.Primary
+        };
+        var cam = client.From<SupabaseShared.Models.Camera>().Insert(camera).Result;
+        var ap = client.From<ApiKey>().Insert(apiKey).Result;
+        client.From<CameraApiKey>().Insert(cameraApiKey).Wait();
         return key;
     }
 

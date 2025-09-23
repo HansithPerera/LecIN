@@ -1,7 +1,7 @@
-﻿using Backend.Api.Models;
-using Backend.Database;
+﻿using Backend.Database;
 using Backend.Face;
 using ResultSharp;
+using SupabaseShared.Models;
 
 namespace Backend.Services;
 

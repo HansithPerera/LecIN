@@ -30,6 +30,7 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Backend.Api\Backend.Api.csproj" />
+      <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj" />
     </ItemGroup>
     <ItemGroup>
       <None Update="haarcascade_frontalface_default.xml">

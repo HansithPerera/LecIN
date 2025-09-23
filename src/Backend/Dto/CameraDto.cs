@@ -1,4 +1,4 @@
-﻿using Backend.Api.Models;
+﻿using SupabaseShared.Models;
 
 namespace Backend.Dto;
 

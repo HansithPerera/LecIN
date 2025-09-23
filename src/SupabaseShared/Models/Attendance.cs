@@ -1,12 +1,12 @@
 ﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace Backend.Api.Models;
+namespace SupabaseShared.Models;
 
 [Table("Attendance")]
 public class Attendance: BaseModel
 {
-    [PrimaryKey]
+    [PrimaryKey(shouldInsert: true)]
     public Guid StudentId { get; set; }
 
     [PrimaryKey]
