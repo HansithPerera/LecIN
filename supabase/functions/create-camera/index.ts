@@ -1,11 +1,8 @@
-import { createClient } from 'supabase'
-import {isAdmin} from "../_shared/auth.ts";
+import {getServiceRoleClient, isAdmin} from "../_shared/auth.ts";
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 
 Deno.serve(async (req) => {
-    const authHeader = req.headers.get('Authorization')!
-    const token = authHeader.replace('Bearer ', '')
-    const authorized = await isAdmin(token)
+    const authorized = await isAdmin(req)
     if (!authorized) {
         return new Response(
             JSON.stringify({error: "Unauthorized"}),
@@ -36,10 +33,7 @@ Deno.serve(async (req) => {
         );
     }
     
-    const supabaseClient = createClient(
-        Deno.env.get('SUPABASE_URL') ?? '',
-        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
+    const supabaseClient = await getServiceRoleClient();
 
     const { data, error } = await supabaseClient
         .from('Cameras')

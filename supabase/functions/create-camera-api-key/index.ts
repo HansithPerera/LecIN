@@ -1,5 +1,5 @@
-import { isAdmin } from "../_shared/auth.ts";
-import { SupabaseClient, createClient } from "supabase";
+import {getServiceRoleClient, isAdmin} from "../_shared/auth.ts";
+import {createClient, SupabaseClient} from "supabase";
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 
 
@@ -27,9 +27,7 @@ async function getKey(supabaseClient: SupabaseClient){
 
 Deno.serve(async (req: Request) => {
     try {
-        const authHeader = req.headers.get('Authorization')!
-        const token = authHeader.replace('Bearer ', '')
-        const authorized = await isAdmin(token)
+        const authorized = await isAdmin(req)
         if (!authorized) {
             return new Response(
                 JSON.stringify({ error: "Unauthorized" }),
@@ -59,11 +57,8 @@ Deno.serve(async (req: Request) => {
                 { status: 400, headers: { "Content-Type": "application/json" } },
             );
         }
-        
-        const supabaseClient = createClient(
-            Deno.env.get('SUPABASE_URL') ?? '',
-            Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-        );
+
+        const supabaseClient = await getServiceRoleClient();
 
         const { prefix, plaintextKey, hash } = await getKey(supabaseClient)
         
@@ -121,7 +116,7 @@ Deno.serve(async (req: Request) => {
                 },
             );
         }
-        
+
         return new Response(
             JSON.stringify({ 
                 Key: plaintextKey,
@@ -132,7 +127,6 @@ Deno.serve(async (req: Request) => {
                 headers: { "Content-Type": "application/json" },
             });
     } catch (err) {
-        console.error("Request processing failed:", err);
         return new Response(
             JSON.stringify({ error: "Internal error", detail: String(err) }),
             { status: 500, headers: { "Content-Type": "application/json" } },
