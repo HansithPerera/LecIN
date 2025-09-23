@@ -69,6 +69,10 @@ jobs:
       - name: Restore dependencies
         working-directory: "./src"
         run: dotnet restore
+        
+      - name: Restore workloads
+        working-directory: "./src"
+        run: dotnet workload restore
 
       - name: Build
         working-directory: "./src"
