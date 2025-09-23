@@ -1,5 +1,6 @@
 ﻿using Backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Backend.Dto;
 
 namespace Backend.Database;
 
@@ -78,6 +79,61 @@ public class Repository(
         return await ctx.Attendances
             .OrderByDescending(a => a.Timestamp)
             .FirstOrDefaultAsync(a => a.StudentId == studentId && a.ClassId == classId);
+    }
+
+    public async Task<AttendancePercentageDto> GetAttendancePercentageAsync(
+    Guid studentId,
+    DateTimeOffset? from = null,
+    DateTimeOffset? to = null)
+    {
+        await using var ctx = await dbContextFactory.CreateDbContextAsync();
+
+        var courseCodes = await ctx.Enrollments
+            .Where(e => e.StudentId == studentId)
+            .Select(e => e.CourseCode)
+            .Distinct()
+            .ToListAsync();
+
+        if (courseCodes.Count == 0)
+            return new AttendancePercentageDto(studentId, 0, 0, 0, new());
+
+        var classesQuery = ctx.Classes
+            .Where(c => courseCodes.Contains(c.CourseCode));
+
+        if (from.HasValue) classesQuery = classesQuery.Where(c => c.StartTime >= from.Value);
+        if (to.HasValue) classesQuery = classesQuery.Where(c => c.StartTime <= to.Value);
+
+        var classes = await classesQuery
+            .Select(c => new { c.Id, c.CourseCode })
+            .ToListAsync();
+
+        var classIds = classes.Select(c => c.Id).ToList();
+
+        var attendedClassIds = await ctx.Attendances
+            .Where(a => a.StudentId == studentId && classIds.Contains(a.ClassId))
+            .Select(a => a.ClassId)
+            .Distinct()
+            .ToListAsync();
+
+        var totalClasses = classes.Count;
+        var attended = attendedClassIds.Count;
+        var overallPct = totalClasses == 0 ? 0 : Math.Round(attended * 100.0 / totalClasses, 1);
+
+
+        var attendedSet = attendedClassIds.ToHashSet();
+        var byCourse = classes
+            .GroupBy(c => c.CourseCode)
+            .Select(g =>
+            {
+                var total = g.Count();
+                var att = g.Count(x => attendedSet.Contains(x.Id));
+                var pct = total == 0 ? 0 : Math.Round(att * 100.0 / total, 1);
+                return new CourseAttendanceDto(g.Key, total, att, pct);
+            })
+            .OrderByDescending(x => x.Percentage)
+            .ToList();
+
+        return new AttendancePercentageDto(studentId, totalClasses, attended, overallPct, byCourse);
     }
 
     public async Task<Class?> GetClassByIdAsync(Guid classId)
