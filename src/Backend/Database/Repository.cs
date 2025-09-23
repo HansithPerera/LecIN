@@ -1,6 +1,6 @@
-﻿using Backend.Api.Models;
-using Supabase.Postgrest;
+﻿using Supabase.Postgrest;
 using Supabase.Postgrest.Interfaces;
+using SupabaseShared.Models;
 using static Supabase.Postgrest.Constants;
 
 namespace Backend.Database;

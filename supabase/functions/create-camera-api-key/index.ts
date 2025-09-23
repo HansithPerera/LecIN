@@ -1,14 +1,16 @@
 import { isAdmin } from "../_shared/auth.ts";
-import { createClient } from 'npm:@supabase/supabase-js@2'
+import { SupabaseClient, createClient } from "supabase";
+import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 
-async function getKey(supabaseClient){
-    let key_resp = await supabaseClient.rpc('create_api_key');
+
+async function getKey(supabaseClient: SupabaseClient){
+    const key_resp = await supabaseClient.rpc('create_api_key');
     
     if (key_resp.error) {
         throw new Error('Failed to create API key: ' + key_resp.error);
     }
     
-    let resp_hash = await supabaseClient.rpc('hash_apikey',
+    const resp_hash = await supabaseClient.rpc('hash_apikey',
         { input_text: key_resp.data }
     );
     
@@ -65,7 +67,7 @@ Deno.serve(async (req: Request) => {
 
         const { prefix, plaintextKey, hash } = await getKey(supabaseClient)
         
-        let camera_resp = await supabaseClient
+        const camera_resp = await supabaseClient
             .from('Cameras')
             .select('*')
             .eq('Id', CameraId)
@@ -78,7 +80,7 @@ Deno.serve(async (req: Request) => {
             );
         }
 
-        let apiKeyResp = await supabaseClient
+        const apiKeyResp = await supabaseClient
             .from('ApiKeys')
             .insert({
                 Name: camera_resp.data.Name + (Primary ? " Primary" : " Secondary"),
@@ -99,7 +101,7 @@ Deno.serve(async (req: Request) => {
             );
         }
 
-        let cameraApiKeyResp = await supabaseClient
+        const cameraApiKeyResp = await supabaseClient
             .from('CameraApiKeys')
             .upsert({
                 CameraId: CameraId,

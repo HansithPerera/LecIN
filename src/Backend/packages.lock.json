@@ -816,6 +816,12 @@
           "Newtonsoft.Json": "[13.0.4, )",
           "Supabase": "[1.1.1, )"
         }
+      },
+      "supabaseshared": {
+        "type": "Project",
+        "dependencies": {
+          "Supabase.Postgrest": "[4.0.3, )"
+        }
       }
     }
   }

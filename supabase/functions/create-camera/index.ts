@@ -1,6 +1,6 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts"
-import { createClient } from 'npm:@supabase/supabase-js@2'
+import { createClient } from 'supabase'
 import {isAdmin} from "../_shared/auth.ts";
+import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 
 Deno.serve(async (req) => {
     const authHeader = req.headers.get('Authorization')!

@@ -6,7 +6,8 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <PreserveCompilationContext>true</PreserveCompilationContext>
-    </PropertyGroup>
+      <UserSecretsId>83d08ab3-1e21-45e9-afe9-9f38246994bc</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.4">
@@ -24,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="Xunit"/>
+        <Using Include="Xunit" />
     </ItemGroup>
 
     <ItemGroup>

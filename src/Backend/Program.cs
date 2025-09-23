@@ -14,10 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
 var isMock = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
-var testing = builder.Environment.IsEnvironment(Constants.TestingEnv);
 
 // Configure the database context and authentication only if not in mock or testing mode.
-if (!isMock && !testing)
+if (!isMock)
 {
     builder.Services.AddAuthentication(Constants.ApiKeyAuthScheme)
         .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(

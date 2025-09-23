@@ -1,4 +1,4 @@
-﻿name: Docker
+﻿name: Build and Test
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -38,14 +38,41 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-      # Setup .NET SDK
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-      
+
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-supabase@v1
+        with:
+          version: '3.0.0'
+          
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+          
+      - name: Start Supabase local development
+        run: supabase start
+        
+      - name: Run Supabase functions deploy
+        run: supabase functions serve
+        
+          
+      - name: Setup Deno Imports
+        working-directory: "./supabase/functions"
+        run: deno install
+        
+      - name: Run deno unit tests
+        working-directory: "./supabase/functions"
+        run: deno test --allow-all
+          
       # Restore, build, and test the .NET project
-      
       - name: Restore dependencies
         working-directory: "./src"
         run: dotnet restore
