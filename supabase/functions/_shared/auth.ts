@@ -1,4 +1,4 @@
-﻿import {createClient} from 'supabase/';
+﻿import {createClient} from 'supabase';
 
 export async function isAdmin(token: string): Promise<boolean> {
     const supabaseClient = createClient(

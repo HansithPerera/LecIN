@@ -7,6 +7,7 @@ import 'jsr:@std/dotenv/load'
 // Set up the configuration for the Supabase client
 const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
 const supabaseKey = Deno.env.get('SUPABASE_PUBLISHABLE_KEY') ?? ''
+const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
 const options = {
     auth: {
         autoRefreshToken: false,
@@ -17,44 +18,49 @@ const options = {
 
 // Test the creation and functionality of the Supabase client
 const testClientCreation = async () => {
-    const client: SupabaseClient = createClient(supabaseUrl, supabaseKey, options)
-
-    // Verify if the Supabase URL and key are provided
+    const client: SupabaseClient = createClient(supabaseUrl, serviceKey, options)
     if (!supabaseUrl) throw new Error('supabaseUrl is required.')
     if (!supabaseKey) throw new Error('supabaseKey is required.')
 
-    // Test a simple query to the database
     const { data: table_data, error: table_error } = await client
-        .from('my_table')
+        .from('ApiKeys')
         .select('*')
         .limit(1)
     if (table_error) {
         throw new Error('Invalid Supabase client: ' + table_error.message)
     }
+    console.log(JSON.stringify(table_data, null, 2))
     assert(table_data, 'Data should be returned from the query.')
 }
 
-// Test the 'hello-world' function
-const testHelloWorld = async () => {
+const testUnauthorizedWithAnon = async () => {
     const client: SupabaseClient = createClient(supabaseUrl, supabaseKey, options)
 
     // Invoke the 'hello-world' function with a parameter
-    const { data: func_data, error: func_error } = await client.functions.invoke('hello-world', {
-        body: { name: 'bar' },
+    const { error, data } = await client.functions.invoke('create-camera', {
+        body: { Name: 'bar', Location: 'baz' },
+    })
+    
+    console.log(JSON.stringify(error, null, 2))
+
+    assertEquals(error.name, "FunctionsHttpError");
+}
+
+const testSuccessWithServiceKey = async () => {
+    const client: SupabaseClient = createClient(supabaseUrl, serviceKey, options)
+
+    // Invoke the 'hello-world' function with a parameter
+    const { error, data } = await client.functions.invoke('create-camera', {
+        body: { Name: 'bar', Location: 'baz' },
     })
 
-    // Check for errors from the function invocation
-    if (func_error) {
-        throw new Error('Invalid response: ' + func_error.message)
-    }
+    console.log(JSON.stringify(data, null, 2))
 
-    // Log the response from the function
-    console.log(JSON.stringify(func_data, null, 2))
-
-    // Assert that the function returned the expected result
-    assertEquals(func_data.message, 'Hello bar!')
+    assertEquals(data[0].Name, "bar");
+    assertEquals(data[0].Location, "baz");
 }
 
 // Register and run the tests
 Deno.test('Client Creation Test', testClientCreation)
-Deno.test('Hello-world Function Test', testHelloWorld)
+Deno.test('Unauthorized with Anon Key Test',{ sanitizeResources: false }, testUnauthorizedWithAnon)
+Deno.test('Success with Service Key Test',{ sanitizeResources: false }, testSuccessWithServiceKey)

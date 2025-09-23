@@ -336,7 +336,7 @@ s3_secret_key = "env(S3_SECRET_KEY)"
 
 [functions.create-camera-api-key]
 enabled = true
-verify_jwt = true
+verify_jwt = false
 import_map = "./functions/create-camera-api-key/deno.json"
 # Uncomment to specify a custom file path to the entrypoint.
 # Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
@@ -347,7 +347,7 @@ entrypoint = "./functions/create-camera-api-key/index.ts"
 
 [functions.create-camera]
 enabled = true
-verify_jwt = true
+verify_jwt = false
 import_map = "./functions/create-camera/deno.json"
 # Uncomment to specify a custom file path to the entrypoint.
 # Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
@@ -358,7 +358,7 @@ entrypoint = "./functions/create-camera/index.ts"
 
 [functions.export-attendance-csv]
 enabled = true
-verify_jwt = true
+verify_jwt = false
 import_map = "./functions/export-attendance-csv/deno.json"
 # Uncomment to specify a custom file path to the entrypoint.
 # Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
