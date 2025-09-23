@@ -66,13 +66,14 @@ jobs:
         run: deno test --allow-all
           
       # Restore, build, and test the .NET project
-      - name: Restore dependencies
-        working-directory: "./src"
-        run: dotnet restore
-        
+
       - name: Restore workloads
         working-directory: "./src"
         run: dotnet workload restore
+        
+      - name: Restore dependencies
+        working-directory: "./src"
+        run: dotnet restore
 
       - name: Build
         working-directory: "./src"
