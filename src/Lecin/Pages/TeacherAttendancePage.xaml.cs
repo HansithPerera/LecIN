@@ -53,7 +53,9 @@ public partial class TeacherAttendancePage : ContentPage
         public bool HasData => Courses.Count > 0 || !string.IsNullOrWhiteSpace(OverallText);
         public bool HasMessage => !string.IsNullOrWhiteSpace(Message);
         public void Clear() { Courses.Clear(); OverallText = ""; Message = ""; }
-    }
+    } 
+
+
 
     public record CourseRow(string CourseCode, int Attended, int Total, double Percentage)
     {
