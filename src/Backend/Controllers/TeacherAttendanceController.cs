@@ -9,8 +9,8 @@ namespace Backend.Controllers;
 [Route("api/teacher/attendance")]
 public class TeacherAttendanceController(Repository repo) : ControllerBase
 {
-    // Keep it simple: any signed-in user for now (swap to your Teacher policy later)
-    [Authorize] // TODO: [Authorize(Policy = "<YourTeacherPolicyName>")]
+    
+    //[Authorize] 
     [HttpGet("percentage/{studentId:guid}")]
     public async Task<ActionResult<AttendancePercentageDto>> GetStudentAttendancePercent(
         Guid studentId,

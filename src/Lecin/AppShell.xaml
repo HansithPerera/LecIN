@@ -7,17 +7,26 @@
     xmlns:pages="clr-namespace:Lecin.Pages"
     Shell.FlyoutBehavior="Flyout"
     Title="Lecin">
-    
+
+    <!-- Existing dashboard item -->
     <ShellContent
         Title="Dashboard"
         Icon="{StaticResource IconDashboard}"
         ContentTemplate="{DataTemplate pages:MainPage}"
         Route="main" />
 
+    <!-- NEW: Teacher Attendance menu entry -->
+    <ShellContent
+        Title="Teacher Attendance"
+        ContentTemplate="{DataTemplate pages:TeacherAttendancePage}"
+        Route="teacher-attendance" />
+    <!-- Optional: add Icon="..." if you have one -->
+
     <Shell.FlyoutFooter>
         <Grid Padding="15">
-            <sf:SfSegmentedControl x:Name="ThemeSegmentedControl" 
-                VerticalOptions="Center" HorizontalOptions="Center" SelectionChanged="SfSegmentedControl_SelectionChanged"
+            <sf:SfSegmentedControl x:Name="ThemeSegmentedControl"
+                VerticalOptions="Center" HorizontalOptions="Center"
+                SelectionChanged="SfSegmentedControl_SelectionChanged"
                 SegmentWidth="40" SegmentHeight="40">
                 <sf:SfSegmentedControl.ItemsSource>
                     <x:Array Type="{x:Type sf:SfSegmentItem}">

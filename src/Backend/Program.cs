@@ -48,9 +48,13 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddOpenApi();
 
+
+
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+
 
 if (app.Environment.IsEnvironment(Constants.DevelopmentEnv)) app.MapOpenApi();
 
