@@ -20,6 +20,20 @@ export async function isAdmin(req: Request): Promise<boolean> {
     return !!user.data.user && admin.data !== null;
 }
 
+export async function isTeacher(req: Request): Promise<boolean> {
+    const authHeader = req.headers.get('Authorization')!
+    const token = authHeader.replace('Bearer ', '')
+
+    const supabaseClient = await getServiceRoleClient();
+    const user = await supabaseClient.auth.getUser(token);
+    const teacher = await supabaseClient
+        .from('Teachers')
+        .select('*')
+        .eq('Id', user.data.user?.id)
+        .single();
+    return !!user.data.user && teacher.data !== null;
+}
+
 export async function getAnonClient() {
     const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
     const anonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
