@@ -11,7 +11,8 @@ namespace Lecin.Pages;
 public partial class TeacherAttendancePage : ContentPage
 {
     private readonly HttpClient _http = new();
-    const string BaseUrl = "http://localhost:5105";
+    //const string BaseUrl = "http://localhost:5105";
+    const string BaseUrl = "https://localhost:7239";
 
     public TeacherAttendancePage()
     {

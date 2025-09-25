@@ -91,8 +91,7 @@ public class Repository(
     {
         // 1) Enrollments for the student
         var enrollments = await _rest.GetAsync<Enrollment>(
-    $"Enrollments?StudentId=eq.{studentId}" +
-    $"&select=CourseCode,CourseYearId:CourseYear,CourseSemesterCode:CourseSemester");
+    $"Enrollments?StudentId=eq.{studentId}&select=CourseCode,CourseYearId:CourseYear,CourseSemesterCode");
         if (enrollments is null || enrollments.Length == 0)
             return new AttendancePercentageDto(studentId, 0, 0, 0, new());
 
