@@ -1449,6 +1449,12 @@
         "dependencies": {
           "Xamarin.Kotlin.StdLib": "2.0.21.3"
         }
+      },
+      "supabaseshared": {
+        "type": "Project",
+        "dependencies": {
+          "Supabase.Postgrest": "[4.0.3, )"
+        }
       }
     },
     "net9.0-android35.0/android-arm64": {},
@@ -1971,6 +1977,12 @@
           "Microsoft.IO.RecyclableMemoryStream": "3.0.0",
           "System.Reactive": "6.0.0",
           "System.Threading.Channels": "8.0.0"
+        }
+      },
+      "supabaseshared": {
+        "type": "Project",
+        "dependencies": {
+          "Supabase.Postgrest": "[4.0.3, )"
         }
       }
     },
