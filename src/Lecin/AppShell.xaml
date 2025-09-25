@@ -17,7 +17,7 @@
 
     <!-- NEW: Teacher Attendance menu entry -->
     <ShellContent
-        Title="Teacher Attendance"
+        Title="Student Attendance %"
         ContentTemplate="{DataTemplate pages:TeacherAttendancePage}"
         Route="teacher-attendance" />
     <!-- Optional: add Icon="..." if you have one -->

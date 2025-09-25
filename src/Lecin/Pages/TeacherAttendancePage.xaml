@@ -2,10 +2,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Lecin.Pages.TeacherAttendancePage"
+             Title="Attendance %">
+    <VerticalStackLayout Padding="16" Spacing="12">
+        <Entry x:Name="StudentIdEntry" Placeholder="Student ID (GUID)" />
+        <Button Text="Get Attendance %" Clicked="OnGetAttendanceClicked" />
+        <Label x:Name="OverallLabel" FontAttributes="Bold" />
+        <Label x:Name="ErrorLabel" TextColor="Red" IsVisible="False" />
+    </VerticalStackLayout>
+</ContentPage>
+
+
+
+
+
+
+
+
+
+
+
+<!--
+    <?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Lecin.Pages.TeacherAttendancePage"
              Title="Student Attendance %">
     <VerticalStackLayout Padding="16" Spacing="12">
         <Label Text="Student ID (GUID)" />
-        <Entry x:Name="StudentIdEntry" Placeholder="49bf8c3d-f7c9-4b2c-862a-9477ddcff815" Keyboard="Chat" />
+        <Entry x:Name="StudentIdEntry" Placeholder="Student ID (GUID) - Example: 49bf8c3d-f7c9-4b2c-862a-9477ddcff815" Keyboard="Chat" />
+        
         <Button Text="Get Attendance %" Clicked="OnFetchClicked" />
 
         <Grid ColumnDefinitions="Auto,*" IsVisible="{Binding HasData}">
@@ -30,3 +55,4 @@
         <Label Text="{Binding Message}" Opacity="0.7" IsVisible="{Binding HasMessage}" />
     </VerticalStackLayout>
 </ContentPage>
+-->
