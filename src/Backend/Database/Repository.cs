@@ -83,6 +83,76 @@ public class Repository(
             .FirstOrDefaultAsync(a => a.StudentId == studentId && a.ClassId == classId);
     }
 
+
+    public async Task<AttendancePercentageDto> GetAttendancePercentageAsync(
+    Guid studentId,
+    DateTimeOffset? from = null,
+    DateTimeOffset? to = null)
+    {
+        // 1) Enrollments for the student
+        var enrollments = await _rest.GetAsync<Enrollment>(
+    $"Enrollments?StudentId=eq.{studentId}" +
+    $"&select=CourseCode,CourseYearId:CourseYear,CourseSemesterCode:CourseSemester");
+        if (enrollments is null || enrollments.Length == 0)
+            return new AttendancePercentageDto(studentId, 0, 0, 0, new());
+
+        // 2) All classes matching those enrollments (with optional from/to on StartTime)
+        var classes = new List<Class>();
+        foreach (var e in enrollments)
+        {
+            var filters = new List<string>
+        {
+    $"CourseCode=eq.{e.CourseCode}",
+    $"CourseYear=eq.{e.CourseYearId}",          // DB column name
+    $"CourseSemester=eq.{e.CourseSemesterCode}" // DB column name
+};  
+            if (from.HasValue) filters.Add($"StartTime=gte.{Uri.EscapeDataString(from.Value.ToString("o"))}");
+            if (to.HasValue) filters.Add($"StartTime=lte.{Uri.EscapeDataString(to.Value.ToString("o"))}");
+
+            var url = "Classes?" + string.Join("&", filters) + "&select=Id,CourseCode,StartTime,EndTime";
+            var rows = await _rest.GetAsync<Class>(url);
+            if (rows != null) classes.AddRange(rows);
+        }
+
+        if (classes.Count == 0)
+            return new AttendancePercentageDto(studentId, 0, 0, 0, new());
+
+        var classIds = classes.Select(c => c.Id).Distinct().ToArray();
+
+        // 3) Attendance for this student across those classes (chunk IN() to keep URL short)
+        var attendedSet = new HashSet<Guid>();
+        for (int i = 0; i < classIds.Length; i += 50)
+        {
+            var chunk = classIds.Skip(i).Take(50);
+            var inList = string.Join(",", chunk);
+            var url = $"Attendance?StudentId=eq.{studentId}&ClassId=in.({inList})&select=ClassId";
+            var rows = await _rest.GetAsync<Attendance>(url);
+            if (rows != null)
+                foreach (var a in rows)
+                    attendedSet.Add(a.ClassId);
+        }
+
+        // 4) Compute overall and per-course
+        var total = classIds.Length;
+        var attended = attendedSet.Count;
+        var overallPct = total == 0 ? 0 : Math.Round(attended * 100.0 / total, 1);
+
+        var byCourse = classes
+            .GroupBy(c => c.CourseCode)
+            .Select(g =>
+            {
+                var totalC = g.Count();
+                var attC = g.Count(x => attendedSet.Contains(x.Id));
+                var pctC = totalC == 0 ? 0 : Math.Round(attC * 100.0 / totalC, 1);
+                return new CourseAttendanceDto(g.Key, totalC, attC, pctC);
+            })
+            .OrderByDescending(x => x.Percentage)
+            .ToList();
+
+        return new AttendancePercentageDto(studentId, total, attended, overallPct, byCourse);
+    }
+
+    /*
     public async Task<AttendancePercentageDto> GetAttendancePercentageAsync(
     Guid studentId,
     DateTimeOffset? from = null,
@@ -137,18 +207,20 @@ public class Repository(
 
         return new AttendancePercentageDto(studentId, totalClasses, attended, overallPct, byCourse);
     }
+    */
 
     public async Task<Class?> GetClassByIdAsync(Guid classId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();
         return await ctx.Classes.FirstOrDefaultAsync(c => c.Id == classId);
     }
+    
 
 
     //
     public async Task<Enrollment[]> GetEnrollmentsForStudentAsync(Guid studentId)
     {
-        var rows = await rest.GetAsync<Enrollment>(
+        var rows = await _rest.GetAsync<Enrollment>(
             $"Enrollments?StudentId=eq.{studentId}&select=CourseCode,CourseYearId,CourseSemesterCode");
         return rows ?? Array.Empty<Enrollment>();
     }
@@ -167,7 +239,7 @@ public class Repository(
                 $"&CourseSemesterCode=eq.{e.CourseSemesterCode}" +
                 $"&StartTime=lte.{Uri.EscapeDataString(asOf.ToString("o"))}" +
                 $"&select=Id,CourseCode,StartTime,EndTime";
-            var rows = await rest.GetAsync<Class>(url);
+            var rows = await _rest.GetAsync<Class>(url);
             if (rows != null) all.AddRange(rows);
         }
         // distinct by Id (in case of overlap)
@@ -190,7 +262,7 @@ public class Repository(
                 $"Attendance?StudentId=eq.{studentId}" +
                 $"&ClassId=in.({inList})" +
                 $"&select=ClassId,StudentId,Timestamp";
-            var rows = await rest.GetAsync<Attendance>(url);
+            var rows = await _rest.GetAsync<Attendance>(url);
             if (rows != null) acc.AddRange(rows);
         }
         return acc.ToArray();

@@ -30,7 +30,27 @@ public partial class TeacherAttendancePage : ContentPage
             return;
         }
 
-        
+        try
+        {
+            var url = $"{BaseUrl}/api/teacher/attendance/percentage/{studentId}";
+            var dto = await _http.GetFromJsonAsync<AttendancePercentageDto>(
+                url,
+                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (dto is null)
+            {
+                ErrorLabel.Text = "No data.";
+                ErrorLabel.IsVisible = true;
+                return;
+            }
+
+            OverallLabel.Text = $"Overall: {dto.Percentage:F1}% ({dto.Attended}/{dto.TotalClasses})";
+        }
+        catch (Exception ex)
+        {
+            ErrorLabel.Text = ex.Message;
+            ErrorLabel.IsVisible = true;
+        }
     }
 
     // Frontend shape; keep in sync with your backend response
