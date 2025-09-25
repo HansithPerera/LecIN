@@ -11,6 +11,10 @@ public class Attendance: BaseModel
 
     [PrimaryKey]
     public Guid ClassId { get; set; }
+    
+    [Column]
+    public string? Reason { get; set; }
 
+    [Column]
     public DateTimeOffset Timestamp { get; set; }
 }
