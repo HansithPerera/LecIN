@@ -39,24 +39,26 @@ public class CameraController(Repository service, CameraService cameraService, I
         {
             await using var stream = image.OpenReadStream();
             var faceDetectionResult = await cameraService.CheckFaceIntoClass(apiKeyId, stream);
-            
+
             if (faceDetectionResult.IsErr)
             {
                 logger.LogWarning("Face recognition failed: {Error}", faceDetectionResult.UnwrapErr());
-                return BadRequest(new { 
-                    Success = false, 
+                return BadRequest(new
+                {
+                    Success = false,
                     Error = faceDetectionResult.UnwrapErr(),
-                    Message = "Face recognition failed" 
+                    Message = "Face recognition failed"
                 });
             }
-            
+
             var attendance = faceDetectionResult.Unwrap();
-            logger.LogInformation("Student {StudentId} marked present for class {ClassId}", 
+            logger.LogInformation("Student {StudentId} marked present for class {ClassId}",
                 attendance.StudentId, attendance.ClassId);
-                
-            return Ok(new { 
-                Success = true, 
-                StudentId = attendance.StudentId, 
+
+            return Ok(new
+            {
+                Success = true,
+                StudentId = attendance.StudentId,
                 ClassId = attendance.ClassId,
                 LectureId = lectureId,
                 Message = "Attendance marked successfully",
@@ -66,10 +68,49 @@ public class CameraController(Repository service, CameraService cameraService, I
         catch (Exception ex)
         {
             logger.LogError(ex, "Error marking attendance");
-            return StatusCode(500, new { 
+            return StatusCode(500, new
+            {
                 Success = false,
-                Error = "Internal server error occurred while marking attendance" 
+                Error = "Internal server error occurred while marking attendance"
             });
         }
     }
+
+    [HttpPost("UploadFaces")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> RecognizeFace([FromForm] FaceUploadModel faceUpload)
+    {
+        if (!Guid.TryParse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), out var apiKeyId))
+            return Unauthorized();
+
+        var tasks = new List<Task>();
+        if (faceUpload.Faces.Count == 0)
+            return BadRequest("No faces uploaded.");
+
+        foreach (var face in faceUpload.Faces)
+        {
+            tasks.Add(Task.Run(async () =>
+            {
+                await using var stream = face.OpenReadStream();
+                var faceDetectionResult = await cameraService.CheckFaceIntoClass(apiKeyId, stream);
+                if (faceDetectionResult.IsErr)
+                {
+                    logger.LogWarning("Face recognition failed for uploaded face: {Error}",
+                        faceDetectionResult.UnwrapErr());
+                }
+                else
+                {
+                    var attendance = faceDetectionResult.Unwrap();
+                    logger.LogInformation("Student {StudentId} checked in successfully for class {ClassId}",
+                        attendance.StudentId, attendance.ClassId);
+                }
+            }));
+        }
+
+        await Task.WhenAll(tasks);
+        return Ok();
+    }
+
 }
