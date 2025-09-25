@@ -4,6 +4,7 @@ public static class Errors
 {
     public enum CheckInError
     {
+        NoCameraFound,
         FaceRecognitionFailed,
         StudentNotFound,
         AlreadyCheckedIn,
