@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 builder.Configuration.AddEnvironmentVariables();
 builder.Configuration.AddUserSecrets<Backend.Program>();
 
@@ -22,6 +24,7 @@ if (!isMock && !testing)
     // Configure the database context to use PostgreSQL with the connection string from configuration.
     builder.Services.AddDbContextFactory<AppDbContext>(options =>
         options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+
     );
 
     builder.Services.AddAuthentication(Constants.ApiKeyAuthScheme)
@@ -49,6 +52,9 @@ builder.Services.AddAuthorization();
 builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
+
+Console.WriteLine("[DefaultConnection] " + builder.Configuration.GetConnectionString("DefaultConnection"));
+
 
 var app = builder.Build();
 

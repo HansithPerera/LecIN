@@ -143,7 +143,19 @@
         }
       }
     },
-    "/api/attendance/check-in": {
+    "/api/student/ping": {
+      "get": {
+        "tags": [
+          "StudentCheckIn"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/student/check-in": {
       "post": {
         "tags": [
           "StudentCheckIn"

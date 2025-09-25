@@ -1,4 +1,6 @@
-﻿using Backend.Models;
+﻿//database pw: enwrrSMtnKE2xPGk
+
+using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Database;
@@ -22,5 +24,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(configuration["DatabaseSchema"] ?? "public");
+        //modelBuilder.Entity<Class>(entity =>{entity.Property(e => e.CourseYearId).HasColumnName("CourseYear");});
     }
 }

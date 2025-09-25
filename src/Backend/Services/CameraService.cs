@@ -62,7 +62,7 @@ public class CameraService(Repository repo, FaceService faceService)
         if (student == null) return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.StudentNotFound);
 
         var enrolled = await repo.IsStudentEnrolledInCourseAsync(student.Id, classroom.CourseCode,
-            classroom.CourseYearId, classroom.CourseSemesterCode);
+            classroom.CourseYear, classroom.CourseSemesterCode);
         if (!enrolled) return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.StudentNotEnrolled);
 
         var attendance = await repo.CreateAttendanceAsync(student.Id, classroom.Id);

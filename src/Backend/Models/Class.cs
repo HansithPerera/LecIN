@@ -10,8 +10,10 @@ public class Class
 
     [MaxLength(255)] public required string CourseCode { get; set; }
 
-    public int CourseYearId { get; set; }
+    [Column("CourseYear")]
+    public int CourseYear { get; set; }
 
+    [Column("CourseSemesterCode")]
     public int CourseSemesterCode { get; set; }
 
     [MaxLength(255)] public string? Location { get; set; }
