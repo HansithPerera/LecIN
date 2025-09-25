@@ -35,12 +35,13 @@ public class StudentCheckInController(Repository repo) : ControllerBase
         if (cls is null) return NotFound("Class not found.");
 
         // comment out already checked in causing issue
-        //var existing = await repo.GetAttendanceAsync(studentId, req.ClassId);
-        //if (existing is not null)
-        //{
-        //    var statusExisting = existing.Timestamp <= cls.StartTime.AddMinutes(5) ? "Present" : "Late";
-        //    return Ok(new CheckInResponse("Already checked in.",cls.CourseCode,existing.Timestamp,statusExisting));
-        //}
+        var existing = await repo.GetAttendanceAsync(studentId, req.ClassId);
+        if (existing is not null)
+        {
+            var statusExisting = existing.Timestamp <= cls.StartTime.AddMinutes(5) ? "Present" : "Late";
+            return Ok(new CheckInResponse("Already checked in.",cls.CourseCode,existing.Timestamp,statusExisting));
+        }
+        //
 
         var att = await repo.CreateAttendanceAsync(studentId, req.ClassId);
         var status = att.Timestamp <= cls.StartTime.AddMinutes(5) ? "Present" : "Late";
