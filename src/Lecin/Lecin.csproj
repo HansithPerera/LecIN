@@ -108,6 +108,10 @@
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
     </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj" />
+    </ItemGroup>
 
     <PropertyGroup>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
