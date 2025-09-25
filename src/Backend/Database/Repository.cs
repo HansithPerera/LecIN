@@ -7,8 +7,9 @@ namespace Backend.Database;
 
 public class Repository(
     IDbContextFactory<AppDbContext> dbContextFactory,
-    ILogger<Repository> logger)
+    ILogger<Repository> logger, SupabaseRest rest)
 {
+    private readonly SupabaseRest _rest = rest;
     public async Task<bool> IsCameraApiKey(Guid apiKeyId)
     {
         await using var ctx = await dbContextFactory.CreateDbContextAsync();

@@ -36,7 +36,10 @@ builder.Services.AddSingleton<Repository>();
 builder.Services.AddSingleton<FaceService>();
 
 // Application services.
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<SupabaseRest>();
 builder.Services.AddSingleton<CameraService>();
+
 
 builder.Services.AddSingleton<IAuthorizationHandler, IntegrationAuthorizationHandler>();
 
