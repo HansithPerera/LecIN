@@ -9,15 +9,14 @@
                FontSize="24"
                HorizontalOptions="Center" />
 
-        <!-- Placeholder list -->
+         <!-- Attendance list -->
         <CollectionView x:Name="AttendanceList">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border Stroke="LightGray" 
-                    StrokeShape="RoundRectangle 4"
-                    Padding="10" 
-                    Margin="5">
-                        <Label Text="{Binding}" FontSize="18" />
+                    <Border Stroke="LightGray" Padding="10" Margin="5" StrokeShape="RoundRectangle 8">
+                        <Label Text="{Binding StatusText}" 
+                               FontSize="18"
+                               TextColor="{Binding StatusColor}" />
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

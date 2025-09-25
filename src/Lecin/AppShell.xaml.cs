@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
+﻿    using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using Font = Microsoft.Maui.Font;
 using Lecin.ViewModels;
@@ -7,12 +7,13 @@ namespace Lecin;
 
 public partial class AppShell : Shell
 {
-    public AppShell(string role)
+    public AppShell(List<string> roles, bool isLoggedIn)   // ✅ roles list instead of single role
     {
         InitializeComponent();
 
         // Apply role-based visibility using ViewModel binding
-        BindingContext = new AppShellViewModel(role);
+        BindingContext = new AppShellViewModel(roles, isLoggedIn);
+
 
         // Initialize theme selector (Light/Dark)
         var currentTheme = Application.Current!.RequestedTheme;
@@ -82,4 +83,24 @@ public partial class AppShell : Shell
     {
         Application.Current!.UserAppTheme = e.NewIndex == 0 ? AppTheme.Light : AppTheme.Dark;
     }
+    private async void OnLogoutClicked(object sender, EventArgs e)
+    {
+        // clean Supabase
+        if (App.CurrentSupabase != null)
+            await App.CurrentSupabase.Auth.SignOut();
+
+        SecureStorage.Default.Remove("jwt_token");
+
+        //LoginPage
+        Application.Current.MainPage = new NavigationPage(
+            new Pages.LoginPage(new PageModels.LoginPageModel(App.CurrentSupabase!))
+        );
+
+        await DisplayToastAsync("You have been logged out.");
+    }
+
+
+
+
+
 }

@@ -45,45 +45,34 @@ public partial class LoginPageModel : ObservableObject
                 await SecureStorage.Default.SetAsync("jwt_token", session.AccessToken);
 
                 var userId = session.User.Id;
-                string role = "Unknown";
+                var roles = new List<string>(); // ✅ collect all roles
 
-                // Student
+                // ✅ Check Student role
                 var studentResponse = await _supabase.From<Lecin.Models.Student>()
-        .Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, userId)
-        .Get();
+                .Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, userId)
+                .Get();
 
+                if (studentResponse.Models.FirstOrDefault() != null)
+                    roles.Add("Student");
 
-                var student = studentResponse.Models.FirstOrDefault();
-                if (student != null)
-                {
-                    role = "Student";
-                }
-
-                // Teacher
+                // ✅ Check Teacher role
                 var teacherResponse = await _supabase.From<Teacher>()
                     .Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, userId)
                     .Get();
+                if (teacherResponse.Models.FirstOrDefault() != null)
+                    roles.Add("Teacher");
 
-                var teacher = teacherResponse.Models.FirstOrDefault();
-                if (teacher != null)
-                {
-                    role = "Teacher";
-                }
-
-                // Admin
+                // ✅ Check Admin role
                 var adminResponse = await _supabase.From<Admin>()
                     .Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, userId)
                     .Get();
+                if (adminResponse.Models.FirstOrDefault() != null)
+                    roles.Add("Admin");
 
-                var admin = adminResponse.Models.FirstOrDefault();
-                if (admin != null)
-                {
-                    role = "Admin";
-                }
+                // ✅ Pass all roles + logged-in flag to AppShell
+                // AppShell will decide which nav items to show
+                Application.Current.MainPage = new AppShell(roles, isLoggedIn: true);
 
-
-                // Load role-specific AppShell
-                Application.Current.MainPage = new AppShell(role);
             }
             else
             {

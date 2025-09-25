@@ -13,13 +13,9 @@ public partial class AttendanceHistoryPage : ContentPage
     public AttendanceHistoryPage()
     {
         InitializeComponent();
+        BindingContext = new Lecin.PageModels.Student.AttendanceHistoryPageModel();
 
-        // Fake data for testing
-        AttendanceList.ItemsSource = new List<string>
-        {
-            "2025-09-20 - Present",
-            "2025-09-21 - Absent",
-            "2025-09-22 - Present"
-        };
+        // Bind the CollectionView
+        AttendanceList.ItemsSource = ((Lecin.PageModels.Student.AttendanceHistoryPageModel)BindingContext).Records;
     }
 }

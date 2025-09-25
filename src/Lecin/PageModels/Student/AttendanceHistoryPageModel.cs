@@ -1,34 +1,36 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Microsoft.Maui.Graphics;
 
 namespace Lecin.PageModels.Student
 {
-    public partial class AttendanceHistoryPageModel : ObservableObject
+    public class AttendanceHistoryPageModel : INotifyPropertyChanged
     {
-        // A list of attendance records
-        [ObservableProperty]
-        private ObservableCollection<string> _attendanceRecords = new();
+        public ObservableCollection<AttendanceRecord> Records { get; set; }
 
         public AttendanceHistoryPageModel()
         {
-            LoadFakeData();
+            // Demo data – replace with Supabase fetch later
+            Records = new ObservableCollection<AttendanceRecord>
+            {
+                new AttendanceRecord { Date = "2025-09-20", Status = "Present" },
+                new AttendanceRecord { Date = "2025-09-21", Status = "Absent" },
+                new AttendanceRecord { Date = "2025-09-22", Status = "Present" }
+            };
         }
 
-        // Command to refresh data (can be linked to pull-to-refresh later)
-        [RelayCommand]
-        private void Refresh()
-        {
-            LoadFakeData();
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
 
-        private void LoadFakeData()
-        {
-            AttendanceRecords.Clear();
-            AttendanceRecords.Add("2025-09-20 - Present");
-            AttendanceRecords.Add("2025-09-21 - Absent");
-            AttendanceRecords.Add("2025-09-22 - Present");
-            AttendanceRecords.Add("2025-09-23 - Present");
-        }
+    public class AttendanceRecord
+    {
+        public string Date { get; set; }
+        public string Status { get; set; }
+
+        public string StatusText => $"{Date} - {Status}";
+        public Color StatusColor => Status == "Present" ? Colors.Green : Colors.Red;
     }
 }
