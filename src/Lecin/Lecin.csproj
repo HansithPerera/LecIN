@@ -81,6 +81,14 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </EmbeddedResource>
       <None Remove="appsettings.dev.json" />
+      <None Remove="appsettings.development.json" />
+      <EmbeddedResource Include="appsettings.Development.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <None Remove="appsettings.Production.json" />
+      <EmbeddedResource Include="appsettings.Production.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
     
     <ItemGroup>
@@ -99,6 +107,10 @@
       <MauiXaml Update="Pages\TeacherDashboardPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj" />
     </ItemGroup>
 
     <PropertyGroup>

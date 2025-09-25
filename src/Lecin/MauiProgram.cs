@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using CommunityToolkit.Maui;
+using Lecin.PageModels.Admin;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
@@ -8,9 +9,31 @@ namespace Lecin;
 
 public static class MauiProgram
 {
+    
+    private static void AddJsonSettings(this MauiAppBuilder builder, string jsonFile)
+    {
+        using var stream = Assembly.GetExecutingAssembly()
+            .GetManifestResourceStream($"{nameof(Lecin)}.{jsonFile}");
+        
+        if (stream != null)
+            builder.Configuration.AddJsonFile(jsonFile);
+    }
+    
+    private static void AddAppSettings(this MauiAppBuilder builder)
+    {
+        builder.AddJsonSettings("appsettings.json");
+        
+        #if DEBUG
+            builder.AddJsonSettings("appsettings.Development.json");
+        #else
+            builder.AddJsonSettings("appsettings.Production.json");
+        #endif
+    }
+    
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+        builder.AddAppSettings();
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
@@ -33,15 +56,6 @@ public static class MauiProgram
         builder.Logging.AddDebug();
         builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
-        using var stream = Assembly.GetExecutingAssembly()
-            .GetManifestResourceStream($"{nameof(Lecin)}.appsettings.json");
-        
-        var config = new ConfigurationBuilder()
-            .AddJsonStream(stream!)
-            .Build();
-        
-        builder.Configuration.AddConfiguration(config);
-        
         builder.Services.AddSingleton<Supabase.Client>(sp =>
             new Supabase.Client(
                 builder.Configuration["Supabase:Url"] ?? throw new InvalidOperationException("Supabase URL is not configured."),
@@ -49,7 +63,8 @@ public static class MauiProgram
             )
         );
         builder.Services.AddSingleton<ModalErrorHandler>();
-        builder.Services.AddSingleton<MainPageModel>();
+        builder.Services.AddTransient<MainPageModel>();
+        builder.Services.AddTransient<AdminPageModel>();
 
         builder.Services.AddTransientWithShellRoute<LoginPage, LoginPageModel>("login");
 

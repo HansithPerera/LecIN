@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lecin", "Lecin\Lecin.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Api", "Backend.Api\Backend.Api.csproj", "{28FC8B9A-9563-45F9-AE03-8AD7067E8A23}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camera", "Camera\Camera.csproj", "{750FB9E9-4BF7-47F6-9225-C42FC5C9640C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupabaseShared", "SupabaseShared\SupabaseShared.csproj", "{7F34BA7A-D12C-4AA8-ACB0-532C884212B1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,13 @@ Global
 		{28FC8B9A-9563-45F9-AE03-8AD7067E8A23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28FC8B9A-9563-45F9-AE03-8AD7067E8A23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28FC8B9A-9563-45F9-AE03-8AD7067E8A23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{750FB9E9-4BF7-47F6-9225-C42FC5C9640C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{750FB9E9-4BF7-47F6-9225-C42FC5C9640C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{750FB9E9-4BF7-47F6-9225-C42FC5C9640C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{750FB9E9-4BF7-47F6-9225-C42FC5C9640C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F34BA7A-D12C-4AA8-ACB0-532C884212B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F34BA7A-D12C-4AA8-ACB0-532C884212B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F34BA7A-D12C-4AA8-ACB0-532C884212B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F34BA7A-D12C-4AA8-ACB0-532C884212B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -4,35 +4,49 @@ using Backend.Auth;
 using Backend.Database;
 using Backend.Face;
 using Backend.Services;
+using Emgu.CV;
+using Emgu.CV.Face;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
 var isMock = Assembly.GetEntryAssembly()?.GetName().Name == "GetDocument.Insider";
-var testing = builder.Environment.IsEnvironment(Constants.TestingEnv);
 
 // Configure the database context and authentication only if not in mock or testing mode.
-if (!isMock && !testing)
+if (!isMock)
 {
-    // Configure the database context to use PostgreSQL with the connection string from configuration.
-    builder.Services.AddDbContextFactory<AppDbContext>(options =>
-        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-    );
-
     builder.Services.AddAuthentication(Constants.ApiKeyAuthScheme)
         .AddScheme<AuthenticationSchemeOptions, ApiKeyAuthenticationHandler>(
             Constants.ApiKeyAuthScheme,
             _ => { }
         );
+
+    builder.Services.AddSingleton<Supabase.Client>(_ =>
+        new Supabase.Client(
+            builder.Configuration["Supabase:Url"] ?? throw new InvalidOperationException("Supabase URL is not configured."),
+            builder.Configuration["Supabase:Key"] ?? throw new InvalidOperationException("Supabase Key is not configured.")
+        )
+    );
+    
+    builder.Services.AddHostedService<FaceTrainingWorker>();
 }
 
 // Repository service for data access.
 builder.Services.AddSingleton<Repository>();
+
+// Face recognition services.
+builder.Services.AddSingleton<CascadeClassifier>(
+    _ => new CascadeClassifier("haarcascade_frontalface_default.xml")
+);
+
+builder.Services.AddSingleton<LBPHFaceRecognizer>(
+    _ => new LBPHFaceRecognizer(1, 8, 8, 8, 100)
+);
 builder.Services.AddSingleton<FaceService>();
+builder.Services.AddSingleton<StorageService>();
 
 // Application services.
 builder.Services.AddSingleton<CameraService>();

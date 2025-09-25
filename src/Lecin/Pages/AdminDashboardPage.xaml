@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:adminPageModels="clr-namespace:Lecin.PageModels.Admin"
+             xmlns:models="clr-namespace:SupabaseShared.Models;assembly=SupabaseShared"
+             x:Name="AdminPage"
              x:Class="Lecin.Pages.AdminDashboardPage"
+             x:DataType="adminPageModels:AdminPageModel"
              Title="Admin Dashboard">
 
     <VerticalStackLayout Padding="20" Spacing="15">
@@ -14,5 +18,23 @@
                FontSize="16"
                HorizontalOptions="Center"
                VerticalOptions="Center" />
+        <CollectionView ItemsSource="{Binding Courses}"
+                        SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Course">
+                    <Grid ColumnDefinitions="Auto, *, Auto, Auto, Auto"
+                          ColumnSpacing="10"
+                          Padding="10"
+                          Margin="5">
+                        <Label Grid.Column="0" Text="{Binding Code}" FontSize="18" FontAttributes="Bold" />
+                        <Label Grid.Column="1" Text="{Binding Name}" FontSize="18" TextColor="Gray" />
+                        <Label Grid.Column="2" Text="{Binding Year}" FontSize="18" TextColor="Gray" />
+                        <Label Grid.Column="3" Text="{Binding SemesterCode}" FontSize="18" TextColor="Gray" />
+                        <Button Grid.Column="4" Text="Download Attendance CSV"
+                                Clicked="OnDownloadCsvClicked"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>

@@ -9,6 +9,9 @@
     <ItemGroup>
         <PackageReference Include="Azure.AI.Vision.Face" Version="1.0.0-beta.2"/>
         <PackageReference Include="CsvHelper" Version="33.1.0"/>
+        <PackageReference Include="Emgu.CV" Version="4.12.0.5764" />
+        <PackageReference Include="Emgu.CV.runtime.ubuntu-x64" Version="4.12.0.5764" />
+        <PackageReference Include="Emgu.CV.runtime.windows" Version="4.12.0.5764" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9"/>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.9"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9"/>
@@ -17,14 +20,23 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.4"/>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4"/>
         <PackageReference Include="ResultSharp" Version="0.3.1"/>
+        <PackageReference Include="Supabase" Version="1.1.1" />
     </ItemGroup>
     <ItemGroup>
         <Content Include="..\.dockerignore">
             <Link>.dockerignore</Link>
         </Content>
         <Content Include="packages.lock.json"/>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Backend.Api\Backend.Api.csproj" />
+      <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="haarcascade_frontalface_default.xml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <PropertyGroup>
