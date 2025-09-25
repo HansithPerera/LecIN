@@ -63,11 +63,13 @@ public partial class LoginPageModel : ObservableObject
                     roles.Add("Teacher");
 
                 // ✅ Check Admin role
-                var adminResponse = await _supabase.From<Admin>()
+                var adminResponse = await _supabase.From<Lecin.Models.Admin>()
                     .Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, userId)
                     .Get();
+
                 if (adminResponse.Models.FirstOrDefault() != null)
                     roles.Add("Admin");
+
 
                 // ✅ Pass all roles + logged-in flag to AppShell
                 // AppShell will decide which nav items to show

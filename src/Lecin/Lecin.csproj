@@ -74,24 +74,16 @@
         <PackageReference Include="Supabase" Version="1.1.1" />
         <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.7" />
     </ItemGroup>
-    
-    <ItemGroup>
-      <None Remove="appsettings.json" />
-      <EmbeddedResource Include="appsettings.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <None Remove="appsettings.dev.json" />
-      <None Remove="appsettings.development.json" />
-      <EmbeddedResource Include="appsettings.Development.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </EmbeddedResource>
-      <None Remove="appsettings.Production.json" />
-      <EmbeddedResource Include="appsettings.Production.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
-    </ItemGroup>
-    
-    <ItemGroup>
+
+	<ItemGroup>
+		<None Remove="appsettings.json" />
+		<EmbeddedResource Include="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
+	</ItemGroup>
+
+
+	<ItemGroup>
       <MauiXaml Update="Pages\AdminDashboardPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
