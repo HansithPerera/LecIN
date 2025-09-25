@@ -15,3 +15,5 @@ public record AttendancePercentageDto
     double Percentage, // overall
     List<CourseAttendanceDto> ByCourse);
 
+public record CourseBreakdown(string CourseCode, int Attended, int TotalClasses, double Percentage);
+

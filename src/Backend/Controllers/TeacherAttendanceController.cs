@@ -7,6 +7,7 @@ namespace Backend.Controllers;
 
 [ApiController]
 [Route("api/teacher/attendance")]
+[AllowAnonymous]
 public class TeacherAttendanceController(Repository repo) : ControllerBase
 {
     
