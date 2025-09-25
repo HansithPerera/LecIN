@@ -5,6 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
     xmlns:pages="clr-namespace:Lecin.Pages"
+    xmlns:viewModels="clr-namespace:Lecin.ViewModels"
+    x:DataType="viewModels:AppShellViewModel"
     Shell.FlyoutBehavior="Flyout"
     Title="Lecin">
 

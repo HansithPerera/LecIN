@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using CommunityToolkit.Maui;
+using Lecin.PageModels.Admin;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
@@ -62,7 +63,8 @@ public static class MauiProgram
             )
         );
         builder.Services.AddSingleton<ModalErrorHandler>();
-        builder.Services.AddSingleton<MainPageModel>();
+        builder.Services.AddTransient<MainPageModel>();
+        builder.Services.AddTransient<AdminPageModel>();
 
         builder.Services.AddTransientWithShellRoute<LoginPage, LoginPageModel>("login");
 

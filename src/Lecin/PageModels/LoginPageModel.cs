@@ -71,7 +71,7 @@ public partial class LoginPageModel : ObservableObject
                 }
 
                 // Admin
-                var adminResponse = await _supabase.From<Models.Admin>()
+                var adminResponse = await _supabase.From<SupabaseShared.Models.Admin>()
                     .Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, userId)
                     .Get();
 

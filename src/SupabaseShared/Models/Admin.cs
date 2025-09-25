@@ -1,14 +1,7 @@
-﻿
-using Supabase.Postgrest.Attributes;
+﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-using System;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Lecin.Models
+namespace SupabaseShared.Models
 {
     [Table("Admins")]
     public class Admin : BaseModel
