@@ -1,13 +1,109 @@
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using Lecin.Models;
-using Lecin.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.Maui.Controls;
 
 namespace Lecin.Pages;
 
+public partial class TeacherAttendancePage : ContentPage
+{
+    // Windows: use HTTPS dev port. Android emulator: use 10.0.2.2 to reach host machine.
+#if ANDROID
+    private const string BaseUrl = "http://10.0.2.2:5105";
+#else
+    private const string BaseUrl = "https://localhost:7239";
+#endif
 
+    private static readonly JsonSerializerOptions JsonOpts = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
+    private readonly HttpClient _http = new();
+
+    public TeacherAttendancePage()
+    {
+        InitializeComponent();
+    }
+
+    private async void OnGetAttendanceClicked(object sender, EventArgs e)
+    {
+        // reset UI
+        ErrorLabel.IsVisible = false;
+        ErrorLabel.Text = "";
+        OverallLabel.Text = "";
+        CourseList.ItemsSource = null;
+        CourseList.IsVisible = false;
+
+        // validate student id
+        if (!Guid.TryParse(StudentIdEntry.Text, out var studentId))
+        {
+            ErrorLabel.Text = "Enter a valid GUID for Student ID.";
+            ErrorLabel.IsVisible = true;
+            return;
+        }
+
+        try
+        {
+            var url = $"{BaseUrl}/api/teacher/attendance/percentage/{studentId}";
+            var dto = await _http.GetFromJsonAsync<AttendancePercentageDto>(url, JsonOpts);
+
+            if (dto is null)
+            {
+                ErrorLabel.Text = "No data.";
+                ErrorLabel.IsVisible = true;
+                return;
+            }
+
+            // overall
+            OverallLabel.Text = $"Overall: {dto.Percentage:F1}% ({dto.Attended}/{dto.TotalClasses})";
+
+            // by course list
+            if (dto.ByCourse is { Count: > 0 })
+            {
+                var rows = dto.ByCourse
+                    .Select(c => new CourseRow(c.CourseCode, c.Attended, c.TotalClasses, c.Percentage))
+                    .ToList();
+
+                CourseList.ItemsSource = rows;
+                CourseList.IsVisible = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLabel.Text = ex.Message;
+            ErrorLabel.IsVisible = true;
+        }
+    }
+
+    // DTOs that mirror the backend response shape
+    public record AttendancePercentageDto(
+        Guid StudentId,
+        int TotalClasses,
+        int Attended,
+        double Percentage,
+        List<CourseAttendanceDto> ByCourse
+    );
+
+    public record CourseAttendanceDto(
+        string CourseCode,
+        int TotalClasses,
+        int Attended,
+        double Percentage
+    );
+
+    public record CourseRow(string CourseCode, int Attended, int Total, double Percentage)
+    {
+        public string TotalsLine => $"{Attended}/{Total} • {Percentage:F1}%";
+    }
+}
+
+
+
+/*
 public partial class TeacherAttendancePage : ContentPage
 {
     private readonly HttpClient _http = new();
@@ -64,66 +160,6 @@ public partial class TeacherAttendancePage : ContentPage
     );
     public record CourseAttendanceDto(string CourseCode, int TotalClasses, int Attended, double Percentage);
 }
-
-
-
-/*
-public partial class TeacherAttendancePage : ContentPage
-{
-    private readonly VM vm = new();
-    public TeacherAttendancePage()
-    {
-        InitializeComponent();          // generated when x:Class matches this namespace/class
-        BindingContext = vm;
-    }
-
-    private async void OnFetchClicked(object? sender, EventArgs e)
-    {
-        vm.Clear();
-        if (!Guid.TryParse(StudentIdEntry.Text?.Trim(), out var studentId))
-        {
-            vm.Message = "Please enter a valid GUID.";
-            return;
-        }
-
-        try
-        {
-            var dto = await BackendClient.GetStudentAttendancePercentAsync(studentId);
-            if (dto.TotalClasses == 0)
-            {
-                vm.Message = "No classes/enrollments found for that student.";
-                return;
-            }
-
-            vm.OverallText = $"{dto.Attended}/{dto.TotalClasses} classes • {dto.Percentage:F1}%";
-            foreach (var c in dto.ByCourse)
-                vm.Courses.Add(new CourseRow(c.CourseCode, c.Attended, c.TotalClasses, c.Percentage));
-        }
-        catch (Exception ex)
-        {
-            vm.Message = $"Error: {ex.Message}";
-        }
-    }
-
-    class VM : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        void N(string p) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(p));
-
-        public ObservableCollection<CourseRow> Courses { get; } = new();
-        string overall = ""; public string OverallText { get => overall; set { overall = value; N(nameof(OverallText)); N(nameof(HasData)); } }
-        string message = ""; public string Message { get => message; set { message = value; N(nameof(Message)); N(nameof(HasMessage)); } }
-        public bool HasData => Courses.Count > 0 || !string.IsNullOrWhiteSpace(OverallText);
-        public bool HasMessage => !string.IsNullOrWhiteSpace(Message);
-        public void Clear() { Courses.Clear(); OverallText = ""; Message = ""; }
-    } 
-
-
-
-    public record CourseRow(string CourseCode, int Attended, int Total, double Percentage)
-    {
-        public string TotalsLine => $"{Attended}/{Total} • {Percentage:F1}%";
-    }
-}
-
 */
+
+
