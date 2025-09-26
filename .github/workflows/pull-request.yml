@@ -1,4 +1,4 @@
-﻿name: Docker
+﻿name: Build and Test
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -19,7 +19,8 @@ env:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    
     permissions:
       contents: read
       packages: write
@@ -38,14 +39,42 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-      # Setup .NET SDK
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-      
+          
+      - name: Install EMGU CV dependencies
+        run: sudo apt update && sudo apt install build-essential libgtk-3-dev libgstreamer1.0-dev libavcodec-dev libswscale-dev libavformat-dev libdc1394-dev libv4l-dev cmake-curses-gui ocl-icd-dev freeglut3-dev libgeotiff-dev libusb-1.0-0-dev libvtk9-dev libfreetype-dev libharfbuzz-dev qtbase5-dev libeigen3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgflags-dev libgoogle-glog-dev liblapacke-dev libva-dev dotnet-sdk-8.0
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: '2.40.7'
+          
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+          
+      - name: Start Supabase local development
+        run: supabase start
+          
+      - name: Setup Deno Imports
+        working-directory: "./supabase/functions"
+        run: deno install
+        
+      - name: Run deno unit tests
+        working-directory: "./supabase/functions"
+        run: deno test --allow-all
+          
       # Restore, build, and test the .NET project
-      
+
+      - name: Restore workloads
+        working-directory: "./src"
+        run: dotnet workload restore
+        
       - name: Restore dependencies
         working-directory: "./src"
         run: dotnet restore

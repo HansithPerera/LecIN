@@ -3,6 +3,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Lecin.Models;
+using SupabaseShared.Models;
 
 namespace Lecin.PageModels;
 

@@ -1,14 +1,21 @@
-﻿namespace Lecin;
+﻿using Supabase;
+
+namespace Lecin;
 
 public partial class App : Application
 {
-    public App()
+    public static Client? CurrentSupabase { get; private set; }
+
+    public App(Client supabase)
     {
         InitializeComponent();
+        CurrentSupabase = supabase;
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new AppShell());
+        // Before login: no roles, not logged in
+        return new Window(new AppShell(new List<string>(), isLoggedIn: false));
     }
+
 }

@@ -56,6 +56,20 @@ VALUES (uuid_generate_v4(), '11111111-1111-1111-1111-111111111111', '11111111-11
        (uuid_generate_v4(), 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
         '{"sub":"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa","email":"user10@example.com"}', 'email', now(), now(), now());
 
+INSERT INTO "public"."PermissionFlags" ("Id", "Name", "BitPosition")
+VALUES ('1', 'ReadTeachers', '0'),
+       ('2', 'ReadStudents', '1'),
+       ('3', 'ReadCourses', '2'),
+       ('4', 'ReadReports', '3'),
+       ('5', 'ReadApiKeys', '4'),
+       ('6', 'ReadCameras', '5'),
+       ('7', 'WriteTeachers', '6'),
+       ('8', 'WriteStudents', '7'),
+       ('9', 'WriteCourses', '8'),
+       ('10', 'WriteReports', '9'),
+       ('11', 'WriteApiKeys', '10'),
+       ('12', 'WriteCameras', '11'),
+       ('13', 'ExportData', '12');
 
 INSERT INTO "Teachers" ("Id", "FirstName", "LastName", "CreatedAt", "UpdatedAt")
 VALUES ('11111111-1111-1111-1111-111111111111', 'Amelia', 'Clark', now(), NULL),

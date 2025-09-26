@@ -1,9 +1,10 @@
 ﻿using System.Net;
 using Backend;
-using Backend.Database;
-using Backend.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SupabaseShared.Models;
+using static System.Security.Cryptography.SHA256;
+using static System.Text.Encoding;
+using Convert = System.Convert;
 
 namespace Tests.Integration;
 
@@ -15,14 +16,12 @@ public class CameraTests : IClassFixture<MockAppBuilder>
     public CameraTests(MockAppBuilder mockAppBuilder)
     {
         _mockAppBuilder = mockAppBuilder;
-        _apiKey = SeedCamera(_mockAppBuilder.Services.GetRequiredService<IDbContextFactory<AppDbContext>>());
+        _apiKey = SeedCamera(_mockAppBuilder.Services.GetRequiredService<Supabase.Client>());
     }
 
-    private static string SeedCamera(IDbContextFactory<AppDbContext> context)
+    private static string SeedCamera(Supabase.Client client)
     {
-        using var ctx = context.CreateDbContext();
-        
-        var camera = new Camera
+        var camera = new SupabaseShared.Models.Camera
         {
             Name = "Test Camera",
             Location = "Test Location",
@@ -31,17 +30,26 @@ public class CameraTests : IClassFixture<MockAppBuilder>
             UpdatedAt = DateTimeOffset.UtcNow
         };
 
-        var apiKey = ApiKey.Create(out var key, "Camera API Key");
-
-        ctx.Cameras.Add(camera);
-        ctx.ApiKeys.Add(apiKey);
-        ctx.CameraApiKeys.Add(new CameraApiKey
+        var key = Guid.NewGuid().ToString();
+        var bas64Sha256 = Convert.ToBase64String(HashData(UTF8.GetBytes(key)));
+        var apiKey = new ApiKey
         {
-            Role = ApiKeyRole.Primary,
+            Prefix = key[..8],
+            Hash = bas64Sha256,
+            IsActive = true,
+            CreatedAt = DateTimeOffset.UtcNow,
+            Name = "Test API Key"
+        };
+        
+        var cameraApiKey = new CameraApiKey
+        {
             CameraId = camera.Id,
-            ApiKeyId = apiKey.Id
-        });
-        ctx.SaveChanges();
+            ApiKeyId = apiKey.Id,
+            Role = ApiKeyRole.Primary
+        };
+        var cam = client.From<SupabaseShared.Models.Camera>().Insert(camera).Result;
+        var ap = client.From<ApiKey>().Insert(apiKey).Result;
+        client.From<CameraApiKey>().Insert(cameraApiKey).Wait();
         return key;
     }
 

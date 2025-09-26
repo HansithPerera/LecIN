@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Lecin.Pages.StudentDashboardPage"
+             Title="Student Dashboard">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+		<Label Text="Welcome Student!"
+               FontSize="24"
+               HorizontalOptions="Center" />
+
+		<Button Text="View Attendance History"
+                Clicked="OnHistoryClicked"
+                HorizontalOptions="Fill" />
+
+		<Button Text="View Attendance Streaks"
+                Clicked="OnStreaksClicked"
+                HorizontalOptions="Fill" />
+    </VerticalStackLayout>
+</ContentPage>
