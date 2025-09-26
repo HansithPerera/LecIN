@@ -8,14 +8,19 @@ using Microsoft.Maui.Controls;
 
 namespace Lecin.Pages;
 
+
+
 public partial class TeacherAttendancePage : ContentPage
 {
     // Windows: use HTTPS dev port. Android emulator: use 10.0.2.2 to reach host machine.
 #if ANDROID
-    private const string BaseUrl = "http://10.0.2.2:5105";
+    private const string BaseUrl = "http://10.0.2.2:5105";   // Android emulator -> host
+#elif WINDOWS
+    private const string BaseUrl = "http://localhost:5105";  // Windows app -> backend
 #else
-    private const string BaseUrl = "https://localhost:7239";
+    private const string BaseUrl = "https://localhost:7239"; // other platforms
 #endif
+
 
     private static readonly JsonSerializerOptions JsonOpts = new()
     {
