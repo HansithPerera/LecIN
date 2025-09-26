@@ -1,9 +1,9 @@
 ﻿using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Lecin.Models;
-using Supabase;
 using Supabase.Gotrue.Exceptions;
+using Supabase.Postgrest;
+using Client = Supabase.Client;
 
 namespace Lecin.PageModels;
 
@@ -11,22 +11,19 @@ public partial class LoginPageModel : ObservableObject
 {
     private readonly Client _supabase;
 
-    [ObservableProperty]
-    private string _email = string.Empty;
+    [ObservableProperty] private string _email = string.Empty;
 
-    [ObservableProperty]
-    private string _password = string.Empty;
+    [ObservableProperty] private string _password = string.Empty;
 
-    [ObservableProperty]
-    private string _statusMessage = string.Empty;
-
-    public ICommand LoginCommand { get; }
+    [ObservableProperty] private string _statusMessage = string.Empty;
 
     public LoginPageModel(Client supabase)
     {
         _supabase = supabase;
         LoginCommand = new AsyncRelayCommand(LoginAsync);
     }
+
+    public ICommand LoginCommand { get; }
 
     private async Task LoginAsync()
     {
@@ -48,23 +45,23 @@ public partial class LoginPageModel : ObservableObject
                 var roles = new List<string>(); // ✅ collect all roles
 
                 // ✅ Check Student role
-                var studentResponse = await _supabase.From<Lecin.Models.Student>()
-                .Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, userId)
-                .Get();
+                var studentResponse = await _supabase.From<SupabaseShared.Models.Student>()
+                    .Filter("Id", Constants.Operator.Equals, userId)
+                    .Get();
 
                 if (studentResponse.Models.FirstOrDefault() != null)
                     roles.Add("Student");
 
                 // ✅ Check Teacher role
-                var teacherResponse = await _supabase.From<Teacher>()
-                    .Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, userId)
+                var teacherResponse = await _supabase.From<SupabaseShared.Models.Teacher>()
+                    .Filter("Id", Constants.Operator.Equals, userId)
                     .Get();
                 if (teacherResponse.Models.FirstOrDefault() != null)
                     roles.Add("Teacher");
 
                 // ✅ Check Admin role
-                var adminResponse = await _supabase.From<Lecin.Models.Admin>()
-                    .Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, userId)
+                var adminResponse = await _supabase.From<SupabaseShared.Models.Admin>()
+                    .Filter("Id", Constants.Operator.Equals, userId)
                     .Get();
 
                 if (adminResponse.Models.FirstOrDefault() != null)
@@ -73,8 +70,7 @@ public partial class LoginPageModel : ObservableObject
 
                 // ✅ Pass all roles + logged-in flag to AppShell
                 // AppShell will decide which nav items to show
-                Application.Current.MainPage = new AppShell(roles, isLoggedIn: true);
-
+                Application.Current.MainPage = new AppShell(roles, true);
             }
             else
             {

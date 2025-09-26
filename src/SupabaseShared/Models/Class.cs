@@ -23,8 +23,7 @@ public class Class: BaseModel
 
     [Column]
     public DateTimeOffset StartTime { get; set; }
-
-    [Column]
+    
     public TimeSpan Duration => EndTime - StartTime;
 
     [Column]

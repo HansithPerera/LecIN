@@ -1,11 +1,4 @@
-﻿using Lecin.Pages.Student;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lecin.Pages;
+﻿namespace Lecin.Pages.Student;
 
 public partial class StudentDashboardPage : ContentPage
 {
@@ -24,4 +17,3 @@ public partial class StudentDashboardPage : ContentPage
         await Shell.Current.GoToAsync(nameof(AttendanceStreaksPage));
     }
 }
-

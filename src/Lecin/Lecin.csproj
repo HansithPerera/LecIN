@@ -87,9 +87,6 @@
       <MauiXaml Update="Pages\AdminDashboardPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
-      <MauiXaml Update="Pages\StudentDashboardPage.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
       <MauiXaml Update="Pages\Student\AttendanceHistoryPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
@@ -103,6 +100,12 @@
     
     <ItemGroup>
       <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Compile Remove="Models\Admin.cs" />
+      <Compile Remove="Models\Student.cs" />
+      <Compile Remove="Pages\StudentDashboardPage.xaml.cs" />
     </ItemGroup>
 
     <PropertyGroup>

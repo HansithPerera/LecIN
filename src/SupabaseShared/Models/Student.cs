@@ -1,17 +1,24 @@
-﻿using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace SupabaseShared.Models;
-
-[Table("Students")]
-public class Student: BaseModel
+namespace SupabaseShared.Models
 {
-    [PrimaryKey(shouldInsert: true)]
-    public Guid Id { get; set; } = Guid.NewGuid();
+    [Table("Students")]
+    public class Student : BaseModel
+    {
+        [PrimaryKey("Id")]
+        public Guid Id { get; set; }
 
-    [Column]
-    public string FirstName { get; set; }
+        [Column("FirstName")]
+        public string FirstName { get; set; } = string.Empty;
 
-    [Column]
-    public string LastName { get; set; }
+        [Column("LastName")]
+        public string LastName { get; set; } = string.Empty;
+
+        [Column("CreatedAt")]
+        public DateTime CreatedAt { get; set; }
+
+        [Column("UpdatedAt")]
+        public DateTime? UpdatedAt { get; set; }
+    }
 }

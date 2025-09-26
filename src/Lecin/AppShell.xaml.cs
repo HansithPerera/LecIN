@@ -1,13 +1,17 @@
-﻿    using CommunityToolkit.Maui.Alerts;
+﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using Font = Microsoft.Maui.Font;
+using Lecin.Pages.Admin;
+using Lecin.Pages.Student;
+using Lecin.Pages.Teacher;
 using Lecin.ViewModels;
+using Font = Microsoft.Maui.Font;
+using SelectionChangedEventArgs = Syncfusion.Maui.Toolkit.SegmentedControl.SelectionChangedEventArgs;
 
 namespace Lecin;
 
 public partial class AppShell : Shell
 {
-    public AppShell(List<string> roles, bool isLoggedIn)   // ✅ roles list instead of single role
+    public AppShell(List<string> roles, bool isLoggedIn) // ✅ roles list instead of single role
     {
         InitializeComponent();
 
@@ -24,23 +28,23 @@ public partial class AppShell : Shell
     }
 
     /// <summary>
-    /// Register all navigation routes for Shell-based navigation.
-    /// Any page you want to navigate to via GoToAsync() must be registered here.
+    ///     Register all navigation routes for Shell-based navigation.
+    ///     Any page you want to navigate to via GoToAsync() must be registered here.
     /// </summary>
     private void RegisterRoutes()
     {
         // Student subpages
-        Routing.RegisterRoute(nameof(Pages.Student.AttendanceHistoryPage), typeof(Pages.Student.AttendanceHistoryPage));
-        Routing.RegisterRoute(nameof(Pages.Student.AttendanceStreaksPage), typeof(Pages.Student.AttendanceStreaksPage));
+        Routing.RegisterRoute(nameof(AttendanceHistoryPage), typeof(AttendanceHistoryPage));
+        Routing.RegisterRoute(nameof(AttendanceStreaksPage), typeof(AttendanceStreaksPage));
 
         // Role dashboards
-        Routing.RegisterRoute(nameof(Pages.AdminDashboardPage), typeof(Pages.AdminDashboardPage));
-        Routing.RegisterRoute(nameof(Pages.TeacherDashboardPage), typeof(Pages.TeacherDashboardPage));
-        Routing.RegisterRoute(nameof(Pages.StudentDashboardPage), typeof(Pages.StudentDashboardPage));
+        Routing.RegisterRoute(nameof(AdminDashboardPage), typeof(AdminDashboardPage));
+        Routing.RegisterRoute(nameof(TeacherDashboardPage), typeof(TeacherDashboardPage));
+        Routing.RegisterRoute(nameof(StudentDashboardPage), typeof(StudentDashboardPage));
     }
 
     /// <summary>
-    /// Display a snackbar message with custom styling.
+    ///     Display a snackbar message with custom styling.
     /// </summary>
     public static async Task DisplaySnackbarAsync(string message)
     {
@@ -62,7 +66,7 @@ public partial class AppShell : Shell
     }
 
     /// <summary>
-    /// Display a toast message (not supported on Windows).
+    ///     Display a toast message (not supported on Windows).
     /// </summary>
     public static async Task DisplayToastAsync(string message)
     {
@@ -76,13 +80,14 @@ public partial class AppShell : Shell
     }
 
     /// <summary>
-    /// Handle theme switch between Light/Dark when segmented control changes.
+    ///     Handle theme switch between Light/Dark when segmented control changes.
     /// </summary>
     private void SfSegmentedControl_SelectionChanged(object sender,
-        Syncfusion.Maui.Toolkit.SegmentedControl.SelectionChangedEventArgs e)
+        SelectionChangedEventArgs e)
     {
         Application.Current!.UserAppTheme = e.NewIndex == 0 ? AppTheme.Light : AppTheme.Dark;
     }
+
     private async void OnLogoutClicked(object sender, EventArgs e)
     {
         // clean Supabase
@@ -93,14 +98,9 @@ public partial class AppShell : Shell
 
         //LoginPage
         Application.Current.MainPage = new NavigationPage(
-            new Pages.LoginPage(new PageModels.LoginPageModel(App.CurrentSupabase!))
+            new LoginPage(new LoginPageModel(App.CurrentSupabase!))
         );
 
         await DisplayToastAsync("You have been logged out.");
     }
-
-
-
-
-
 }
