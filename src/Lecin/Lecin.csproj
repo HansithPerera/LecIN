@@ -80,6 +80,14 @@
 		<EmbeddedResource Include="appsettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
+		<None Remove="appsettings.Production.json" />
+		<EmbeddedResource Include="appsettings.Production.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<None Remove="appsettings.Development.json" />
+		<EmbeddedResource Include="appsettings.Development.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
 	</ItemGroup>
 
 
