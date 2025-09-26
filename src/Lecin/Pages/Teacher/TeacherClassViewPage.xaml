@@ -31,6 +31,24 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <Label Text="Enrolled Students" FontSize="24" HorizontalOptions="Center" Margin="10"/>
+            <CollectionView
+                ItemsSource="{Binding Students}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Student">
+                        <Grid ColumnDefinitions="Auto, *, Auto, Auto"
+                              ColumnSpacing="10"
+                              Padding="10"
+                              Margin="5">
+                            <Label Grid.Column="0" Text="{Binding FirstName}" FontSize="18" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="{Binding LastName}" FontSize="18" TextColor="White" />
+                            <Button Grid.Column="2" Text="Mark Late" Clicked="MarkLate"/>
+                            <Button Grid.Column="3" Text="Mark Present" Clicked="MarkPresent"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
     </ContentPage.Content>
 </pages:BaseContentPage>

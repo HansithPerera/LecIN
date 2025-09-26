@@ -20,6 +20,12 @@ public class Enrollment: BaseModel
 
     [Column]
     public int CourseSemesterCode { get; set; }
+    
+    [Reference(typeof(Course))]
+    public Course? Course { get; set; }
+    
+    [Reference(typeof(Student))]
+    public Student? Student { get; set; }
 
     [Column]
     public DateTimeOffset EnrolledAt { get; set; }
