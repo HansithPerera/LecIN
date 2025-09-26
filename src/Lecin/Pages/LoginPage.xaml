@@ -28,6 +28,11 @@
                    HorizontalOptions="Center"
                    TextColor="Red" />
 
+              <Button Text="Test Attendance Feature" 
+               BackgroundColor="Blue"
+              TextColor="White"
+              Clicked="OnAttendanceTestClicked"/>
+
         </VerticalStackLayout>
     </ContentPage.Content>
 </ContentPage>

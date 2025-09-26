@@ -13,4 +13,9 @@ public partial class LoginPage : ContentPage
         InitializeComponent();
         BindingContext = loginPageModel;
     }
+    private async void OnAttendanceTestClicked(object sender, EventArgs e)
+{
+    await Navigation.PushAsync(new Lecin.Pages.AttendanceTestPage());
 }
+}
+
