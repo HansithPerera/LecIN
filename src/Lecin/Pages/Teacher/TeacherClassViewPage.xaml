@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Lecin.Pages"
+             xmlns:models="clr-namespace:SupabaseShared.Models;assembly=SupabaseShared"
+             xmlns:teacher="clr-namespace:Lecin.PageModels.Teacher"
+             x:DataType="teacher:TeacherClassViewPageModel"
+             x:Class="Lecin.Pages.Teacher.TeacherClassViewPage">
+    <ContentPage.Content>
+        <VerticalStackLayout Spacing="15" Padding="10">
+            <Entry Placeholder="Student ID" Text="{Binding StudentId}">
+                
+            </Entry>
+            <Entry Placeholder="Reason..." Text="{Binding Reason}"></Entry>
+            <Button Text="Justify Student" Clicked="OnAddAttendanceClicked"></Button>
+            <CollectionView
+                ItemsSource="{Binding Attendances}"
+                SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Attendance">
+                        <Grid ColumnDefinitions="Auto, Auto, Auto, Auto, Auto"
+                              ColumnSpacing="10"
+                              Padding="10"
+                              Margin="5">
+                            <Label Grid.Column="0" Text="{Binding Student.FirstName}" FontSize="18" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="{Binding Student.LastName}" FontSize="18" TextColor="White" />
+                            <Label Grid.Column="2" Text="{Binding Timestamp, StringFormat='{0:MM/dd/yyyy HH:mm}'}" FontSize="18" TextColor="White" />
+                            <Label Grid.Column="3" Text="{Binding Reason}" FontSize="18" TextColor="White" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</pages:BaseContentPage>

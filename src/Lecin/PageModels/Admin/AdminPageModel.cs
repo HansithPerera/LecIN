@@ -1,30 +1,28 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
-using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Supabase.Functions;
+using Supabase;
 using SupabaseShared.Models;
 using static System.Text.Encoding;
 
 namespace Lecin.PageModels.Admin;
 
-public partial class AdminPageModel : ObservableObject
+public partial class AdminPageModel : BasePageModel
 {
-    private bool _isNavigatedTo;
+    private readonly Client _client;
+
+    private readonly ModalErrorHandler _errorHandler;
+
+    [ObservableProperty] private ObservableCollection<Course> _courses = [];
     private bool _dataLoaded;
 
     [ObservableProperty] private bool _isBusy;
+    private bool _isNavigatedTo;
 
     [ObservableProperty] private bool _isRefreshing;
 
-    [ObservableProperty] ObservableCollection<Course> _courses = [];
-    private readonly Supabase.Client _client;
-    
-    private readonly ModalErrorHandler _errorHandler;
-    
-    public AdminPageModel(Supabase.Client client, ModalErrorHandler errorHandler)
+    public AdminPageModel(Client client, ModalErrorHandler errorHandler)
     {
         _client = client;
         _errorHandler = errorHandler;
@@ -36,17 +34,16 @@ public partial class AdminPageModel : ObservableObject
         if (course == null) return;
         try
         {
-            var options = new Client.InvokeFunctionOptions
+            var options = new Supabase.Functions.Client.InvokeFunctionOptions
             {
-                Body = new Dictionary<string, object> { { "Code", course.Code }, { "SemesterCode", course.SemesterCode }, { "Year", course.Year }}
+                Body = new Dictionary<string, object>
+                    { { "Code", course.Code }, { "SemesterCode", course.SemesterCode }, { "Year", course.Year } }
             };
             var text = await _client.Functions.Invoke<CsvResponse>("export-attendance-csv", options: options);
-            if (text == null || string.IsNullOrWhiteSpace(text.csv))
-            {
+            if (text == null || string.IsNullOrWhiteSpace(text.Csv))
                 _errorHandler.HandleError(new Exception("Failed to retrieve CSV data."));
-            }
             var fileName = $"{course.Code}_Attendance_{course.Year}_S{course.SemesterCode}.csv";
-            using var stream = new MemoryStream(UTF8.GetBytes(text.csv));
+            using var stream = new MemoryStream(UTF8.GetBytes(text.Csv));
             var fileSaverResult = await FileSaver.Default.SaveAsync(fileName, stream);
         }
         catch (Exception ex)
@@ -55,7 +52,7 @@ public partial class AdminPageModel : ObservableObject
         }
     }
 
-    public async Task LoadDataAsync()
+    public override async Task LoadDataAsync()
     {
         if (_dataLoaded && _isNavigatedTo) return;
 
@@ -63,11 +60,11 @@ public partial class AdminPageModel : ObservableObject
         try
         {
             _dataLoaded = true;
-            
+
             var courses = await _client.From<Course>()
                 .Select("*")
                 .Get();
-            
+
             Courses = new ObservableCollection<Course>(courses.Models);
         }
         catch (Exception ex)
@@ -79,5 +76,4 @@ public partial class AdminPageModel : ObservableObject
             IsBusy = false;
         }
     }
-    
 }

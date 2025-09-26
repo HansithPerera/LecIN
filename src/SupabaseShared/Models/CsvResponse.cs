@@ -1,6 +1,8 @@
-﻿namespace SupabaseShared.Models;
+﻿using Newtonsoft.Json;
+
+namespace SupabaseShared.Models;
 
 public class CsvResponse
 {
-    public string csv { get; set; }
+    [JsonProperty("csv")] public string Csv { get; set; }
 }

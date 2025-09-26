@@ -1,9 +1,9 @@
-﻿using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
 namespace SupabaseShared.Models
 {
-    [Table("Admins")]
+    [Table("Admins")] //
     public class Admin : BaseModel
     {
         [PrimaryKey("Id")]
@@ -14,9 +14,6 @@ namespace SupabaseShared.Models
 
         [Column("LastName")]
         public string LastName { get; set; } = string.Empty;
-
-        [Column("Permissions")]
-        public long Permissions { get; set; }
 
         [Column("CreatedAt")]
         public DateTime CreatedAt { get; set; }

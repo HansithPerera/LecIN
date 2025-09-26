@@ -80,14 +80,19 @@
 		<EmbeddedResource Include="appsettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</EmbeddedResource>
+		<None Remove="appsettings.Production.json" />
+		<EmbeddedResource Include="appsettings.Production.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<None Remove="appsettings.Development.json" />
+		<EmbeddedResource Include="appsettings.Development.json">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
 	</ItemGroup>
 
 
 	<ItemGroup>
       <MauiXaml Update="Pages\AdminDashboardPage.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
-      <MauiXaml Update="Pages\StudentDashboardPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </MauiXaml>
       <MauiXaml Update="Pages\Student\AttendanceHistoryPage.xaml">
@@ -103,6 +108,12 @@
     
     <ItemGroup>
       <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Compile Remove="Models\Admin.cs" />
+      <Compile Remove="Models\Student.cs" />
+      <Compile Remove="Pages\StudentDashboardPage.xaml.cs" />
     </ItemGroup>
 
     <PropertyGroup>
