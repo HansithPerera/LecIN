@@ -1,26 +1,167 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Lecin.Pages.Student.AttendanceHistoryPage"
+             x:Class="Lecin.Pages.AttendanceHistoryPage"
              Title="Attendance History">
 
-    <VerticalStackLayout Padding="20" Spacing="10">
-        <Label Text="Attendance History"
-               FontSize="24"
-               HorizontalOptions="Center" />
+    <Grid>
+        <!-- Main Content -->
+        <ScrollView>
+            <StackLayout Padding="20" Spacing="15">
+                
+                <!-- Header Section -->
+                <Frame BackgroundColor="#FF292929" 
+                       Padding="15" 
+                       CornerRadius="10"
+                       HasShadow="True">
+                    <StackLayout>
+                        <Label Text="My Attendance History" 
+                               FontSize="20" 
+                               FontAttributes="Bold"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Track your class attendance performance" 
+                               FontSize="14" 
+                               TextColor="Gray"
+                               HorizontalOptions="Center"/>
+                    </StackLayout>
+                </Frame>
 
-         <!-- Attendance list -->
-        <CollectionView x:Name="AttendanceList">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border Stroke="LightGray" Padding="10" Margin="5" StrokeShape="RoundRectangle 8">
-                        <Label Text="{Binding StatusText}" 
-                               FontSize="18"
-                               TextColor="{Binding StatusColor}" />
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                <!-- Test Student ID Input (Temporary for testing) -->
+                <Frame BackgroundColor="#FF181717" 
+                       Padding="10" 
+                       CornerRadius="5">
+                    <StackLayout Orientation="Horizontal" Spacing="10">
+                        <Entry x:Name="StudentIdEntry" 
+                               Placeholder="Enter Student ID for testing..."
+                               HorizontalOptions="FillAndExpand"/>
+                        <Button Text="Load" 
+                                Command="{Binding LoadAttendanceHistoryCommand}"
+                                CommandParameter="{Binding Source={x:Reference StudentIdEntry}, Path=Text}"
+                                BackgroundColor="Blue"
+                                TextColor="White"/>
+                    </StackLayout>
+                </Frame>
 
-    </VerticalStackLayout>
+                <!-- Refresh Button -->
+                <Button Text="🔄 Refresh" 
+                        Command="{Binding RefreshCommand}"
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        CornerRadius="20"/>
+
+                <!-- Error Message -->
+                <Frame IsVisible="{Binding HasError}"
+                       BackgroundColor="Red" 
+                       Padding="10" 
+                       CornerRadius="5"
+                       Margin="0,0,0,10">
+                    <Label Text="{Binding ErrorMessage}" 
+                           TextColor="White" 
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
+                </Frame>
+
+                <!-- Attendance History List -->
+                <CollectionView ItemsSource="{Binding AttendanceHistory}"
+                               BackgroundColor="Transparent">
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                            <Label Text="📅" FontSize="48" HorizontalOptions="Center"/>
+                            <Label Text="No attendance records found" 
+                                   FontSize="16" 
+                                   TextColor="Gray"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Your attendance history will appear here" 
+                                   FontSize="14" 
+                                   TextColor="Gray"
+                                   HorizontalOptions="Center"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="0,5">
+                                <Frame BackgroundColor="{Binding BackgroundColor}"
+                                       Padding="15"
+                                       CornerRadius="10"
+                                       HasShadow="True">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewDetailCommand}"
+                                                              CommandParameter="{Binding .}"/>
+                                    </Frame.GestureRecognizers>
+                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Status Icon -->
+                                        <Label Grid.Column="0" 
+                                               Text="{Binding StatusIcon}"
+                                               FontSize="32"
+                                               TextColor="{Binding StatusColor}"
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="Center"/>
+
+                                        <!-- Date and Time Info -->
+                                        <StackLayout Grid.Column="1" 
+                                                     VerticalOptions="Center"
+                                                     Spacing="2">
+                                            <Label Text="{Binding DisplayDate}" 
+                                                   FontSize="16" 
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding Time}" 
+                                                   FontSize="14" 
+                                                   TextColor="Gray"/>
+                                        </StackLayout>
+
+                                        <!-- Status Badge -->
+                                        <Frame Grid.Column="2" 
+                                               BackgroundColor="{Binding StatusColor}"
+                                               Padding="8,4"
+                                               CornerRadius="12"
+                                               VerticalOptions="Center"
+                                               Margin="10,0">
+                                            <Label Text="{Binding StatusText}" 
+                                                   TextColor="White" 
+                                                   FontAttributes="Bold"
+                                                   FontSize="12"/>
+                                        </Frame>
+
+                                        <!-- Tap Indicator -->
+                                        <Label Grid.Column="3" 
+                                               Text="→" 
+                                               FontSize="18"
+                                               TextColor="Gray"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </StackLayout>
+        </ScrollView>
+
+        <!-- Loading Overlay -->
+        <Grid IsVisible="{Binding IsLoading}"
+              BackgroundColor="#80000000">
+            <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                   Color="White"
+                                   HeightRequest="50"
+                                   WidthRequest="50"/>
+                <Label Text="Loading attendance history..."
+                       TextColor="White"
+                       FontSize="16"
+                       HorizontalOptions="Center"
+                       Margin="0,10,0,0"/>
+            </StackLayout>
+        </Grid>
+    </Grid>
+
 </ContentPage>

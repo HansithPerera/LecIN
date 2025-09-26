@@ -10,12 +10,13 @@
                FontSize="24"
                HorizontalOptions="Center" />
 
-        <Button Text="View Attendance History"
-                Clicked="OnHistoryClicked"
-                HorizontalOptions="Fill" />
-
         <Button Text="View Attendance Streaks"
                 Clicked="OnStreaksClicked"
                 HorizontalOptions="Fill" />
+
+        <Button Text="View Attendance History" 
+                BackgroundColor="Purple"
+                TextColor="White"
+                Clicked="OnViewAttendanceHistoryClicked"/>
     </VerticalStackLayout>
 </ContentPage>

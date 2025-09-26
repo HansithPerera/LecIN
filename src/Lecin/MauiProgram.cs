@@ -1,14 +1,13 @@
 ﻿using System.Reflection;
 using CommunityToolkit.Maui;
 using Lecin.PageModels.Admin;
-using Lecin.PageModels.Teacher;
-using Lecin.Pages.Teacher;
-using Lecin.Resources.Fonts;
+using Lecin.Services;
+using Lecin.PageModels;
+using Lecin.Pages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Supabase;
-using SupabaseShared.Models;
 using Syncfusion.Maui.Toolkit.Hosting;
+using Microsoft.Maui.Controls.PlatformConfiguration;
 
 namespace Lecin;
 
@@ -18,22 +17,22 @@ public static class MauiProgram
     {
         using var stream = Assembly.GetExecutingAssembly()
             .GetManifestResourceStream($"{nameof(Lecin)}.{jsonFile}");
-
+                
         if (stream != null)
             builder.Configuration.AddJsonFile(jsonFile);
     }
-
+        
     private static void AddAppSettings(this MauiAppBuilder builder)
     {
         builder.AddJsonSettings("appsettings.json");
-
+                
 #if DEBUG
         builder.AddJsonSettings("appsettings.Development.json");
 #else
-            builder.AddJsonSettings("appsettings.Production.json");
+        builder.AddJsonSettings("appsettings.Production.json");
 #endif
     }
-
+        
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
@@ -44,8 +43,8 @@ public static class MauiProgram
             .ConfigureSyncfusionToolkit()
             .ConfigureMauiHandlers(handlers =>
             {
-#if IOS || MACCATALYST
-				handlers.AddHandler<Microsoft.Maui.Controls.CollectionView, Microsoft.Maui.Controls.Handlers.Items2.CollectionViewHandler2>();
+#if IOS || MACCATALYST 
+                handlers.AddHandler<Microsoft.Maui.Controls.CollectionView, Microsoft.Maui.Controls.Handlers.Items2.CollectionViewHandler2>();
 #endif
             })
             .ConfigureFonts(fonts =>
@@ -53,30 +52,39 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("SegoeUI-Semibold.ttf", "SegoeSemibold");
-                fonts.AddFont("FluentSystemIcons-Regular.ttf", FluentUI.FontFamily);
+                fonts.AddFont("FluentSystemIcons-Regular.ttf", "FluentUI");
             });
 
 #if DEBUG
         builder.Logging.AddDebug();
         builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
-        builder.Services.AddSingleton<Client>(sp =>
-            new Client(
-                builder.Configuration["Supabase:Url"] ??
-                throw new InvalidOperationException("Supabase URL is not configured."),
-                builder.Configuration["Supabase:Key"] ??
-                throw new InvalidOperationException("Supabase Key is not configured.")
+        
+        builder.Services.AddSingleton<Supabase.Client>(sp =>
+            new Supabase.Client(
+                builder.Configuration["Supabase:Url"] ?? throw new InvalidOperationException("Supabase URL is not configured."),
+                builder.Configuration["Supabase:Key"] ?? throw new InvalidOperationException("Supabase Key is not configured.")
             )
         );
+        
         builder.Services.AddSingleton<ModalErrorHandler>();
         builder.Services.AddTransient<MainPageModel>();
         builder.Services.AddTransient<AdminPageModel>();
 
-        builder.Services.AddTransientWithShellRoute<LoginPage, LoginPageModel>("login");
-        builder.Services.AddTransientWithShellRoute<TeacherCourseListPage, TeacherCourseListPageModel>("teacher/courses");
-        builder.Services.AddTransientWithShellRoute<TeacherCourseViewPage, TeacherCourseViewPageModel>("teachers/course");
-        builder.Services.AddTransientWithShellRoute<TeacherClassViewPage, TeacherClassViewPageModel>("teachers/class");
+        // NEW: Attendance Services
+        builder.Services.AddScoped<IAttendanceHistoryService, AttendanceHistoryService>();
+        
+        // NEW: Attendance PageModels
+        builder.Services.AddTransient<AttendanceHistoryPageModel>();
+        
+        // NEW: Attendance Pages  
+        builder.Services.AddTransient<AttendanceHistoryPage>();
 
+        builder.Services.AddTransientWithShellRoute<LoginPage, LoginPageModel>("login");
+        
+        // NEW: Add attendance history route
+        builder.Services.AddTransientWithShellRoute<AttendanceHistoryPage, AttendanceHistoryPageModel>("attendancehistory");
+        
         return builder.Build();
     }
 }

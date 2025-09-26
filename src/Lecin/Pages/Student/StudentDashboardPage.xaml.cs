@@ -16,4 +16,10 @@ public partial class StudentDashboardPage : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(AttendanceStreaksPage));
     }
+
+    private async void OnViewAttendanceHistoryClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("attendancehistory");
+    }
+
 }
