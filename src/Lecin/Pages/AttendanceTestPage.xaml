@@ -1,0 +1,87 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Lecin.Pages.AttendanceTestPage"
+             Title="Attendance Test">
+
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="15">
+            
+            <!-- Header -->
+            <Label Text="Attendance Percentage Test" 
+                   FontSize="24" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,20"/>
+            
+            <!-- Test Results Card -->
+            <Frame BackgroundColor="#FF252525" 
+                   Padding="20" 
+                   CornerRadius="10"
+                   HasShadow="True">
+                <StackLayout Spacing="10">
+                    
+                    <Label Text="Test Results:" FontSize="18" FontAttributes="Bold"/>
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Student ID -->
+                        <Label Grid.Row="0" Grid.Column="0" Text="Student ID:" FontAttributes="Bold"/>
+                        <Label Grid.Row="0" Grid.Column="1" x:Name="StudentIdLabel" Text="-"/>
+                        
+                        <!-- Classes Attended -->
+                        <Label Grid.Row="1" Grid.Column="0" Text="Classes Attended:" FontAttributes="Bold"/>
+                        <Label Grid.Row="1" Grid.Column="1" x:Name="AttendedLabel" Text="-"/>
+                        
+                        <!-- Total Classes -->
+                        <Label Grid.Row="2" Grid.Column="0" Text="Total Classes:" FontAttributes="Bold"/>
+                        <Label Grid.Row="2" Grid.Column="1" x:Name="TotalLabel" Text="-"/>
+                        
+                        <!-- Percentage -->
+                        <Label Grid.Row="3" Grid.Column="0" Text="Percentage:" FontAttributes="Bold"/>
+                        <Label Grid.Row="3" Grid.Column="1" x:Name="PercentageLabel" 
+                               Text="-" FontSize="18" FontAttributes="Bold"/>
+                        
+                        <!-- Status -->
+                        <Label Grid.Row="4" Grid.Column="0" Text="Status:" FontAttributes="Bold"/>
+                        <Label Grid.Row="4" Grid.Column="1" x:Name="StatusLabel" Text="-"/>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+            
+            <!-- Test Buttons -->
+            <StackLayout Spacing="10">
+                <Label Text="🧪 Test Different Scenarios:" FontSize="16" FontAttributes="Bold"/>
+                
+                <Button x:Name="Test80PercentButton"
+                        Text="Test: 8/10 Classes (80%)" 
+                        BackgroundColor="Green"
+                        TextColor="White"
+                        Clicked="OnTest80PercentClicked"/>
+                
+                <Button x:Name="Test0PercentButton"
+                        Text="Test: 0/10 Classes (0%)" 
+                        BackgroundColor="Red"
+                        TextColor="White"
+                        Clicked="OnTest0PercentClicked"/>
+                        
+                <Button x:Name="Test100PercentButton"
+                        Text="Test: 5/5 Classes (100%)" 
+                        BackgroundColor="Blue"
+                        TextColor="White"
+                        Clicked="OnTest100PercentClicked"/>
+            </StackLayout>
+            
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

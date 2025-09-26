@@ -5,18 +5,6 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/Camera/ping": {
-      "get": {
-        "tags": [
-          "Camera"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Camera/details": {
       "get": {
         "tags": [
@@ -86,58 +74,6 @@
         }
       }
     },
-    "/api/Camera/register-student": {
-      "post": {
-        "tags": [
-          "Camera"
-        ],
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "type": "object",
-                "allOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "photos": {
-                        "type": "array",
-                        "items": {
-                          "type": "string",
-                          "format": "binary"
-                        }
-                      }
-                    }
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "studentId": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "studentName": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Camera/mark-attendance": {
       "post": {
         "tags": [
@@ -193,28 +129,6 @@
           },
           "required": true
         },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Camera/attendance/{lectureId}": {
-      "get": {
-        "tags": [
-          "Camera"
-        ],
-        "parameters": [
-          {
-            "name": "lectureId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
