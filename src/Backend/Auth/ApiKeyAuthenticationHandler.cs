@@ -2,7 +2,6 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
-using Backend.Api;
 using Backend.Database;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;

@@ -30,7 +30,6 @@
         <Content Include="packages.lock.json"/>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Backend.Api\Backend.Api.csproj" />
       <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj" />
     </ItemGroup>
     <ItemGroup>
