@@ -1,5 +1,4 @@
-﻿import {createClient} from 'supabase';
-
+﻿import {createClient} from 'npm:@supabase/supabase-js@2/';
 
 
 export async function isAdmin(req: Request): Promise<boolean> {
@@ -63,5 +62,5 @@ export async function getServiceRoleClient() {
             detectSessionInUrl: false,
         },
     }
-    return createClient(supabaseUrl, anonKey, options);
+    return createClient(supabaseUrl, secretKey, options);
 }

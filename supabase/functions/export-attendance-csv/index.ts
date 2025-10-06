@@ -1,8 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import {getServiceRoleClient, isAdmin} from "../_shared/auth.ts";
 
-console.log("Hello from Functions!");
-
 Deno.serve(async (req) => {
     const authorized = await isAdmin(req);
     if (!authorized) {
