@@ -70,7 +70,7 @@ jobs:
         run: dotnet build  -c Release -f net9.0-android --no-restore
         
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: '.\**\bin\Release\**\*.apk'
 
@@ -79,7 +79,7 @@ jobs:
         run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true --no-restore
         
       - name: Upload MSIX artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: '.\**\AppPackages\**\*.msix'
       
