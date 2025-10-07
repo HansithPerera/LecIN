@@ -2,5 +2,5 @@
 
 public class FaceUploadModel
 {
-    public required FormFileCollection Faces { get; set; }
+    public required IFormFileCollection Faces { get; set; }
 }
