@@ -2,7 +2,7 @@ namespace Lecin.Models
 {
     public class AttendanceStats
     {
-        public string StudentId { get; set; }
+        public Guid StudentId { get; set; }
         public int TotalClassesEnrolled { get; set; }
         public int ClassesAttended { get; set; }
         

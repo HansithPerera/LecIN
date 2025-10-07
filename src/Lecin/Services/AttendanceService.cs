@@ -1,11 +1,11 @@
 using Lecin.Models;
-using Supabase;
+using SupabaseShared.Models;
 
 namespace Lecin.Services
 {
     public interface IAttendanceService
     {
-        Task<AttendanceStats> GetStudentAttendanceStatsAsync(string studentId);
+        Task<AttendanceStats> GetStudentAttendanceStatsAsync(Guid studentId);
         Task<List<AttendanceStats>> GetAllStudentsAttendanceStatsAsync();
         Task<List<Student>> GetAllStudentsAsync();
     }
@@ -19,7 +19,7 @@ namespace Lecin.Services
             _supabaseClient = supabaseClient;
         }
 
-        public async Task<AttendanceStats> GetStudentAttendanceStatsAsync(string studentId)
+        public async Task<AttendanceStats> GetStudentAttendanceStatsAsync(Guid studentId)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace Lecin.Services
                 // Get attendance stats for each student
                 foreach (var student in students.Models)
                 {
-                    var stats = await GetStudentAttendanceStatsAsync(student.StudentId);
+                    var stats = await GetStudentAttendanceStatsAsync(student.Id);
                     allStats.Add(stats);
                 }
 
@@ -113,7 +113,7 @@ namespace Lecin.Services
 
         // Bonus: Get attendance stats for a specific date range
         public async Task<AttendanceStats> GetStudentAttendanceStatsByDateAsync(
-            string studentId, 
+            Guid studentId, 
             DateTime fromDate, 
             DateTime toDate)
         {

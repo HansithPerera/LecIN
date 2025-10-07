@@ -16,7 +16,7 @@ namespace Lecin.Pages
             // Test case: 8 out of 10 classes attended (80%)
             var stats = new AttendanceStats
             {
-                StudentId = "student_80_test",
+                StudentId = Guid.NewGuid(),
                 ClassesAttended = 8,
                 TotalClassesEnrolled = 10
             };
@@ -30,7 +30,7 @@ namespace Lecin.Pages
             // Test case: 0 out of 10 classes attended (0%)
             var stats = new AttendanceStats
             {
-                StudentId = "student_0_test",
+                StudentId = Guid.NewGuid(),
                 ClassesAttended = 0,
                 TotalClassesEnrolled = 10
             };
@@ -44,7 +44,7 @@ namespace Lecin.Pages
             // Test case: 5 out of 5 classes attended (100%)
             var stats = new AttendanceStats
             {
-                StudentId = "student_100_test",
+                StudentId = Guid.NewGuid(),
                 ClassesAttended = 5,
                 TotalClassesEnrolled = 5
             };
@@ -65,7 +65,7 @@ namespace Lecin.Pages
                 
                 var attendanceService = new AttendanceService(supabaseClient);
                 
-                string testStudentId = "07ab83f9-d6af-4146-939c-80221eb9d9d1"; 
+                var testStudentId = Guid.Parse("07ab83f9-d6af-4146-939c-80221eb9d9d1");
                 
                 DisplayAlert("Loading", "Connecting to Supabase...", "OK");
                 
@@ -83,7 +83,7 @@ namespace Lecin.Pages
         private void DisplayResults(AttendanceStats stats)
         {
             // Update the UI labels with the calculated results
-            StudentIdLabel.Text = stats.StudentId;
+            StudentIdLabel.Text = stats.StudentId.ToString();
             AttendedLabel.Text = stats.ClassesAttended.ToString();
             TotalLabel.Text = stats.TotalClassesEnrolled.ToString();
             PercentageLabel.Text = stats.AttendancePercentageDisplay;

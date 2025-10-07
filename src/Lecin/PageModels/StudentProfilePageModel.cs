@@ -1,21 +1,28 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Lecin.Models;
 using Lecin.Services;
 
 namespace Lecin.PageModels
 {
-    public class StudentProfilePageModel : INotifyPropertyChanged
+    public partial class StudentProfilePageModel : ObservableObject
     {
         private readonly IAttendanceService _attendanceService;
         
         // Properties for data binding
+        [ObservableProperty]
         private AttendanceStats _attendanceStats = new();
-        private Student _selectedStudent = new();
+        
+        [ObservableProperty]
         private bool _isLoading = false;
+        
+        [ObservableProperty]
         private string _errorMessage = string.Empty;
-        private List<Student> _allStudents = new();
+        
+        [ObservableProperty]
+        private List<SupabaseShared.Models.Student> _allStudents = new();
 
         public StudentProfilePageModel(IAttendanceService attendanceService)
         {
@@ -27,62 +34,8 @@ namespace Lecin.PageModels
             LoadAllStudentsCommand = new Command(async () => await LoadAllStudents());
         }
 
-        // Properties for UI binding
-        public AttendanceStats AttendanceStats
-        {
-            get => _attendanceStats;
-            set
-            {
-                _attendanceStats = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Student SelectedStudent
-        {
-            get => _selectedStudent;
-            set
-            {
-                _selectedStudent = value;
-                OnPropertyChanged();
-                
-                // Auto-load attendance when student is selected
-                if (!string.IsNullOrEmpty(value?.StudentId))
-                {
-                    LoadAttendanceCommand.Execute(value.StudentId);
-                }
-            }
-        }
-
-        public List<Student> AllStudents
-        {
-            get => _allStudents;
-            set
-            {
-                _allStudents = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsLoading
-        {
-            get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set
-            {
-                _errorMessage = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
+        private SupabaseShared.Models.Student? _selectedStudent;
 
         // Commands
         public ICommand LoadAttendanceCommand { get; }
@@ -90,21 +43,19 @@ namespace Lecin.PageModels
         public ICommand LoadAllStudentsCommand { get; }
 
         // Methods
-        private async Task LoadAttendanceData(string studentId)
+        private async Task LoadAttendanceData(string? studentId)
         {
-            if (string.IsNullOrEmpty(studentId))
+            if (Guid.TryParse(studentId, out var guid))
             {
-                ErrorMessage = "Please select a student";
                 return;
             }
-
             try
             {
                 IsLoading = true;
                 ErrorMessage = string.Empty;
 
                 // Get attendance stats from Supabase
-                AttendanceStats = await _attendanceService.GetStudentAttendanceStatsAsync(studentId);
+                AttendanceStats = await _attendanceService.GetStudentAttendanceStatsAsync(guid);
                 
                 if (AttendanceStats.TotalClassesEnrolled == 0)
                 {
@@ -114,7 +65,7 @@ namespace Lecin.PageModels
             catch (Exception ex)
             {
                 ErrorMessage = $"Error loading attendance data: {ex.Message}";
-                AttendanceStats = new AttendanceStats { StudentId = studentId };
+                AttendanceStats = new AttendanceStats { StudentId = guid };
             }
             finally
             {
@@ -124,10 +75,12 @@ namespace Lecin.PageModels
 
         private async Task RefreshData()
         {
-            if (!string.IsNullOrEmpty(SelectedStudent.StudentId))
+            if (SelectedStudent == null)
             {
-                await LoadAttendanceData(SelectedStudent.StudentId);
+                ErrorMessage = "No student selected to refresh data.";
+                return;
             }
+            await LoadAttendanceData(SelectedStudent.Id.ToString());
         }
 
         private async Task LoadAllStudents()
