@@ -59,7 +59,28 @@ jobs:
 
       - name: Build All
         working-directory: "./src"
-        run: dotnet build --no-restore=
+        run: dotnet build --no-restore
+        
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: '2.40.7'
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Start Supabase local development
+        run: supabase start
+
+      - name: Setup Deno Imports
+        working-directory: "./supabase/functions"
+        run: deno install
+
+      - name: Run deno unit tests
+        working-directory: "./supabase/functions"
+        run: deno test --allow-all
       
       - name: Test
         working-directory: "./src"
