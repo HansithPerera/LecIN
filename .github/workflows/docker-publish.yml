@@ -17,50 +17,21 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
 
-
 jobs:
-  build:
-    runs-on: windows-latest
-    permissions:
-      contents: read
-      packages: write
-      # This is used to complete the identity challenge
-      # with sigstore/fulcio when running outside of PRs.
-      id-token: write
-
+  test:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Set up Docker
-        uses: docker/setup-docker-action@v4
-        
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-      # Setup .NET SDK
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-          
-      # Restore, build, and test the .NET project
-      - name: Restore workloads
-        working-directory: "./src"
-        run: dotnet workload restore
-        
-      - name: Restore dependencies
-        working-directory: "./src"
-        run: dotnet restore
 
-      - name: Build All
-        working-directory: "./src"
-        run: dotnet build --no-restore
-        
+      - name: Install EMGU CV dependencies
+        run: sudo apt update && sudo apt install build-essential libgtk-3-dev libgstreamer1.0-dev libavcodec-dev libswscale-dev libavformat-dev libdc1394-dev libv4l-dev cmake-curses-gui ocl-icd-dev freeglut3-dev libgeotiff-dev libusb-1.0-0-dev libvtk9-dev libfreetype-dev libharfbuzz-dev qtbase5-dev libeigen3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgflags-dev libgoogle-glog-dev liblapacke-dev libva-dev dotnet-sdk-8.0
+
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
         with:
@@ -81,10 +52,54 @@ jobs:
       - name: Run deno unit tests
         working-directory: "./supabase/functions"
         run: deno test --allow-all
-      
+
+      # Restore, build, and test the .NET project
+      - name: Restore workloads
+        working-directory: "./src"
+        run: dotnet workload restore
+
+      - name: Restore dependencies
+        working-directory: "./src"
+        run: dotnet restore
+
+      - name: Build
+        working-directory: "./src"
+        run: dotnet build --no-restore
       - name: Test
         working-directory: "./src"
-        run: dotnet test
+        run: dotnet test --no-build --verbosity normal
+        
+  publish:
+    runs-on: windows-latest
+    needs: test
+    permissions:
+      contents: read
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
+        
+      # Setup .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+          
+      # Restore, build, and test the .NET project
+      - name: Restore workloads
+        working-directory: "./src"
+        run: dotnet workload restore
+        
+      - name: Restore dependencies
+        working-directory: "./src"
+        run: dotnet restore
         
       - name: Build APK
         working-directory: "./src/Lecin"
