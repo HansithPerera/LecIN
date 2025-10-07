@@ -1,7 +1,7 @@
 ﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace Lecin.Models;
+namespace SupabaseShared.Models;
 
 [Table("Courses")]
 public class Course: BaseModel

@@ -1,16 +1,43 @@
 ﻿using System.Reflection;
 using CommunityToolkit.Maui;
+using Lecin.PageModels.Admin;
+using Lecin.PageModels.Teacher;
+using Lecin.Pages.Teacher;
+using Lecin.Resources.Fonts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Supabase;
+using SupabaseShared.Models;
 using Syncfusion.Maui.Toolkit.Hosting;
 
 namespace Lecin;
 
 public static class MauiProgram
 {
+    private static void AddJsonSettings(this MauiAppBuilder builder, string jsonFile)
+    {
+        using var stream = Assembly.GetExecutingAssembly()
+            .GetManifestResourceStream($"{nameof(Lecin)}.{jsonFile}");
+
+        if (stream != null)
+            builder.Configuration.AddJsonFile(jsonFile);
+    }
+
+    private static void AddAppSettings(this MauiAppBuilder builder)
+    {
+        builder.AddJsonSettings("appsettings.json");
+
+#if DEBUG
+        builder.AddJsonSettings("appsettings.Development.json");
+#else
+            builder.AddJsonSettings("appsettings.Production.json");
+#endif
+    }
+
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+        builder.AddAppSettings();
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
@@ -33,25 +60,22 @@ public static class MauiProgram
         builder.Logging.AddDebug();
         builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
-        using var stream = Assembly.GetExecutingAssembly()
-            .GetManifestResourceStream($"{nameof(Lecin)}.appsettings.json");
-        
-        var config = new ConfigurationBuilder()
-            .AddJsonStream(stream!)
-            .Build();
-        
-        builder.Configuration.AddConfiguration(config);
-        
-        builder.Services.AddSingleton<Supabase.Client>(sp =>
-            new Supabase.Client(
-                builder.Configuration["Supabase:Url"] ?? throw new InvalidOperationException("Supabase URL is not configured."),
-                builder.Configuration["Supabase:Key"] ?? throw new InvalidOperationException("Supabase Key is not configured.")
+        builder.Services.AddSingleton<Client>(sp =>
+            new Client(
+                builder.Configuration["Supabase:Url"] ??
+                throw new InvalidOperationException("Supabase URL is not configured."),
+                builder.Configuration["Supabase:Key"] ??
+                throw new InvalidOperationException("Supabase Key is not configured.")
             )
         );
         builder.Services.AddSingleton<ModalErrorHandler>();
-        builder.Services.AddSingleton<MainPageModel>();
+        builder.Services.AddTransient<MainPageModel>();
+        builder.Services.AddTransient<AdminPageModel>();
 
         builder.Services.AddTransientWithShellRoute<LoginPage, LoginPageModel>("login");
+        builder.Services.AddTransientWithShellRoute<TeacherCourseListPage, TeacherCourseListPageModel>("teacher/courses");
+        builder.Services.AddTransientWithShellRoute<TeacherCourseViewPage, TeacherCourseViewPageModel>("teachers/course");
+        builder.Services.AddTransientWithShellRoute<TeacherClassViewPage, TeacherClassViewPageModel>("teachers/class");
 
         return builder.Build();
     }

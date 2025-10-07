@@ -2,34 +2,34 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Lecin.Models;
+using Supabase;
+using SupabaseShared.Models;
 
 namespace Lecin.PageModels;
 
 public partial class MainPageModel : ObservableObject
 {
-    private bool _isNavigatedTo;
-    private bool _dataLoaded;
+    private readonly Client _client;
 
     private readonly ModalErrorHandler _errorHandler;
 
-    [ObservableProperty] bool _isBusy;
+    [ObservableProperty] private ObservableCollection<Course> _courses = [];
+    private bool _dataLoaded;
 
-    [ObservableProperty] bool _isRefreshing;
-    
-    [ObservableProperty] ObservableCollection<Course> _courses = [];
+    [ObservableProperty] private bool _isBusy;
+    private bool _isNavigatedTo;
 
-    public ICommand RefreshCommand { get; set; }
-    
-    private readonly Supabase.Client _client;
+    [ObservableProperty] private bool _isRefreshing;
 
-    /// <inheritdoc/>
-    public MainPageModel(ModalErrorHandler errorHandler, Supabase.Client client)
+    /// <inheritdoc />
+    public MainPageModel(ModalErrorHandler errorHandler, Client client)
     {
         _client = client;
         RefreshCommand = new AsyncRelayCommand(Refresh);
         _errorHandler = errorHandler;
     }
+
+    public ICommand RefreshCommand { get; set; }
 
     private async Task Refresh()
     {
@@ -37,7 +37,7 @@ public partial class MainPageModel : ObservableObject
         await LoadDataAsync();
         IsRefreshing = false;
     }
-    
+
     public async Task LoadDataAsync()
     {
         if (_dataLoaded && _isNavigatedTo) return;
@@ -48,7 +48,7 @@ public partial class MainPageModel : ObservableObject
             var courses = await _client.From<Course>()
                 .Select("*")
                 .Get();
-            
+
             Courses = new ObservableCollection<Course>(courses.Models);
             _dataLoaded = true;
         }
@@ -63,10 +63,14 @@ public partial class MainPageModel : ObservableObject
     }
 
     [RelayCommand]
-    private void NavigatedTo() =>
+    private void NavigatedTo()
+    {
         _isNavigatedTo = true;
+    }
 
     [RelayCommand]
-    private void NavigatedFrom() =>
+    private void NavigatedFrom()
+    {
         _isNavigatedTo = false;
+    }
 }

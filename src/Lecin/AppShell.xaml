@@ -1,32 +1,73 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <Shell
     x:Class="Lecin.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
     xmlns:pages="clr-namespace:Lecin.Pages"
+    xmlns:viewModels="clr-namespace:Lecin.ViewModels"
+    xmlns:admin="clr-namespace:Lecin.Pages.Admin"
+    xmlns:teacher="clr-namespace:Lecin.Pages.Teacher"
+    xmlns:student="clr-namespace:Lecin.Pages.Student"
+    x:DataType="viewModels:AppShellViewModel"
     Shell.FlyoutBehavior="Flyout"
     Title="Lecin">
-    
+
+    <!-- Default Main Dashboard -->
     <ShellContent
         Title="Dashboard"
         Icon="{StaticResource IconDashboard}"
         ContentTemplate="{DataTemplate pages:MainPage}"
         Route="main" />
 
+    <!-- Role-based Dashboards -->
+    <ShellContent
+        Title="Admin"
+        ContentTemplate="{DataTemplate admin:AdminDashboardPage}"
+        Route="adminDashboard"
+        IsVisible="{Binding IsAdmin}" />
+
+    <ShellContent
+        Title="Teacher"
+        ContentTemplate="{DataTemplate teacher:TeacherDashboardPage}"
+        Route="teacherDashboard"
+        IsVisible="{Binding IsTeacher}" />
+
+    <ShellContent
+        Title="Student"
+        ContentTemplate="{DataTemplate student:StudentDashboardPage}"
+        Route="studentDashboard"
+        IsVisible="{Binding IsStudent}" />
+
+
     <Shell.FlyoutFooter>
-        <Grid Padding="15">
-            <sf:SfSegmentedControl x:Name="ThemeSegmentedControl" 
-                VerticalOptions="Center" HorizontalOptions="Center" SelectionChanged="SfSegmentedControl_SelectionChanged"
-                SegmentWidth="40" SegmentHeight="40">
+        <Grid Padding="15" RowDefinitions="Auto,Auto" RowSpacing="10">
+
+            <!-- Theme switcher -->
+            <sf:SfSegmentedControl x:Name="ThemeSegmentedControl"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   SelectionChanged="SfSegmentedControl_SelectionChanged"
+                                   SegmentWidth="40"
+                                   SegmentHeight="40">
                 <sf:SfSegmentedControl.ItemsSource>
                     <x:Array Type="{x:Type sf:SfSegmentItem}">
-                        <sf:SfSegmentItem ImageSource="{StaticResource IconLight}"/>
-                        <sf:SfSegmentItem ImageSource="{StaticResource IconDark}"/>
+                        <sf:SfSegmentItem ImageSource="{StaticResource IconLight}" />
+                        <sf:SfSegmentItem ImageSource="{StaticResource IconDark}" />
                     </x:Array>
                 </sf:SfSegmentedControl.ItemsSource>
             </sf:SfSegmentedControl>
+
+            <!-- Logout button -->
+            <Button Grid.Row="1"
+                    Text="Logout"
+                    BackgroundColor="DarkRed"
+                    TextColor="White"
+                    Clicked="OnLogoutClicked"
+                    IsVisible="{Binding IsLoggedIn}" />
         </Grid>
     </Shell.FlyoutFooter>
+
 
 </Shell>

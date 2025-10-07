@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:pages="clr-namespace:Lecin.Pages"
+                       xmlns:teacher="clr-namespace:Lecin.PageModels.Teacher"
+                       xmlns:models="clr-namespace:SupabaseShared.Models;assembly=SupabaseShared"
+                       x:DataType="teacher:TeacherCourseListPageModel"
+                       x:Class="Lecin.Pages.Teacher.TeacherCourseListPage">
+    <ContentPage.Content>
+        <CollectionView
+            ItemsSource="{Binding Courses}"
+            SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Course">
+                    <Grid ColumnDefinitions="Auto, *, Auto, Auto, Auto"
+                          ColumnSpacing="10"
+                          Padding="10"
+                          Margin="5">
+                        <Label Grid.Column="0" Text="{Binding Code}" FontSize="18" FontAttributes="Bold" />
+                        <Label Grid.Column="1" Text="{Binding Name}" FontSize="18" TextColor="White" />
+                        <Label Grid.Column="2" Text="{Binding Year}" FontSize="18" TextColor="White" />
+                        <Label Grid.Column="3" Text="{Binding SemesterCode}" FontSize="18" TextColor="White" />
+                        <Button Grid.Column="4" Text="Manage Course" Clicked="GotoCourseView"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ContentPage.Content>
+</pages:BaseContentPage>

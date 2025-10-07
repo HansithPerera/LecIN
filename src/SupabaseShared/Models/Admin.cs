@@ -3,8 +3,8 @@ using Supabase.Postgrest.Models;
 
 namespace SupabaseShared.Models
 {
-    [Table("Students")]
-    public class Student : BaseModel
+    [Table("Admins")] //
+    public class Admin : BaseModel
     {
         [PrimaryKey("Id")]
         public Guid Id { get; set; }

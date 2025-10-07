@@ -1,18 +1,51 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using Lecin.Pages.Admin;
+using Lecin.Pages.Student;
+using Lecin.Pages.Teacher;
+using Lecin.ViewModels;
 using Font = Microsoft.Maui.Font;
+using SelectionChangedEventArgs = Syncfusion.Maui.Toolkit.SegmentedControl.SelectionChangedEventArgs;
 
 namespace Lecin;
 
 public partial class AppShell : Shell
 {
-    public AppShell()
+    public AppShell(List<string> roles, bool isLoggedIn) // ✅ roles list instead of single role
     {
         InitializeComponent();
+
+        // Apply role-based visibility using ViewModel binding
+        BindingContext = new AppShellViewModel(roles, isLoggedIn);
+
+
+        // Initialize theme selector (Light/Dark)
         var currentTheme = Application.Current!.RequestedTheme;
         ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
+
+        // Register routes for navigation
+        RegisterRoutes();
     }
 
+    /// <summary>
+    ///     Register all navigation routes for Shell-based navigation.
+    ///     Any page you want to navigate to via GoToAsync() must be registered here.
+    /// </summary>
+    private void RegisterRoutes()
+    {
+        // Student subpages
+        Routing.RegisterRoute(nameof(AttendanceHistoryPage), typeof(AttendanceHistoryPage));
+        Routing.RegisterRoute(nameof(AttendanceStreaksPage), typeof(AttendanceStreaksPage));
+
+        // Role dashboards
+        Routing.RegisterRoute(nameof(AdminDashboardPage), typeof(AdminDashboardPage));
+        Routing.RegisterRoute(nameof(TeacherDashboardPage), typeof(TeacherDashboardPage));
+        Routing.RegisterRoute(nameof(StudentDashboardPage), typeof(StudentDashboardPage));
+    }
+
+    /// <summary>
+    ///     Display a snackbar message with custom styling.
+    /// </summary>
     public static async Task DisplaySnackbarAsync(string message)
     {
         var cancellationTokenSource = new CancellationTokenSource();
@@ -32,9 +65,11 @@ public partial class AppShell : Shell
         await snackbar.Show(cancellationTokenSource.Token);
     }
 
+    /// <summary>
+    ///     Display a toast message (not supported on Windows).
+    /// </summary>
     public static async Task DisplayToastAsync(string message)
     {
-        // Toast is currently not working in MCT on Windows
         if (OperatingSystem.IsWindows())
             return;
 
@@ -44,9 +79,28 @@ public partial class AppShell : Shell
         await toast.Show(cts.Token);
     }
 
+    /// <summary>
+    ///     Handle theme switch between Light/Dark when segmented control changes.
+    /// </summary>
     private void SfSegmentedControl_SelectionChanged(object sender,
-        Syncfusion.Maui.Toolkit.SegmentedControl.SelectionChangedEventArgs e)
+        SelectionChangedEventArgs e)
     {
         Application.Current!.UserAppTheme = e.NewIndex == 0 ? AppTheme.Light : AppTheme.Dark;
+    }
+
+    private async void OnLogoutClicked(object sender, EventArgs e)
+    {
+        // clean Supabase
+        if (App.CurrentSupabase != null)
+            await App.CurrentSupabase.Auth.SignOut();
+
+        SecureStorage.Default.Remove("jwt_token");
+
+        //LoginPage
+        Application.Current.MainPage = new NavigationPage(
+            new LoginPage(new LoginPageModel(App.CurrentSupabase!))
+        );
+
+        await DisplayToastAsync("You have been logged out.");
     }
 }

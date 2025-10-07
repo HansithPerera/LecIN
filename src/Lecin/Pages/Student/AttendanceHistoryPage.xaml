@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Lecin.Pages.Student.AttendanceHistoryPage"
+             Title="Attendance History">
+
+    <VerticalStackLayout Padding="20" Spacing="10">
+        <Label Text="Attendance History"
+               FontSize="24"
+               HorizontalOptions="Center" />
+
+         <!-- Attendance list -->
+        <CollectionView x:Name="AttendanceList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Stroke="LightGray" Padding="10" Margin="5" StrokeShape="RoundRectangle 8">
+                        <Label Text="{Binding StatusText}" 
+                               FontSize="18"
+                               TextColor="{Binding StatusColor}" />
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentPage>
