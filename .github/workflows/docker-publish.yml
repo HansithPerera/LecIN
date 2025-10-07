@@ -57,13 +57,32 @@ jobs:
         working-directory: "./src"
         run: dotnet restore
 
-      - name: Build
+      - name: Build All
         working-directory: "./src"
-        run: dotnet build --no-restore
+        run: dotnet build  -c Release --no-restore
+      
       - name: Test
         working-directory: "./src"
         run: dotnet test --no-build --verbosity normal
         
+      - name: Build APK
+        working-directory: "./src/Lecin"
+        run: dotnet build  -c Release -f net9.0-android --no-restore
+        
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: ".\**\bin\Release\**\*.apk"
+
+      - name: Build MSIX
+        working-directory: "./src/Lecin"
+        run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true --no-restore
+        
+      - name: Upload MSIX artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: ".\**\AppPackages\**\*.msix"
+      
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
