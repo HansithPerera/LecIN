@@ -270,6 +270,7 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
+          name: 'android'
           path: '.\**\bin\Release\**\*.apk'
 
       - name: Build MSIX
@@ -279,4 +280,5 @@ jobs:
       - name: Upload MSIX artifact
         uses: actions/upload-artifact@v4
         with:
+          name: 'windows'
           path: '.\**\AppPackages\**\*.msix'
