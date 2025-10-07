@@ -11,13 +11,11 @@ public class RecognizedFace
 
 public class FaceService(CascadeClassifier faceCascade, LBPHFaceRecognizer recognizer)
 {
-    private readonly Dictionary<int, string> _personMap;
-
     private int _maxIndex = 0;
     
     private readonly Dictionary<int, string> _faceMap = new();
     
-    private int InsertStudent(Guid personId)
+    private int InsertFace(Guid personId)
     {
         var nextIndex = _maxIndex++;
         _faceMap[nextIndex] = personId.ToString();
@@ -31,7 +29,7 @@ public class FaceService(CascadeClassifier faceCascade, LBPHFaceRecognizer recog
             var mat = await DetectFaceAsync(image);
             if (mat == null)
                 return;
-            recognizer.Update([ mat ], [ InsertStudent(personId) ]);
+            recognizer.Update([ mat ], [ InsertFace(personId) ]);
         });
     }
 
