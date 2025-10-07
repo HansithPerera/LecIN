@@ -59,7 +59,7 @@ jobs:
 
       - name: Build All
         working-directory: "./src"
-        run: dotnet build  -c Release --no-restore
+        run: dotnet build  -c Release
       
       - name: Test
         working-directory: "./src"
