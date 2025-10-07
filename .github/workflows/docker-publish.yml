@@ -72,16 +72,16 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v3
         with:
-          path: ".\**\bin\Release\**\*.apk"
+          path: '.\**\bin\Release\**\*.apk'
 
       - name: Build MSIX
-        working-directory: "./src/Lecin"
+        working-directory: './src/Lecin'
         run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true --no-restore
         
       - name: Upload MSIX artifact
         uses: actions/upload-artifact@v3
         with:
-          path: ".\**\AppPackages\**\*.msix"
+          path: '.\**\AppPackages\**\*.msix'
       
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
