@@ -13,6 +13,7 @@
         either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
         <!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
+        <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
         <OutputType>Exe</OutputType>
         <RootNamespace>Lecin</RootNamespace>
         <UseMaui>true</UseMaui>
