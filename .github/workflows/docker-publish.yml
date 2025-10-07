@@ -263,13 +263,9 @@ jobs:
         working-directory: "./src"
         run: dotnet workload restore
         
-      - name: Restore dependencies
-        working-directory: "./src"
-        run: dotnet restore
-        
       - name: Build APK
         working-directory: "./src/Lecin"
-        run: dotnet build -c Release -f net9.0-android --no-restore
+        run: dotnet build -c Release -f net9.0-android
         
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -278,7 +274,7 @@ jobs:
 
       - name: Build MSIX
         working-directory: './src/Lecin'
-        run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64 /p:GenerateAppxPackageOnBuild=true --no-restore
+        run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64 /p:GenerateAppxPackageOnBuild=true
         
       - name: Upload MSIX artifact
         uses: actions/upload-artifact@v4
