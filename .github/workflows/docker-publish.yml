@@ -68,9 +68,9 @@ jobs:
       - name: Test
         working-directory: "./src"
         run: dotnet test --no-build --verbosity normal
-        
-  publish:
-    runs-on: windows-latest
+  
+  publish-docker:
+    runs-on: ubuntu-latest
     needs: test
     permissions:
       contents: read
@@ -85,39 +85,11 @@ jobs:
         
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
-        
-      # Setup .NET SDK
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-          
-      # Restore, build, and test the .NET project
-      - name: Restore workloads
-        working-directory: "./src"
-        run: dotnet workload restore
-        
-      - name: Restore dependencies
-        working-directory: "./src"
-        run: dotnet restore
-        
-      - name: Build APK
-        working-directory: "./src/Lecin"
-        run: dotnet build -c Release -f net9.0-android --no-restore
-        
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          path: '.\**\bin\Release\**\*.apk'
-
-      - name: Build MSIX
-        working-directory: './src/Lecin'
-        run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true --no-restore
-        
-      - name: Upload MSIX artifact
-        uses: actions/upload-artifact@v4
-        with:
-          path: '.\**\AppPackages\**\*.msix'
       
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
@@ -179,3 +151,53 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+  
+  publish-maui:
+    runs-on: windows-latest
+    needs: test
+    permissions:
+      contents: read
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
+        
+      # Setup .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+          
+      # Restore, build, and test the .NET project
+      - name: Restore workloads
+        working-directory: "./src"
+        run: dotnet workload restore
+        
+      - name: Restore dependencies
+        working-directory: "./src"
+        run: dotnet restore
+        
+      - name: Build APK
+        working-directory: "./src/Lecin"
+        run: dotnet build -c Release -f net9.0-android --no-restore
+        
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: '.\**\bin\Release\**\*.apk'
+
+      - name: Build MSIX
+        working-directory: './src/Lecin'
+        run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 /p:GenerateAppxPackageOnBuild=true --no-restore
+        
+      - name: Upload MSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: '.\**\AppPackages\**\*.msix'

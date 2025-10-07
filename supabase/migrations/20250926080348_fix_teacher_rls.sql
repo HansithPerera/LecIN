@@ -1,4 +1,4 @@
-﻿create policy "Allow Teachers in course to view"
+create policy "Allow Teachers in course to view"
 on "public"."Attendance"
 as permissive
 for select
