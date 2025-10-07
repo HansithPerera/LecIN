@@ -258,16 +258,16 @@ jobs:
       - name: Restore workloads
         working-directory: "./src"
         run: dotnet workload restore
-
-      - name: Build MSIX
-        working-directory: './src/Lecin'
-        run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64 /p:GenerateAppxPackageOnBuild=true
         
-      - name: Upload MSIX artifact
+      - name: Build APK
+        working-directory: "./src/Lecin"
+        run: dotnet build -c Release -f net9.0-android
+        
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: 'windows'
-          path: '.\**\AppPackages\**\*.msix'
+          name: 'android'
+          path: '.\**\bin\Release\**\*.apk'
           
   publish-maui-windows:
     runs-on: windows-latest
@@ -293,13 +293,15 @@ jobs:
       - name: Restore workloads
         working-directory: "./src"
         run: dotnet workload restore
+
+      - name: Build MSIX
+        working-directory: './src/Lecin'
+        run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64 /p:GenerateAppxPackageOnBuild=true
         
-      - name: Build APK
-        working-directory: "./src/Lecin"
-        run: dotnet build -c Release -f net9.0-android
-        
-      - name: Upload APK artifact
+      - name: Upload MSIX artifact
         uses: actions/upload-artifact@v4
         with:
-          name: 'android'
-          path: '.\**\bin\Release\**\*.apk'
+          name: 'windows'
+          path: '.\**\AppPackages\**\*.msix'
+        
+
