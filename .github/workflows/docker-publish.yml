@@ -261,13 +261,13 @@ jobs:
         
       - name: Build APK
         working-directory: "./src/Lecin"
-        run: dotnet build -c Release -f net9.0-android
+        run: dotnet publish -c Release -f net9.0-android
         
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: 'frontend-android-apk'
-          path: '.\**\bin\Release\**\*.apk'
+          path: '.\**\bin\Release\**\publish\**\*.apk'
           
   publish-frontend-windows:
     runs-on: windows-latest
@@ -294,14 +294,13 @@ jobs:
         working-directory: "./src"
         run: dotnet workload restore
 
-      - name: Build MSIX
+      - name: Build Package
         working-directory: './src/Lecin'
-        run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64 /p:GenerateAppxPackageOnBuild=true
+        run: dotnet publish -c Release -f:net9.0-windows10.0.19041.0 -p:RuntimeIdentifierOverride=win10-x64
         
-      - name: Upload MSIX artifact
+      - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
         with:
           name: 'frontend-windows-msix'
-          path: '.\**\AppPackages\**\*.msix'
+          path: '.\**\bin\Release\**\publish\**\*.*'
         
-
