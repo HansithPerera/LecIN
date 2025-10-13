@@ -4,6 +4,7 @@ using Lecin.PageModels.Admin;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Syncfusion.Maui.Toolkit.Hosting;
+using Supabase;
 
 namespace Lecin;
 
@@ -12,11 +13,17 @@ public static class MauiProgram
     
     private static void AddJsonSettings(this MauiAppBuilder builder, string jsonFile)
     {
+        builder.Configuration.AddJsonFile(jsonFile, optional: true, reloadOnChange: true);
+        System.Diagnostics.Debug.WriteLine(
+    $"FE Config -> Url set? {builder.Configuration["Supabase:Url"] != null}, Key set? {builder.Configuration["Supabase:Key"] != null}"
+);
+        /*
         using var stream = Assembly.GetExecutingAssembly()
             .GetManifestResourceStream($"{nameof(Lecin)}.{jsonFile}");
         
         if (stream != null)
             builder.Configuration.AddJsonFile(jsonFile);
+        */
     }
     
     private static void AddAppSettings(this MauiAppBuilder builder)

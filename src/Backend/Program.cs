@@ -65,6 +65,8 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+app.MapGet("/healthz", () => Results.Ok(new { ok = true, time = DateTimeOffset.UtcNow }));
+
 if (app.Environment.IsEnvironment(Constants.DevelopmentEnv)) app.MapOpenApi();
 
 app.UseHttpsRedirection();

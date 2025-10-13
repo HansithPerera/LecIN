@@ -5,6 +5,18 @@
     "version": "1.0.0"
   },
   "paths": {
+    "/healthz": {
+      "get": {
+        "tags": [
+          "Backend"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Camera/ping": {
       "get": {
         "tags": [
@@ -317,6 +329,9 @@
     }
   },
   "tags": [
+    {
+      "name": "Backend"
+    },
     {
       "name": "Camera"
     }
