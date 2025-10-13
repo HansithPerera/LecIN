@@ -1,21 +1,26 @@
-﻿using Supabase;
+﻿using System.Diagnostics;
+using Lecin.Shells;
+using Lecin.ViewModels;
 
 namespace Lecin;
 
 public partial class App : Application
 {
-    public static Client? CurrentSupabase { get; private set; }
+    private readonly AppShellViewModel _vm;
 
-    public App(Client supabase)
+    public App(AppShellViewModel vm)
     {
         InitializeComponent();
-        CurrentSupabase = supabase;
+        _vm = vm;
+        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+        {
+            var exception = args.ExceptionObject as Exception;
+            Debug.WriteLine($"Unhandled Exception: {exception?.Message}");
+        };
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        // Before login: no roles, not logged in
-        return new Window(new AppShell(new List<string>(), isLoggedIn: false));
+        return new Window(new AppShell(_vm));
     }
-
 }

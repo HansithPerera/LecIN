@@ -1,5 +1,6 @@
 ﻿using Lecin.PageModels.Teacher;
 using Supabase;
+using SupabaseShared.Models;
 
 namespace Lecin.Pages.Teacher;
 
@@ -12,11 +13,11 @@ public partial class TeacherCourseListPage : BaseContentPage
 
     private void GotoCourseView(object? sender, EventArgs e)
     {
-        if (sender is not Button { BindingContext: SupabaseShared.Models.Course course }) return;
+        if (sender is not Button { BindingContext: Course course }) return;
 
         try
         {
-            Shell.Current.GoToAsync($"teachers/course", new Dictionary<string, object>
+            Shell.Current.GoToAsync("teacher/course", new Dictionary<string, object>
             {
                 { "course", course }
             });

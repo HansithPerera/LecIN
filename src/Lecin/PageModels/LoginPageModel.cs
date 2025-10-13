@@ -1,15 +1,11 @@
-﻿using System.Windows.Input;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Supabase.Gotrue.Exceptions;
-using Supabase.Postgrest;
-using Client = Supabase.Client;
 
 namespace Lecin.PageModels;
 
-public partial class LoginPageModel : ObservableObject
+public partial class LoginPageModel : BasePageModel
 {
-    private readonly Client _supabase;
+    private readonly AuthService _authService;
 
     [ObservableProperty] private string _email = string.Empty;
 
@@ -17,73 +13,46 @@ public partial class LoginPageModel : ObservableObject
 
     [ObservableProperty] private string _statusMessage = string.Empty;
 
-    public LoginPageModel(Client supabase)
+    [ObservableProperty] private UserType _userType = UserType.Student;
+
+    public LoginPageModel(AuthService authService)
     {
-        _supabase = supabase;
-        LoginCommand = new AsyncRelayCommand(LoginAsync);
+        _authService = authService;
     }
 
-    public ICommand LoginCommand { get; }
+    public override async Task LoadDataAsync()
+    {
+        await _authService.RestoreSession();
+    }
 
-    private async Task LoginAsync()
+    [RelayCommand]
+    private async Task Login()
     {
         if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
             StatusMessage = "Please enter email and password.";
             return;
         }
-
         try
         {
-            var session = await _supabase.Auth.SignInWithPassword(Email, Password);
-            if (session != null && session.User != null)
+            var loginResult = await _authService.SignIn(Email, Password, UserType);
+            if (loginResult.IsOk)
             {
-                StatusMessage = $"Welcome, {session.User.Email}";
-                await SecureStorage.Default.SetAsync("jwt_token", session.AccessToken);
-
-                var userId = session.User.Id;
-                var roles = new List<string>(); // ✅ collect all roles
-
-                // ✅ Check Student role
-                var studentResponse = await _supabase.From<SupabaseShared.Models.Student>()
-                    .Filter("Id", Constants.Operator.Equals, userId)
-                    .Get();
-
-                if (studentResponse.Models.FirstOrDefault() != null)
-                    roles.Add("Student");
-
-                // ✅ Check Teacher role
-                var teacherResponse = await _supabase.From<SupabaseShared.Models.Teacher>()
-                    .Filter("Id", Constants.Operator.Equals, userId)
-                    .Get();
-                if (teacherResponse.Models.FirstOrDefault() != null)
-                    roles.Add("Teacher");
-
-                // ✅ Check Admin role
-                var adminResponse = await _supabase.From<SupabaseShared.Models.Admin>()
-                    .Filter("Id", Constants.Operator.Equals, userId)
-                    .Get();
-
-                if (adminResponse.Models.FirstOrDefault() != null)
-                    roles.Add("Admin");
-
-
-                // ✅ Pass all roles + logged-in flag to AppShell
-                // AppShell will decide which nav items to show
-                Application.Current.MainPage = new AppShell(roles, true);
+                StatusMessage = "Welcome!";
             }
             else
             {
-                StatusMessage = "Login failed. Try again.";
+                StatusMessage = loginResult.UnwrapErr() switch
+                {
+                    SignInError.InvalidCredentials => "Invalid email or password.",
+                    SignInError.InvalidUserType => "User type does not match.",
+                    _ => "An unknown error occurred."
+                };
             }
-        }
-        catch (GotrueException ex) when (ex.StatusCode == 400)
-        {
-            StatusMessage = "Invalid email or password.";
         }
         catch (Exception ex)
         {
-            StatusMessage = $"An error occurred: {ex.Message}";
+            StatusMessage = $"Error: {ex.Message}";
         }
     }
 }

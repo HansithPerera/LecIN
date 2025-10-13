@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lecin.PageModels.Teacher;
+﻿using Lecin.PageModels.Teacher;
+using Supabase;
+using SupabaseShared.Models;
 
 namespace Lecin.Pages.Teacher;
 
 public partial class TeacherCourseViewPage
 {
-    public TeacherCourseViewPage(TeacherCourseViewPageModel vm, Supabase.Client client): base(vm, client)
+    public TeacherCourseViewPage(TeacherCourseViewPageModel vm, Client client) : base(vm, client)
     {
         InitializeComponent();
     }
@@ -18,9 +15,9 @@ public partial class TeacherCourseViewPage
     {
         try
         {
-            if (sender is not Button { BindingContext: SupabaseShared.Models.Class cls }) return;
+            if (sender is not Button { BindingContext: Class cls }) return;
 
-            await Shell.Current.GoToAsync($"teachers/class", new Dictionary<string, object>
+            await Shell.Current.GoToAsync("teacher/class", new Dictionary<string, object>
             {
                 { "class", cls }
             });

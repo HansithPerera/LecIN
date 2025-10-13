@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Lecin.PageModels.Student;
 
-namespace Lecin.PageModels.Student
+internal class AttendanceStreaksPageModel : BasePageModel
 {
-    class AttendanceStreaksPageModel
-    {
-    }
 }

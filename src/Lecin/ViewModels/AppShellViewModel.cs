@@ -1,62 +1,117 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Lecin.Shells;
+using Supabase;
+using Supabase.Realtime.PostgresChanges;
+using SupabaseShared.Models;
 
 namespace Lecin.ViewModels;
 
-public class AppShellViewModel : INotifyPropertyChanged
+public partial class AppShellViewModel : BasePageModel
 {
-    public bool IsAdmin { get; }
-    public bool IsTeacher { get; }
-    public bool IsStudent { get; }
+    private readonly AuthService _authService;
+    private readonly Client _client;
 
-    private bool _isLoggedIn;
-    public bool IsLoggedIn
+    [ObservableProperty] private FlyoutBehavior _flyoutBehavior;
+
+    [ObservableProperty] private bool _isAdmin;
+
+    [ObservableProperty] private bool _isLoggedIn;
+
+    [ObservableProperty] private bool _isStudent;
+
+    [ObservableProperty] private bool _isTeacher;
+
+    public event EventHandler<Attendance>? AttendanceAlertReceived;
+    
+    public event EventHandler? LoggedOut;
+    
+    public event EventHandler<UserType>? LoggedIn;
+
+    [ObservableProperty] [NotifyCanExecuteChangedFor(nameof(ChangeThemeCommand))]
+    private int _selectedIndex;
+
+    /// <inheritdoc />
+    public AppShellViewModel(AuthService authService, Client client)
     {
-        get => _isLoggedIn;
-        set
+        _authService = authService;
+        _client = client;
+        _authService.LoggedIn += OnLoggedIn;
+        _authService.LoggedOut += OnLoggedOut;
+    }
+    
+    private async void SubscribeToAttendanceAlerts()
+    {
+        try
         {
-            if (_isLoggedIn != value)
-            {
-                _isLoggedIn = value;
-                OnPropertyChanged();
-            }
+            await _client.Realtime.ConnectAsync();
+            var channel = _client.Realtime.Channel(table: "Attendance");
+            
+            channel.AddPostgresChangeHandler(PostgresChangesOptions.ListenType.Inserts, 
+                (_, change) =>
+                {
+                    var model = change.Model<Attendance>();
+                    if (model == null) return;
+                    AttendanceAlertReceived?.Invoke(this, model);
+                });
+            await channel.Subscribe();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Failed to subscribe to attendance alerts: {ex.Message}");
         }
     }
 
-    public ICommand LogoutCommand { get; }
-
-    public AppShellViewModel(List<string> roles, bool isLoggedIn = true)
+    private void OnLoggedIn(object? sender, LoggedInEventArgs e)
     {
-        IsAdmin = roles.Contains("Admin");
-        IsTeacher = roles.Contains("Teacher");
-        IsStudent = roles.Contains("Student");
-        IsLoggedIn = isLoggedIn;
+        switch (e.UserType)
+        {
+            case UserType.Student:
+                SubscribeToAttendanceAlerts();
+                IsStudent = true;
+                break;
+            case UserType.Teacher:
+                IsTeacher = true;
+                break;
+            case UserType.Admin:
+                IsAdmin = true;
+                break;
+        }
 
-        LogoutCommand = new AsyncRelayCommand(OnLogoutAsync);
+        IsLoggedIn = true;
+        SelectedIndex = Application.Current!.UserAppTheme == AppTheme.Light ? 0 : 1;
+        FlyoutBehavior = FlyoutBehavior.Flyout;
+        LoggedIn?.Invoke(this, e.UserType);
     }
 
-    private async Task OnLogoutAsync()
+    public void OnLoggedOut(object? sender, object e)
     {
-        // Clear token
-        SecureStorage.Remove("jwt_token");
-
-        // Go back to LoginPage
-        Application.Current.MainPage = new NavigationPage(
-            new Pages.LoginPage(new PageModels.LoginPageModel(App.CurrentSupabase))
-        );
-
-        // Mark as logged out
+        IsStudent = false;
+        IsTeacher = false;
+        IsAdmin = false;
         IsLoggedIn = false;
-
-        // Optional feedback
-        await AppShell.DisplaySnackbarAsync("You have been logged out.");
+        FlyoutBehavior = FlyoutBehavior.Disabled;
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-    protected void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    [RelayCommand]
+    private async Task ChangeTheme()
+    {
+        var theme = SelectedIndex == 0 ? AppTheme.Light : AppTheme.Dark;
+        Application.Current!.UserAppTheme = theme;
+    }
+
+    [RelayCommand]
+    private async Task Logout()
+    {
+        try
+        {
+            await _authService.SignOut();
+            LoggedOut?.Invoke(this, EventArgs.Empty);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Logout failed: {ex.Message}");
+        }
+    }
 }

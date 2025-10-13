@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Supabase;
 
 namespace Lecin.Pages;
 
@@ -12,5 +8,13 @@ public partial class LoginPage : ContentPage
     {
         InitializeComponent();
         BindingContext = loginPageModel;
+    }
+    
+    protected override async void OnAppearing()
+    {
+        if (BindingContext is LoginPageModel vm)
+        {
+            await vm.LoadDataAsync();
+        }
     }
 }
