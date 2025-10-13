@@ -8,8 +8,8 @@ public abstract class BaseContentPage : ContentPage
 
     protected BaseContentPage(BasePageModel vm, Client client)
     {
-        _client = client;
         BindingContext = vm;
+        _client = client;
     }
 
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)

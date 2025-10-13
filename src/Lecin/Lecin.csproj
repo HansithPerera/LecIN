@@ -12,7 +12,7 @@
         The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
         either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
         <!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
-        
+
         <OutputType>Exe</OutputType>
         <RootNamespace>Lecin</RootNamespace>
         <UseMaui>true</UseMaui>
@@ -43,77 +43,85 @@
 
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#17171a" />
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#17171a"/>
 
         <!-- Splash Screen -->
-        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#17171a" BaseSize="128,128" />
+        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#17171a" BaseSize="128,128"/>
 
         <!-- Images -->
-        <MauiImage Include="Resources\Images\*" />
-        <MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+        <MauiImage Include="Resources\Images\*"/>
+        <MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185"/>
 
         <!-- Custom Fonts -->
-        <MauiFont Include="Resources\Fonts\*" />
+        <MauiFont Include="Resources\Fonts\*"/>
 
         <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.9" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.9" />
-        <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.110" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.9"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.9"/>
+        <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.110"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-        <PackageReference Include="CommunityToolkit.Maui" Version="12.2.0" />
-        <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="9.0.9" />
-        <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11" />
-        <PackageReference Include="Supabase" Version="1.1.1" />
-        <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.7" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
+        <PackageReference Include="CommunityToolkit.Maui" Version="12.2.0"/>
+        <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="9.0.9"/>
+        <PackageReference Include="ResultSharp" Version="0.3.1"/>
+        <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11"/>
+        <PackageReference Include="Supabase" Version="1.1.1"/>
+        <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.7"/>
     </ItemGroup>
 
-	<ItemGroup>
-		<None Remove="appsettings.json" />
-		<EmbeddedResource Include="appsettings.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</EmbeddedResource>
-		<None Remove="appsettings.Production.json" />
-		<EmbeddedResource Include="appsettings.Production.json">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</EmbeddedResource>
-		<None Remove="appsettings.Development.json" />
-		<EmbeddedResource Include="appsettings.Development.json">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</EmbeddedResource>
-	</ItemGroup>
-
-
-	<ItemGroup>
-      <MauiXaml Update="Pages\AdminDashboardPage.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
-      <MauiXaml Update="Pages\Student\AttendanceHistoryPage.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
-      <MauiXaml Update="Pages\Student\AttendanceStreaksPage.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
-      <MauiXaml Update="Pages\TeacherDashboardPage.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
-    </ItemGroup>
-    
     <ItemGroup>
-      <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj" />
+        <None Remove="appsettings.json"/>
+        <EmbeddedResource Include="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <None Remove="appsettings.Production.json"/>
+        <EmbeddedResource Include="appsettings.Production.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
+        <None Remove="appsettings.Development.json"/>
+        <EmbeddedResource Include="appsettings.Development.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
     </ItemGroup>
-    
+
+
     <ItemGroup>
-      <Compile Remove="Models\Admin.cs" />
-      <Compile Remove="Models\Student.cs" />
-      <Compile Remove="Pages\StudentDashboardPage.xaml.cs" />
+        <MauiXaml Update="Pages\AdminDashboardPage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Pages\Student\AttendanceHistoryPage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Pages\Student\AttendanceStreaksPage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Pages\TeacherDashboardPage.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </MauiXaml>
+        <MauiXaml Update="Shells\AppShell.xaml">
+            <SubType>Designer</SubType>
+        </MauiXaml>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Remove="Models\Admin.cs"/>
+        <Compile Remove="Models\Student.cs"/>
+        <Compile Remove="Pages\StudentDashboardPage.xaml.cs"/>
+        <Compile Update="Shells\AppShell.xaml.cs">
+            <DependentUpon>AppShell.xaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <PropertyGroup>

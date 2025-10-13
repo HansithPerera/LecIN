@@ -1,13 +1,16 @@
 ﻿using System.Reflection;
 using CommunityToolkit.Maui;
 using Lecin.PageModels.Admin;
+using Lecin.PageModels.Student;
 using Lecin.PageModels.Teacher;
+using Lecin.Pages.Admin;
+using Lecin.Pages.Student;
 using Lecin.Pages.Teacher;
 using Lecin.Resources.Fonts;
+using Lecin.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Supabase;
-using SupabaseShared.Models;
 using Syncfusion.Maui.Toolkit.Hosting;
 
 namespace Lecin;
@@ -30,7 +33,7 @@ public static class MauiProgram
 #if DEBUG
         builder.AddJsonSettings("appsettings.Development.json");
 #else
-            builder.AddJsonSettings("appsettings.Production.json");
+        builder.AddJsonSettings("appsettings.Production.json");
 #endif
     }
 
@@ -40,7 +43,8 @@ public static class MauiProgram
         builder.AddAppSettings();
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
+            .UseMauiCommunityToolkit(options => options.SetShouldEnableSnackbarOnWindows(true)
+            )
             .ConfigureSyncfusionToolkit()
             .ConfigureMauiHandlers(handlers =>
             {
@@ -68,14 +72,42 @@ public static class MauiProgram
                 throw new InvalidOperationException("Supabase Key is not configured.")
             )
         );
+
+        builder.Services.AddSingleton<AuthService>();
         builder.Services.AddSingleton<ModalErrorHandler>();
-        builder.Services.AddTransient<MainPageModel>();
-        builder.Services.AddTransient<AdminPageModel>();
 
         builder.Services.AddTransientWithShellRoute<LoginPage, LoginPageModel>("login");
-        builder.Services.AddTransientWithShellRoute<TeacherCourseListPage, TeacherCourseListPageModel>("teacher/courses");
-        builder.Services.AddTransientWithShellRoute<TeacherCourseViewPage, TeacherCourseViewPageModel>("teachers/course");
-        builder.Services.AddTransientWithShellRoute<TeacherClassViewPage, TeacherClassViewPageModel>("teachers/class");
+        builder.Services.AddTransientWithShellRoute<LandingPage, LandingPageModel>("landing");
+        builder.Services.AddTransient<AppShellViewModel>();
+
+        #region Teacher
+
+        builder.Services.AddTransientWithShellRoute<TeacherCourseListPage, TeacherCourseListPageModel>(
+            "teacher/courses");
+        builder.Services
+            .AddTransientWithShellRoute<TeacherCourseViewPage, TeacherCourseViewPageModel>("teacher/course");
+        builder.Services.AddTransientWithShellRoute<TeacherClassViewPage, TeacherClassViewPageModel>("teacher/class");
+        builder.Services.AddTransientWithShellRoute<TeacherDashboardPage, TeacherDashboardPageModel>(
+            "teacher/dashboard");
+
+        #endregion
+
+        #region Student
+
+        builder.Services.AddTransientWithShellRoute<AttendanceHistoryPage, AttendanceHistoryPageModel>(
+            "student/attendance/history");
+        builder.Services.AddTransientWithShellRoute<AttendanceStreaksPage, AttendanceStreaksPageModel>(
+            "student/attendance/streaks");
+        builder.Services.AddTransientWithShellRoute<StudentDashboardPage, StudentDashboardPageModel>(
+            "student/dashboard");
+
+        #endregion
+
+        #region Admin
+
+        builder.Services.AddTransientWithShellRoute<AdminDashboardPage, AdminPageModel>("admin/dashboard");
+
+        #endregion
 
         return builder.Build();
     }
