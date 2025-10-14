@@ -1,5 +1,8 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using Lecin.Pages.Admin;
+using Lecin.Pages.Student;
+using Lecin.Pages.Teacher;
 using Lecin.ViewModels;
 using SupabaseShared.Models;
 using Debug = System.Diagnostics.Debug;
@@ -16,6 +19,32 @@ public partial class AppShell : Shell
         vm.LoggedIn += OnLoggedIn;
         vm.LoggedOut += OnLoggedOut;
         vm.AttendanceAlertReceived += OnAttendanceAlertReceived;
+        RegisterRoutes();
+    }
+
+    public static string LoginPageRoute => nameof(LoginPage);
+    
+    public static string LandingPageRoute => nameof(LandingPage);
+    
+    public static string AdminDashboardPageRoute => nameof(AdminDashboardPage);
+    
+    public static string TeacherDashboardPageRoute => nameof(TeacherDashboardPage);
+    
+    public static string TeacherCourseListPageRoute => nameof(TeacherCourseListPage);
+    
+    public static string StudentDashboardPageRoute => nameof(StudentDashboardPage);
+    
+    public static string StudentProfilePageRoute => nameof(StudentProfilePage);
+    
+    public static string AttendanceHistoryPageRoute => nameof(AttendanceHistoryPage);
+    
+    private void RegisterRoutes()
+    {
+        Routing.RegisterRoute(nameof(AttendanceHistoryPage), typeof(AttendanceHistoryPage));
+        Routing.RegisterRoute(nameof(StudentProfilePage), typeof(StudentProfilePage));
+        Routing.RegisterRoute(nameof(TeacherClassViewPage), typeof(TeacherClassViewPage));
+        Routing.RegisterRoute(nameof(TeacherCourseViewPage), typeof(TeacherCourseViewPage));
+        Routing.RegisterRoute(nameof(AttendanceStreaksPage), typeof(AttendanceStreaksPage));
     }
 
     private async void OnAttendanceAlertReceived(object? sender, Attendance e)
@@ -34,7 +63,7 @@ public partial class AppShell : Shell
     {
         try
         {
-            Current.GoToAsync("login");
+            Current.GoToAsync($"//{nameof(LoginPage)}");
         }
         catch (Exception e)
         {
@@ -49,13 +78,13 @@ public partial class AppShell : Shell
             switch (userType)
             {
                 case UserType.Admin:
-                    Current.GoToAsync("admin/dashboard");
+                    Current.GoToAsync($"//{nameof(AdminDashboardPage)}");
                     break;
                 case UserType.Teacher:
-                    Current.GoToAsync("teacher/dashboard");
+                    Current.GoToAsync($"//{nameof(TeacherCourseListPage)}");
                     break;
                 case UserType.Student:
-                    Current.GoToAsync("student/dashboard");
+                    Current.GoToAsync($"//{nameof(StudentDashboardPage)}");
                     break;
                 default:
                     break;

@@ -17,7 +17,7 @@ public partial class TeacherCourseListPage : BaseContentPage
 
         try
         {
-            Shell.Current.GoToAsync("teacher/course", new Dictionary<string, object>
+            Shell.Current.GoToAsync(nameof(TeacherCourseViewPage), new Dictionary<string, object>
             {
                 { "course", course }
             });

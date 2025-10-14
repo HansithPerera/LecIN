@@ -15,7 +15,7 @@ public partial class LandingPage : BaseContentPage
     {
         try
         {
-            await Shell.Current.GoToAsync("login");
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
         catch (Exception ex)
         {

@@ -45,7 +45,6 @@
         <!-- App Icon -->
 
         <!-- Splash Screen -->
-        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#17171a" BaseSize="128,128"/>
 
         <!-- Images -->
         <MauiImage Include="Resources\Images\*"/>
@@ -77,6 +76,9 @@
 
     <ItemGroup>
         <None Remove="appsettings.json"/>
+        <EmbeddedResource Include="appsettings.android.Development.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
         <EmbeddedResource Include="appsettings.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
@@ -124,10 +126,18 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Resources\AppIcon\appicon.svg"/>
-        <MauiIcon Include="Resources\AppIcon\appicon.svg">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" >
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </MauiIcon>
+        <MauiIcon Include="Resources\AppIcon\appiconfg.svg">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </MauiIcon>
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiSplashScreen Include="Resources\Splash\splash.svg">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </MauiSplashScreen>
     </ItemGroup>
 
     <PropertyGroup>

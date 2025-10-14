@@ -23,25 +23,27 @@
             </Grid.ColumnDefinitions>
             <VerticalStackLayout
                 Grid.Row="0"
-                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Grid.Column="0"
                 Spacing="10"
-                Padding="20"
+                Padding="0, 10"
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill">
                 <Image
                     HorizontalOptions="Center"
-                    Source="lec.png"
-                    WidthRequest="50"
-                    HeightRequest="50" />
+                    Source="lecin_dark.png"
+                    WidthRequest="150"/>
                 <Label
+                    LineBreakMode="NoWrap"
                     HorizontalOptions="Center"
-                    Text="Please sign in"
+                    Text="Please Sign In"
                     FontSize="24" />
             </VerticalStackLayout>
             <HorizontalStackLayout
                 Grid.Row="1"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
+                Padding="10"
                 RadioButtonGroup.GroupName="RoleGroup"
                 RadioButtonGroup.SelectedValue="{Binding UserType, Mode=TwoWay}"
                 HorizontalOptions="Center"
@@ -55,6 +57,7 @@
             </HorizontalStackLayout>
             <VerticalStackLayout
                 Spacing="15"
+                Padding="15, 0"
                 Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
                 Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
                 Grid.Row="2">

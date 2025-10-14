@@ -32,7 +32,11 @@ public static class MauiProgram
         builder.AddJsonSettings("appsettings.json");
 
 #if DEBUG
+#if ANDROID
+        builder.AddJsonSettings("appsettings.android.Development.json");
+#elif WINDOWS
         builder.AddJsonSettings("appsettings.Development.json");
+#endif
 #else
         builder.AddJsonSettings("appsettings.Production.json");
 #endif
@@ -77,36 +81,30 @@ public static class MauiProgram
         builder.Services.AddSingleton<AuthService>();
         builder.Services.AddSingleton<ModalErrorHandler>();
 
-        builder.Services.AddTransientWithShellRoute<LoginPage, LoginPageModel>("login");
-        builder.Services.AddTransientWithShellRoute<LandingPage, LandingPageModel>("landing");
+        builder.Services.AddTransient<LoginPageModel>();
+        builder.Services.AddTransient<LandingPageModel>();
         builder.Services.AddTransient<AppShellViewModel>();
 
         #region Teacher
 
-        builder.Services.AddTransientWithShellRoute<TeacherCourseListPage, TeacherCourseListPageModel>(
-            "teacher/courses");
-        builder.Services
-            .AddTransientWithShellRoute<TeacherCourseViewPage, TeacherCourseViewPageModel>("teacher/course");
-        builder.Services.AddTransientWithShellRoute<TeacherClassViewPage, TeacherClassViewPageModel>("teacher/class");
-        builder.Services.AddTransientWithShellRoute<TeacherDashboardPage, TeacherDashboardPageModel>(
-            "teacher/dashboard");
+        builder.Services.AddTransient<TeacherCourseListPageModel>();
+        builder.Services.AddTransient<TeacherCourseViewPageModel>();
+        builder.Services.AddTransient<TeacherClassViewPageModel>();
+        builder.Services.AddTransient<TeacherDashboardPageModel>();
 
         #endregion
 
         #region Student
 
-        builder.Services.AddTransientWithShellRoute<AttendanceHistoryPage, AttendanceHistoryPageModel>(
-            "student/attendance/history");
-        builder.Services.AddTransientWithShellRoute<AttendanceStreaksPage, AttendanceStreaksPageModel>(
-            "student/attendance/streaks");
-        builder.Services.AddTransientWithShellRoute<StudentDashboardPage, StudentDashboardPageModel>(
-            "student/dashboard");
+        builder.Services.AddTransient<AttendanceHistoryPageModel>();
+        builder.Services.AddTransient<AttendanceStreaksPageModel>();
+        builder.Services.AddTransient<StudentDashboardPageModel>();
 
         #endregion
 
         #region Admin
 
-        builder.Services.AddTransientWithShellRoute<AdminDashboardPage, AdminPageModel>("admin/dashboard");
+        builder.Services.AddTransient<AdminPageModel>();
 
         #endregion
 
