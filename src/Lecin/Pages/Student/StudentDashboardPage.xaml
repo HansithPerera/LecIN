@@ -10,6 +10,10 @@
                FontSize="24"
                HorizontalOptions="Center" />
 
+        <Button Text="Check In"
+                Clicked="OnCheckInClicked"
+                HorizontalOptions="Fill" />
+
         <Button Text="View Attendance History"
                 Clicked="OnHistoryClicked"
                 HorizontalOptions="Fill" />

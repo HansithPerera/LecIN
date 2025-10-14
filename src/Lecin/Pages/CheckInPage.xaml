@@ -12,13 +12,8 @@
 
         <Border Grid.Row="1" StrokeShape="RoundRectangle 16">
             <Grid>
-                <toolkit:CameraView x:Name="Camera"
-                                    CameraOptions="Front"
-                                    IsTorchOn="False"
-                                    IsAvailableChanged="Camera_OnIsAvailableChanged" />
                 <Image Source="{Binding PhotoPreview}"
-                       Aspect="AspectFill"
-                       IsVisible="{Binding HasCapturedPhoto}" />
+                       Aspect="AspectFill" />
             </Grid>
         </Border>
 
@@ -37,12 +32,10 @@
 
             <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                 <Button Text="Capture Photo"
-                        Command="{Binding CapturePhotoCommand}"
-                        IsEnabled="{Binding CanCapture}"
+                        Clicked="CapturePhotoButton_Clicked"
                         Grid.Column="0" />
                 <Button Text="Confirm Check-In"
-                        Command="{Binding ConfirmCommand}"
-                        IsEnabled="{Binding CanConfirm}"
+                        Clicked="ConfirmButton_Clicked"
                         Grid.Column="1" />
             </Grid>
         </VerticalStackLayout>
