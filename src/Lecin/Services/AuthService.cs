@@ -78,7 +78,7 @@ public class AuthService(Client supabase)
         {
             return Result.Err<UserType, SignInError>(SignInError.InvalidCredentials);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             return Result.Err<UserType, SignInError>(SignInError.Error);
         }

@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Lecin.PageModels;
@@ -37,6 +38,7 @@ public partial class LoginPageModel(AuthService authService) : BasePageModel
         }
         catch (Exception ex)
         {
+            Debug.WriteLine(ex);
             StatusMessage = $"Error: {ex.Message}";
         }
     }

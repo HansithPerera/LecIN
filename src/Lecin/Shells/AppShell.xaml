@@ -9,6 +9,9 @@
     xmlns:teacher="clr-namespace:Lecin.Pages.Teacher"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:pages="using:Lecin.Pages"
+    xmlns:admin="clr-namespace:Lecin.Pages.Admin"
+    xmlns:student="clr-namespace:Lecin.Pages.Student"
+    xmlns:local="clr-namespace:Lecin.Shells"
     x:DataType="viewModels:AppShellViewModel"
     FlyoutBehavior="{Binding FlyoutBehavior}"
     Title="Lecin">
@@ -21,27 +24,48 @@
 
     <ShellContent
         FlyoutItemIsVisible="False"
+        Route="{x:Static local:AppShell.LandingPageRoute}"
         ContentTemplate="{DataTemplate pages:LandingPage}" />
 
     <ShellContent
         Title="Login"
+        Route="{x:Static local:AppShell.LoginPageRoute}"
         FlyoutItemIsVisible="{Binding IsLoggedIn, Converter={StaticResource InvertedBoolConverter}}"
         ContentTemplate="{DataTemplate pages:LoginPage}" />
 
     <ShellContent
         Title="Dashboard"
+        Route="{x:Static local:AppShell.TeacherDashboardPageRoute}"
         ContentTemplate="{DataTemplate teacher:TeacherDashboardPage}"
         FlyoutItemIsVisible="{Binding IsTeacher}" />
-
+    
     <ShellContent
         Title="Courses"
-        FlyoutItemIsVisible="{Binding IsTeacher}"
-        ContentTemplate="{DataTemplate teacher:TeacherCourseListPage}" />
-
-
+        Route="{x:Static local:AppShell.TeacherCourseListPageRoute}"
+        ContentTemplate="{DataTemplate teacher:TeacherCourseListPage}" 
+        FlyoutItemIsVisible="{Binding IsTeacher}"/>
+    
+    <ShellContent
+        Title="Dashboard"
+        Route="{x:Static local:AppShell.AdminDashboardPageRoute}"
+        ContentTemplate="{DataTemplate admin:AdminDashboardPage}"
+        FlyoutItemIsVisible="{Binding IsAdmin}" />
+    
+    <ShellContent
+        Title="Dashboard"
+        Route="{x:Static local:AppShell.StudentDashboardPageRoute}"
+        FlyoutItemIsVisible="{Binding IsStudent}"
+        ContentTemplate="{DataTemplate student:StudentDashboardPage}">
+    </ShellContent>
+    
+    <ShellContent
+        Title="Attendance History"
+        Route="{x:Static local:AppShell.AttendanceHistoryPageRoute}"
+        FlyoutItemIsVisible="{Binding IsStudent}"
+        ContentTemplate="{DataTemplate student:AttendanceHistoryPage}" />
+    
     <Shell.FlyoutFooter>
         <Grid Padding="15" RowDefinitions="Auto,Auto" RowSpacing="10">
-
             <!-- Theme switcher -->
             <sf:SfSegmentedControl
                 VerticalOptions="Center"

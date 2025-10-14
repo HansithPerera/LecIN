@@ -11,7 +11,7 @@ public partial class TeacherDashboardPage : ContentPage
     {
         try
         {
-            await Shell.Current.GoToAsync("teacher/courses");
+            await Shell.Current.GoToAsync(nameof(TeacherCourseListPage));
         }
         catch (Exception ex)
         {

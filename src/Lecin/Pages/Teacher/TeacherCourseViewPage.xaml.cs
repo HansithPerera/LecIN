@@ -17,7 +17,7 @@ public partial class TeacherCourseViewPage
         {
             if (sender is not Button { BindingContext: Class cls }) return;
 
-            await Shell.Current.GoToAsync("teacher/class", new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(TeacherClassViewPage), new Dictionary<string, object>
             {
                 { "class", cls }
             });

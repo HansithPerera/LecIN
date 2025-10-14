@@ -18,7 +18,7 @@ public partial class MainPage : ContentPage
         base.OnNavigatedTo(args);
         if (_supabase.Auth.CurrentUser == null)
         {
-            await Shell.Current.GoToAsync("login");
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
         else if (BindingContext is MainPageModel vm)
         {

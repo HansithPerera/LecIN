@@ -6,7 +6,7 @@
                        x:Class="Lecin.Pages.LandingPage">
     <ContentPage.Content>
         <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="30">
-            <Image Source="lec.png" WidthRequest="150" HeightRequest="150" />
+            <Image Source="lecin_dark.png" WidthRequest="150" HeightRequest="150" />
             <ActivityIndicator IsRunning="True" />
         </VerticalStackLayout>
     </ContentPage.Content>
