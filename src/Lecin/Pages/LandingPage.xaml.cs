@@ -1,10 +1,25 @@
-﻿namespace Lecin.Pages;
+﻿using System.Diagnostics;
 
-public partial class LandingPage : ContentPage
+namespace Lecin.Pages;
+
+public partial class LandingPage : BaseContentPage
 {
-    public LandingPage(LandingPageModel vm)
+    public LandingPage(LandingPageModel vm) : base(vm)
     {
         BindingContext = vm;
+        vm.OnSessionRestoreFailed += OnSessionRestoreFailed;
         InitializeComponent();
+    }
+
+    private async void OnSessionRestoreFailed(object? sender, EventArgs e)
+    {
+        try
+        {
+            await Shell.Current.GoToAsync("login");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("Failed to navigate to login page: " + ex.Message);
+        }
     }
 }

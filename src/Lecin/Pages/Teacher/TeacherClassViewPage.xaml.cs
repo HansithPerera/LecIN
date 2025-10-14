@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lecin.PageModels.Teacher;
+﻿using Lecin.PageModels.Teacher;
+using Supabase;
 
 namespace Lecin.Pages.Teacher;
 
 public partial class TeacherClassViewPage : BaseContentPage
 {
-    public TeacherClassViewPage(TeacherClassViewPageModel vm, Supabase.Client client) : base(vm, client)
+    public TeacherClassViewPage(TeacherClassViewPageModel vm, Client client) : base(vm)
     {
         InitializeComponent();
     }
@@ -39,13 +35,12 @@ public partial class TeacherClassViewPage : BaseContentPage
         {
             await DisplayAlert("Error", exception.Message, "OK");
         }
-        
     }
 
     private async void MarkLate(object? sender, EventArgs e)
     {
         try
-        { 
+        {
             if (BindingContext is not TeacherClassViewPageModel vm) return;
             if (sender is not Button { BindingContext: SupabaseShared.Models.Student student }) return;
             await vm.SetAttendance(student.Id, "Late");

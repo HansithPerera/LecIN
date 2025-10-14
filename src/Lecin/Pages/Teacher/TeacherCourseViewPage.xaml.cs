@@ -6,7 +6,7 @@ namespace Lecin.Pages.Teacher;
 
 public partial class TeacherCourseViewPage
 {
-    public TeacherCourseViewPage(TeacherCourseViewPageModel vm, Client client) : base(vm, client)
+    public TeacherCourseViewPage(TeacherCourseViewPageModel vm, Client client) : base(vm)
     {
         InitializeComponent();
     }

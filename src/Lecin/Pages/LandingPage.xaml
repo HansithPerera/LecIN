@@ -1,9 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Lecin.Pages.LandingPage">
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:pages="clr-namespace:Lecin.Pages"
+                       x:Class="Lecin.Pages.LandingPage">
     <ContentPage.Content>
-
+        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="30">
+            <Image Source="lec.png" WidthRequest="150" HeightRequest="150" />
+            <ActivityIndicator IsRunning="True" />
+        </VerticalStackLayout>
     </ContentPage.Content>
-</ContentPage>
+</pages:BaseContentPage>

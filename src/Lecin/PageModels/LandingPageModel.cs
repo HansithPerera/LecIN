@@ -1,11 +1,12 @@
-﻿using Supabase;
+﻿namespace Lecin.PageModels;
 
-namespace Lecin.PageModels;
-
-public partial class LandingPageModel(Client client, AuthService auth) : BasePageModel
+public class LandingPageModel(AuthService auth) : BasePageModel
 {
+    public event EventHandler? OnSessionRestoreFailed;
+
     public override async Task LoadDataAsync()
     {
-
+        var session = await auth.RestoreSession();
+        if (session == null) OnSessionRestoreFailed?.Invoke(this, EventArgs.Empty);
     }
 }

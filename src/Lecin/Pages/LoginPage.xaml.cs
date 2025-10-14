@@ -1,20 +1,10 @@
-﻿using Supabase;
+﻿namespace Lecin.Pages;
 
-namespace Lecin.Pages;
-
-public partial class LoginPage : ContentPage
+public partial class LoginPage
 {
-    public LoginPage(LoginPageModel loginPageModel)
+    public LoginPage(LoginPageModel vm) : base(vm)
     {
         InitializeComponent();
-        BindingContext = loginPageModel;
-    }
-    
-    protected override async void OnAppearing()
-    {
-        if (BindingContext is LoginPageModel vm)
-        {
-            await vm.LoadDataAsync();
-        }
+        BindingContext = vm;
     }
 }

@@ -1,17 +1,13 @@
 ﻿using Lecin.PageModels.Admin;
-using Supabase;
 using SupabaseShared.Models;
 
 namespace Lecin.Pages.Admin;
 
 public partial class AdminDashboardPage : BaseContentPage
 {
-    private readonly Client _supabase;
-
-    public AdminDashboardPage(AdminPageModel vm, Client supabase) : base(vm, supabase)
+    public AdminDashboardPage(AdminPageModel vm) : base(vm)
     {
         InitializeComponent();
-        _supabase = supabase;
         BindingContext = vm;
     }
 

@@ -20,6 +20,10 @@
     </Shell.Resources>
 
     <ShellContent
+        FlyoutItemIsVisible="False"
+        ContentTemplate="{DataTemplate pages:LandingPage}" />
+
+    <ShellContent
         Title="Login"
         FlyoutItemIsVisible="{Binding IsLoggedIn, Converter={StaticResource InvertedBoolConverter}}"
         ContentTemplate="{DataTemplate pages:LoginPage}" />
