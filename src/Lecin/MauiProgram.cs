@@ -19,11 +19,12 @@ public static class MauiProgram
 {
     private static void AddJsonSettings(this MauiAppBuilder builder, string jsonFile)
     {
-        using var stream = Assembly.GetExecutingAssembly()
-            .GetManifestResourceStream($"{nameof(Lecin)}.{jsonFile}");
+        var asm = Assembly.GetExecutingAssembly();
+        using var stream = asm
+            .GetManifestResourceStream($"{asm.GetName().Name}.{jsonFile}");
 
         if (stream != null)
-            builder.Configuration.AddJsonFile(jsonFile);
+            builder.Configuration.AddJsonStream(stream);
     }
 
     private static void AddAppSettings(this MauiAppBuilder builder)
