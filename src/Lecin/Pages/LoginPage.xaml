@@ -1,19 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:pageModels="clr-namespace:Lecin.PageModels"
-             xmlns:lecin="clr-namespace:Lecin"
-             x:DataType="pageModels:LoginPageModel"
-             x:Class="Lecin.Pages.LoginPage">
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:pageModels="clr-namespace:Lecin.PageModels"
+                       xmlns:lecin="clr-namespace:Lecin"
+                       xmlns:pages="clr-namespace:Lecin.Pages"
+                       x:DataType="pageModels:LoginPageModel"
+                       x:Class="Lecin.Pages.LoginPage">
 
     <ContentPage.Content>
-        <VerticalStackLayout Padding="30" Spacing="20">
-
-            <Label Text="Please sign in"
-                   FontSize="24"
-                   HorizontalOptions="Center" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <VerticalStackLayout
+                Grid.Row="0"
+                Grid.Column="1"
+                Spacing="10"
+                Padding="20"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill">
+                <Image
+                    HorizontalOptions="Center"
+                    Source="lec.png"
+                    WidthRequest="50"
+                    HeightRequest="50" />
+                <Label
+                    HorizontalOptions="Center"
+                    Text="Please sign in"
+                    FontSize="24" />
+            </VerticalStackLayout>
             <HorizontalStackLayout
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
                 RadioButtonGroup.GroupName="RoleGroup"
                 RadioButtonGroup.SelectedValue="{Binding UserType, Mode=TwoWay}"
                 HorizontalOptions="Center"
@@ -25,21 +53,28 @@
                 <RadioButton Content="Admin"
                              Value="{x:Static lecin:UserType.Admin}" />
             </HorizontalStackLayout>
-            <Entry Placeholder="Email"
-                   Text="{Binding Email}"
-                   Keyboard="Email" />
+            <VerticalStackLayout
+                Spacing="15"
+                Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                Grid.Row="2">
+                <Entry Placeholder="Email"
+                       Text="{Binding Email}"
+                       Keyboard="Email" />
 
-            <Entry Placeholder="Password"
-                   Text="{Binding Password}"
-                   IsPassword="True" />
+                <Entry Placeholder="Password"
+                       Text="{Binding Password}"
+                       IsPassword="True" />
 
-            <Button Text="Sign In"
-                    Command="{Binding LoginCommand}" />
-
-            <Label Text="{Binding StatusMessage}"
-                   HorizontalOptions="Center"
-                   TextColor="Red" />
-
-        </VerticalStackLayout>
+                <Button Text="Sign In"
+                        Command="{Binding LoginCommand}" />
+            </VerticalStackLayout>
+            <Label
+                Grid.Column="1"
+                Grid.Row="3"
+                Text="{Binding StatusMessage}"
+                HorizontalOptions="Center"
+                TextColor="Red" />
+        </Grid>
     </ContentPage.Content>
-</ContentPage>
+</pages:BaseContentPage>
