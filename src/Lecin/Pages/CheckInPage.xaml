@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:pageModels="clr-namespace:Lecin.PageModels"
+             x:Class="Lecin.Pages.CheckInPage"
+             x:DataType="pageModels:CheckInPageModel"
+             Title="Attendance Check-In">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20" RowSpacing="12">
+        <Label Text="Attendance Check-In" Style="{StaticResource Title1}" />
+
+        <Border Grid.Row="1" StrokeShape="RoundRectangle 16">
+            <Grid>
+                <toolkit:CameraView x:Name="Camera"
+                                    CameraOptions="Front"
+                                    IsTorchOn="False"
+                                    IsAvailableChanged="Camera_OnIsAvailableChanged" />
+                <Image Source="{Binding PhotoPreview}"
+                       Aspect="AspectFill"
+                       IsVisible="{Binding HasCapturedPhoto}" />
+            </Grid>
+        </Border>
+
+        <VerticalStackLayout Grid.Row="2" Spacing="12">
+            <Grid ColumnDefinitions="*,*" >
+                <VerticalStackLayout>
+                    <Label Text="Time" Style="{StaticResource Subtitle}" />
+                    <Label Text="{Binding CapturedAt, StringFormat='{0:HH:mm:ss}'}"
+                           Style="{StaticResource BodyMedium}" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1">
+                    <Label Text="Location" Style="{StaticResource Subtitle}" />
+                    <Label Text="{Binding LocationDisplay}" Style="{StaticResource BodyMedium}" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Button Text="Capture Photo"
+                        Command="{Binding CapturePhotoCommand}"
+                        IsEnabled="{Binding CanCapture}"
+                        Grid.Column="0" />
+                <Button Text="Confirm Check-In"
+                        Command="{Binding ConfirmCommand}"
+                        IsEnabled="{Binding CanConfirm}"
+                        Grid.Column="1" />
+            </Grid>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
+

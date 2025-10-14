@@ -26,16 +26,30 @@ public partial class MainPageModel : ObservableObject
     {
         _client = client;
         RefreshCommand = new AsyncRelayCommand(Refresh);
+        CheckInCommand = new AsyncRelayCommand(NavigateToCheckIn);
         _errorHandler = errorHandler;
     }
 
     public ICommand RefreshCommand { get; set; }
+    public IAsyncRelayCommand CheckInCommand { get; private set; }
 
     private async Task Refresh()
     {
         IsRefreshing = true;
         await LoadDataAsync();
         IsRefreshing = false;
+    }
+
+    private async Task NavigateToCheckIn()
+    {
+        try
+        {
+            await Shell.Current.GoToAsync(nameof(Pages.CheckInPage));
+        }
+        catch (Exception ex)
+        {
+            _errorHandler.HandleError(ex);
+        }
     }
 
     public async Task LoadDataAsync()
