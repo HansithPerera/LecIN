@@ -127,6 +127,9 @@ public class AuthService(Client supabase)
         catch (Exception ex)
         {
             Console.WriteLine($"Error restoring session: {ex.Message}");
+            // If session restore fails (e.g., config changed from local emulator),
+            // clear any persisted session so the app can proceed to login cleanly.
+            await ClearSession();
             return null;
         }
     }
