@@ -17,10 +17,10 @@ public class ApiKeyAuthenticationHandler(
 {
     protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        if (!Request.Headers.TryGetValue(Constants.ApiKeyHeaderName, out var apiKey))
+        if (!Request.Headers.TryGetValue(Constants.ApiKeyHeaderName, out var apiKey) || string.IsNullOrEmpty(apiKey))
             return AuthenticateResult.Fail("Missing or invalid API Key.");
-        
-        var apiKeyHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(apiKey)));
+
+        var apiKeyHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(apiKey.ToString())));
         var camera = await service.GetApiKeyByHashAsync(apiKeyHash);
         
         if (camera == null) return AuthenticateResult.Fail("Invalid API Key.");

@@ -7,8 +7,10 @@ builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddHttpClient<OpenApiClient>(client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["BaseAddress"]);
-    client.DefaultRequestHeaders.Add("X-API-KEY", builder.Configuration["ApiKey"]);
+    var baseAddress = builder.Configuration["BaseAddress"] ?? throw new InvalidOperationException("BaseAddress configuration is required");
+    client.BaseAddress = new Uri(baseAddress);
+    var apiKey = builder.Configuration["ApiKey"] ?? throw new InvalidOperationException("ApiKey configuration is required");
+    client.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
 });
 
 builder.Services.AddSingleton<OpenApiClient>(provider => 

@@ -10,7 +10,7 @@ public class ApiKey: BaseModel
     public Guid Id { get; set; } = Guid.NewGuid();
 
     [Column]
-    public string Hash { get; set; }
+    public string Hash { get; set; } = string.Empty;
 
     [Column]
     public bool IsActive { get; set; }
@@ -19,7 +19,7 @@ public class ApiKey: BaseModel
     public string? Name { get; set; }
 
     [Column]
-    public string Prefix { get; set; }
+    public string Prefix { get; set; } = string.Empty;
 
     [Column]
     public DateTimeOffset CreatedAt { get; set; }

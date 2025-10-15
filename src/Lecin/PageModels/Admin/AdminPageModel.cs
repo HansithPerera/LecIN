@@ -18,7 +18,6 @@ public partial class AdminPageModel : BasePageModel
     private bool _dataLoaded;
 
     [ObservableProperty] private bool _isBusy;
-    private bool _isNavigatedTo;
 
     [ObservableProperty] private bool _isRefreshing;
 
@@ -54,7 +53,7 @@ public partial class AdminPageModel : BasePageModel
 
     public override async Task LoadDataAsync()
     {
-        if (_dataLoaded && _isNavigatedTo) return;
+        if (_dataLoaded) return;
 
         IsBusy = true;
         try

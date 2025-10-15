@@ -6,8 +6,7 @@ using static Supabase.Postgrest.Constants;
 namespace Backend.Database;
 
 public class Repository(
-    Supabase.Client client,
-    ILogger<Repository> logger)
+    Supabase.Client client)
 {
     public async Task<bool> IsCameraApiKey(Guid apiKeyId)
     {
@@ -27,7 +26,7 @@ public class Repository(
         return resp.Models.FirstOrDefault();
     }
 
-    public async Task<Attendance> AddAttendanceAsync(Attendance attendance)
+    public async Task<Attendance?> AddAttendanceAsync(Attendance attendance)
     {
         var resp = await client.From<Attendance>().Insert(attendance);
         return resp.Model;
@@ -61,7 +60,7 @@ public class Repository(
         return resp != null;
     }
 
-    public async Task<Attendance> UpsertAttendanceAsync(Guid studentId, Guid classId)
+    public async Task<Attendance?> UpsertAttendanceAsync(Guid studentId, Guid classId)
     {
         var attendance = new Attendance
         {
@@ -73,8 +72,10 @@ public class Repository(
         return resp.Model;
     }
 
-    public async Task<Class?> GetClassByLocationTimeAsync(string location, DateTimeOffset time)
+    public async Task<Class?> GetClassByLocationTimeAsync(string? location, DateTimeOffset time)
     {
+        if (string.IsNullOrEmpty(location)) return null;
+
         var filters = new List<IPostgrestQueryFilter>
         {
             new QueryFilter<Class, string>(c => c.Location, Operator.Equals, location),

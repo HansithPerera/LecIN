@@ -10,14 +10,14 @@ public class StudentFace : BaseModel
     public Guid StudentId { get; set; }
 
     [Column]
-    public string FaceImagePath { get; set; }
+    public string FaceImagePath { get; set; } = string.Empty;
 
     [Column]
     public DateTimeOffset CreatedAt { get; set; }
 
     [Column]
     public DateTimeOffset? UpdatedAt { get; set; }
-    
+
     [Reference(typeof(Student))]
-    public Student Student { get; set; }
+    public Student? Student { get; set; }
 }

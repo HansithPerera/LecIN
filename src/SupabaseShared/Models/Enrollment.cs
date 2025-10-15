@@ -10,10 +10,10 @@ public class Enrollment: BaseModel
     public Guid StudentId { get; set; }
 
     [Column]
-    public string CourseCode { get; set; }
+    public string CourseCode { get; set; } = string.Empty;
 
     [Column]
-    public string CourseId { get; set; }
+    public string CourseId { get; set; } = string.Empty;
 
     [Column]
     public int CourseYear { get; set; }

@@ -10,10 +10,10 @@ public class Camera: BaseModel
     public Guid Id { get; set; } = Guid.NewGuid();
 
     [Column]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     [Column]
-    public string Location { get; set; }
+    public string Location { get; set; } = string.Empty;
 
     [Column]
     public bool IsActive { get; set; }

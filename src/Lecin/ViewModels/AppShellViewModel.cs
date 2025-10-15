@@ -95,10 +95,11 @@ public partial class AppShellViewModel : BasePageModel
     }
 
     [RelayCommand]
-    private async Task ChangeTheme()
+    private Task ChangeTheme()
     {
         var theme = SelectedIndex == 0 ? AppTheme.Light : AppTheme.Dark;
         Application.Current!.UserAppTheme = theme;
+        return Task.CompletedTask;
     }
 
     [RelayCommand]
