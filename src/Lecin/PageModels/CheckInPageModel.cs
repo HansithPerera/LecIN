@@ -61,10 +61,13 @@ public partial class CheckInPageModel : BasePageModel
     public async Task Confirm()
     {
         // Placeholder: Here you would send photo bytes + time + location to backend
-        await Application.Current!.MainPage!.DisplayAlert("Checked In",
-            $"Time: {CapturedAt:HH:mm:ss}\nLocation: {LocationDisplay}", "OK");
+        if (Shell.Current?.CurrentPage != null)
+        {
+            await Shell.Current.CurrentPage.DisplayAlert("Checked In",
+                $"Time: {CapturedAt:HH:mm:ss}\nLocation: {LocationDisplay}", "OK");
 
-        await Shell.Current.GoToAsync("..");
+            await Shell.Current.GoToAsync("..");
+        }
     }
 }
 
