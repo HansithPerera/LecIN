@@ -15,10 +15,10 @@ namespace Lecin.Pages
             BindingContext = ViewModel;
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
-            
+
             // Auto-load students when the page appears
             if (ViewModel.AllStudents.Count == 0)
             {

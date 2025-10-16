@@ -23,6 +23,7 @@
             <pullToRefresh:SfPullToRefresh.PullableContent>
                 <ScrollView>
                     <VerticalStackLayout Spacing="{StaticResource LayoutSpacing}" Padding="{StaticResource LayoutPadding}">
+                        <Button Text="Check In" Command="{Binding CheckInCommand}" />
                         <Label Text="Projects" Style="{StaticResource Title2}"/>
                         <ScrollView Orientation="Horizontal" Margin="-30,0">
                             <VerticalStackLayout 

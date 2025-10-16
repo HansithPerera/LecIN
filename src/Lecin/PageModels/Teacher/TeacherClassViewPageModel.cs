@@ -89,9 +89,9 @@ public partial class TeacherClassViewPageModel(Supabase.Client client): BasePage
                     .Where(s => Attendances.All(a => a.StudentId != s.Id))
                     .ToList());
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine("Failed to load attendances");
+            Console.WriteLine($"Failed to load attendances: {ex.Message}");
         }
     }
     

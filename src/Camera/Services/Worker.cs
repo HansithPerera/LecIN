@@ -1,4 +1,5 @@
 using System.Drawing.Imaging;
+using System.Runtime.Versioning;
 using Backend.Api;
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -7,6 +8,7 @@ namespace Camera.Services;
 
 public class Worker(FaceService service, OpenApiClient client, ILogger<Worker> logger) : BackgroundService
 {
+    [SupportedOSPlatform("windows6.1")]
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)

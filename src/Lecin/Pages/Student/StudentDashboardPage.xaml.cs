@@ -16,4 +16,9 @@ public partial class StudentDashboardPage : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(AttendanceStreaksPage));
     }
+
+    private async void OnCheckInClicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(CheckInPage));
+    }
 }

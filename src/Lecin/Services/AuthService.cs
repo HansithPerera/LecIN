@@ -29,8 +29,6 @@ public class AuthService(Client supabase)
 {
     private const string SessionKey = "user_session";
 
-    private bool _loggedIn;
-
     public UserType? CurrentUserType { get; private set; }
 
     public event EventHandler<LoggedInEventArgs>? LoggedIn;
@@ -69,7 +67,6 @@ public class AuthService(Client supabase)
             }
 
             CurrentUserType = userType;
-            _loggedIn = true;
             await SaveSession();
             LoggedIn?.Invoke(this, new LoggedInEventArgs { UserType = userType });
             return Result.Ok<UserType, SignInError>(userType);
@@ -78,8 +75,9 @@ public class AuthService(Client supabase)
         {
             return Result.Err<UserType, SignInError>(SignInError.InvalidCredentials);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
+            Console.WriteLine($"Sign in error: {ex.Message}");
             return Result.Err<UserType, SignInError>(SignInError.Error);
         }
     }
@@ -89,7 +87,6 @@ public class AuthService(Client supabase)
         await supabase.Auth.SignOut();
         await ClearSession();
         CurrentUserType = null;
-        _loggedIn = false;
         LoggedOut?.Invoke(this, EventArgs.Empty);
     }
 
@@ -119,7 +116,6 @@ public class AuthService(Client supabase)
             if (saved == null)
                 return null;
             await supabase.Auth.SetSession(saved.Session.AccessToken, saved.Session.RefreshToken, true);
-            _loggedIn = true;
             CurrentUserType = saved.UserType;
             LoggedIn?.Invoke(this, new LoggedInEventArgs { UserType = saved.UserType });
             return saved.UserType;
@@ -127,12 +123,16 @@ public class AuthService(Client supabase)
         catch (Exception ex)
         {
             Console.WriteLine($"Error restoring session: {ex.Message}");
+            // If session restore fails (e.g., config changed from local emulator),
+            // clear any persisted session so the app can proceed to login cleanly.
+            await ClearSession();
             return null;
         }
     }
 
-    public async Task ClearSession()
+    public Task ClearSession()
     {
         SecureStorage.Remove(SessionKey);
+        return Task.CompletedTask;
     }
 }

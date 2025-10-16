@@ -66,9 +66,9 @@ namespace Lecin.Pages
                 var attendanceService = new AttendanceService(supabaseClient);
                 
                 var testStudentId = Guid.Parse("07ab83f9-d6af-4146-939c-80221eb9d9d1");
-                
-                DisplayAlert("Loading", "Connecting to Supabase...", "OK");
-                
+
+                await DisplayAlert("Loading", "Connecting to Supabase...", "OK");
+
                 var realStats = await attendanceService.GetStudentAttendanceStatsAsync(testStudentId);
                 
                 DisplayResults(realStats);

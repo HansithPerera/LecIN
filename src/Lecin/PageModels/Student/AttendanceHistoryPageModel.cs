@@ -20,15 +20,15 @@ namespace Lecin.PageModels.Student
             };
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null) =>
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
     public class AttendanceRecord
     {
-        public string Date { get; set; }
-        public string Status { get; set; }
+        public required string Date { get; set; }
+        public required string Status { get; set; }
 
         public string StatusText => $"{Date} - {Status}";
         public Color StatusColor => Status == "Present" ? Colors.Green : Colors.Red;

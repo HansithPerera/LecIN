@@ -6,6 +6,7 @@ using Lecin.PageModels.Teacher;
 using Lecin.Pages.Admin;
 using Lecin.Pages.Student;
 using Lecin.Pages.Teacher;
+using Lecin.Pages;
 using Lecin.Resources.Fonts;
 using Lecin.ViewModels;
 using Microsoft.Extensions.Configuration;
@@ -84,6 +85,7 @@ public static class MauiProgram
         builder.Services.AddTransient<LoginPageModel>();
         builder.Services.AddTransient<LandingPageModel>();
         builder.Services.AddTransient<AppShellViewModel>();
+        builder.Services.AddTransient<CheckInPageModel>();
 
         #region Teacher
 

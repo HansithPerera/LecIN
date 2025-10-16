@@ -18,13 +18,13 @@ public class FaceService
         _faceCascade = new CascadeClassifier(haarCascadePath);
     }
 
-    public async Task<List<Image<Bgr,byte>>> ProcessFrameAsync(Image<Bgr,byte> frame)
+    public Task<List<Image<Bgr,byte>>> ProcessFrameAsync(Image<Bgr,byte> frame)
     {
         var gray = frame.Convert<Gray, byte>();
         var faces = _faceCascade.DetectMultiScale(gray, 1.1, 10, Size.Empty);
 
         var croppedFaces = faces.Select(face => CropFace(frame, face)).ToList();
-        return croppedFaces;
+        return Task.FromResult(croppedFaces);
     }
 
     private static Image<Bgr, byte> CropFace(Image<Bgr, byte> frame, Rectangle face)

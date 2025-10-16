@@ -10,7 +10,7 @@ public class Class: BaseModel
     public Guid Id { get; set; } = Guid.NewGuid();
 
     [Column]
-    public string CourseCode { get; set; }
+    public string CourseCode { get; set; } = string.Empty;
 
     [Column]
     public int CourseYear { get; set; }

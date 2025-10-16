@@ -49,7 +49,10 @@ public class CameraService(Repository repo, FaceService faceService)
             return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.StudentNotEnrolled);
         
         var attendance = await repo.UpsertAttendanceAsync(student.Id, classValue.Id);
-        
+
+        if (attendance == null)
+            return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.UnknownError);
+
         return Result.Ok<Attendance, Errors.CheckInError>(attendance);
     }
 }
