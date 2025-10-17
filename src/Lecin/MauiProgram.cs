@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Supabase;
 using Syncfusion.Maui.Toolkit.Hosting;
+using StudentCourseViewPageModel = Lecin.PageModels.Student.StudentCourseViewPageModel;
 
 namespace Lecin;
 
@@ -63,6 +64,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("SegoeUI-Semibold.ttf", "SegoeSemibold");
+                fonts.AddFont("MauiMaterialAssets.ttf", "MaterialAssets");
                 fonts.AddFont("FluentSystemIcons-Regular.ttf", FluentUI.FontFamily);
             });
 
@@ -90,7 +92,7 @@ public static class MauiProgram
         #region Teacher
 
         builder.Services.AddTransient<TeacherCourseListPageModel>();
-        builder.Services.AddTransient<TeacherCourseViewPageModel>();
+        builder.Services.AddTransient<StudentCourseViewPageModel>();
         builder.Services.AddTransient<TeacherClassViewPageModel>();
         builder.Services.AddTransient<TeacherDashboardPageModel>();
 
@@ -101,6 +103,7 @@ public static class MauiProgram
         builder.Services.AddTransient<AttendanceHistoryPageModel>();
         builder.Services.AddTransient<AttendanceStreaksPageModel>();
         builder.Services.AddTransient<StudentDashboardPageModel>();
+        builder.Services.AddTransient<StudentCourseViewPageModel>();
 
         #endregion
 

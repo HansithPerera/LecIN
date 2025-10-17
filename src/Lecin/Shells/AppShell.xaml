@@ -15,7 +15,6 @@
     x:DataType="viewModels:AppShellViewModel"
     FlyoutBehavior="{Binding FlyoutBehavior}"
     Title="Lecin">
-
     <Shell.Resources>
         <ResourceDictionary>
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />

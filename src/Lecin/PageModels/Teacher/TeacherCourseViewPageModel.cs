@@ -16,10 +16,18 @@ public partial class TeacherCourseViewPageModel(Supabase.Client client): BasePag
     {
         if (Course == null) return;
 
-        var classes = await client.From<Class>()
-            .Select("*")
-            .Get();
+        try
+        {
+            var classes = await client.From<Class>()
+                .Where(c => c.CourseCode == Course.Code && c.CourseSemesterCode == Course.SemesterCode && c.CourseYear == Course.Year)
+                .Select(c => new object[]{ "*", c.Attendance})
+                .Get();
 
-        Classes = new ObservableCollection<Class>(classes.Models);
+            Classes = new ObservableCollection<Class>(classes.Models);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error loading classes: {ex.Message}");
+        }
     }
 }

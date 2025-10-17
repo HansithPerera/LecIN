@@ -100,14 +100,14 @@
         <MauiXaml Update="Pages\Student\AttendanceHistoryPage.xaml">
             <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
-        <MauiXaml Update="Pages\Student\AttendanceStreaksPage.xaml">
-            <Generator>MSBuild:Compile</Generator>
-        </MauiXaml>
         <MauiXaml Update="Pages\TeacherDashboardPage.xaml">
             <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
         <MauiXaml Update="Shells\AppShell.xaml">
             <SubType>Designer</SubType>
+        </MauiXaml>
+        <MauiXaml Update="Pages\Student\TeacherCourseViewPage.xaml">
+          <SubType>Designer</SubType>
         </MauiXaml>
     </ItemGroup>
 
@@ -122,6 +122,10 @@
         <Compile Update="Shells\AppShell.xaml.cs">
             <DependentUpon>AppShell.xaml</DependentUpon>
             <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Pages\Student\TeacherCourseViewPage.xaml.cs">
+          <DependentUpon>TeacherCourseViewPage.xaml</DependentUpon>
+          <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
 

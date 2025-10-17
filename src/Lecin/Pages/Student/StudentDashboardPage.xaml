@@ -1,25 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Lecin.Pages.Student.StudentDashboardPage"
-             Title="Student Dashboard">
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:pageModels="clr-namespace:Lecin.PageModels.Student"
+                       xmlns:pages="clr-namespace:Lecin.Pages"
+                       xmlns:models="clr-namespace:SupabaseShared.Models;assembly=SupabaseShared"
+                       x:Class="Lecin.Pages.Student.StudentDashboardPage"
+                       x:DataType="pageModels:StudentDashboardPageModel">
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <VerticalStackLayout
+                Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                Padding="20"
+                Spacing="15">
+                <Label Text="{Binding WelcomeMessage}"
+                       FontSize="24"
+                       HorizontalOptions="Center" />
 
-    <VerticalStackLayout Padding="20" Spacing="15">
-        <Label Text="Welcome Student!"
-               FontSize="24"
-               HorizontalOptions="Center" />
+                <Button Text="Check In"
+                        Clicked="OnCheckInClicked"
+                        HorizontalOptions="Fill" />
 
-        <Button Text="Check In"
-                Clicked="OnCheckInClicked"
-                HorizontalOptions="Fill" />
+                <Button Text="View Attendance History"
+                        Clicked="OnHistoryClicked"
+                        HorizontalOptions="Fill" />
 
-        <Button Text="View Attendance History"
-                Clicked="OnHistoryClicked"
-                HorizontalOptions="Fill" />
-
-        <Button Text="View Attendance Streaks"
-                Clicked="OnStreaksClicked"
-                HorizontalOptions="Fill" />
-    </VerticalStackLayout>
-</ContentPage>
+                <Label Text="Upcoming Classes"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+                <CollectionView
+                    ItemsSource="{Binding UpcomingClasses}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Class">
+                            <Border Padding="20">
+                                <Grid ColumnDefinitions="{OnIdiom Phone='*,Auto', Default='Auto, *, Auto, Auto'}"
+                                      RowDefinitions="{OnIdiom Phone='Auto,Auto', Default='Auto'}"
+                                      ColumnSpacing="10">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding Course.Name}" FontSize="18" FontAttributes="Bold" />
+                                    <Label Grid.Column="{OnIdiom 1, Phone=0, Tablet=1, Desktop=1}"
+                                           Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}"
+                                           Text="{Binding CourseCode}" FontSize="18" />
+                                    <HorizontalStackLayout
+                                        Grid.Column="{OnIdiom 2, Phone=1, Tablet=2, Desktop=2}"
+                                        Spacing="5"
+                                        HorizontalOptions="End">
+                                        <Label Text="&#xe71c;" FontFamily="MaterialAssets" FontSize="18" VerticalOptions="Center"/>
+                                        <Label Text="{Binding Location}" FontSize="18" />
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout
+                                        Spacing="5"
+                                        HorizontalOptions="End"
+                                        Grid.Column="{OnIdiom 3, Phone=1, Tablet=3, Desktop=3}"
+                                        Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}">
+                                        <Label Text="&#xe71e;" 
+                                               FontFamily="MaterialAssets" 
+                                               FontSize="18" 
+                                               VerticalOptions="Center"/>
+                                        <Label VerticalOptions="Center" 
+                                               Text="{Binding StartTime, StringFormat='{0:HH:mm tt}'}" 
+                                               FontSize="18" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Label Text="Enrolled Courses"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+                <CollectionView
+                    ItemsSource="{Binding Courses}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Course">
+                            <Border Padding="20">
+                                <Grid ColumnSpacing="10"
+                                      RowSpacing="10"
+                                      RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto', Default='Auto'}"
+                                      ColumnDefinitions="{OnIdiom Phone='*,*', Default='2*,Auto,Auto,*'}">
+                                    <Label 
+                                        Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=0}"
+                                        Grid.Row="{OnIdiom 0, Phone=0, Tablet=0, Desktop=0}"
+                                        Grid.ColumnSpan="{OnIdiom 1, Phone=2, Tablet=1, Desktop=1}"
+                                        Text="{Binding Name}" FontSize="18"
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="{OnIdiom Start, Phone=Center, Tablet=Start, Desktop=Start}"
+                                        FontAttributes="Bold" />
+                                    <Label 
+                                        Grid.Column="{OnIdiom 1, Phone=0, Tablet=1, Desktop=1}"
+                                        Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        Text="{Binding Code}" />
+                                    <HorizontalStackLayout
+                                        Spacing="5"
+                                        Grid.Column="{OnIdiom 2, Phone=1, Tablet=2, Desktop=2}"
+                                        Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}"
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="Center">
+                                        <HorizontalStackLayout>
+                                            <Label Text="S" />
+                                            <Label Text="{Binding SemesterCode}" />
+                                        </HorizontalStackLayout>
+                                        <Label Text="{Binding Year}" />
+                                    </HorizontalStackLayout>
+                                    <Button Grid.Column="{OnIdiom 3, Phone=0, Tablet=3, Desktop=3}"
+                                            Grid.Row="{OnIdiom 0, Phone=2, Tablet=0, Desktop=0}"
+                                            Grid.ColumnSpan="{OnIdiom 1, Phone=4, Tablet=1, Desktop=1}"
+                                            Text="View" Clicked="GotoCourseView" VerticalOptions="Center" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</pages:BaseContentPage>
