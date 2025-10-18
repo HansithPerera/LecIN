@@ -69,6 +69,7 @@
             <sf:SfSegmentedControl
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
+                SelectionChanged="OnThemeSegmentChanged"
                 SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
                 SegmentWidth="40"
                 SegmentHeight="40">
