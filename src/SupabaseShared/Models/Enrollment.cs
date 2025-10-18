@@ -13,9 +13,6 @@ public class Enrollment: BaseModel
     public string CourseCode { get; set; } = string.Empty;
 
     [Column]
-    public string CourseId { get; set; } = string.Empty;
-
-    [Column]
     public int CourseYear { get; set; }
 
     [Column]

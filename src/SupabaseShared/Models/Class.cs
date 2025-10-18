@@ -28,4 +28,10 @@ public class Class: BaseModel
 
     [Column]
     public DateTimeOffset EndTime { get; set; }
+    
+    [Reference(typeof(Course))]
+    public Course? Course { get; set; }
+    
+    [Reference(typeof(Attendance), useInnerJoin: false, includeInQuery: false)]
+    public List<Attendance>? Attendance { get; set; }
 }

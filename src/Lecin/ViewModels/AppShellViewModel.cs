@@ -29,7 +29,8 @@ public partial class AppShellViewModel : BasePageModel
     
     public event EventHandler<UserType>? LoggedIn;
 
-    [ObservableProperty] [NotifyCanExecuteChangedFor(nameof(ChangeThemeCommand))]
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ChangeThemeCommand))]
     private int _selectedIndex;
 
     /// <inheritdoc />

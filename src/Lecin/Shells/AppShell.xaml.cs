@@ -7,6 +7,7 @@ using Lecin.ViewModels;
 using SupabaseShared.Models;
 using Debug = System.Diagnostics.Debug;
 using Font = Microsoft.Maui.Font;
+using SelectionChangedEventArgs = Syncfusion.Maui.Toolkit.SegmentedControl.SelectionChangedEventArgs;
 
 namespace Lecin.Shells;
 
@@ -45,6 +46,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(TeacherClassViewPage), typeof(TeacherClassViewPage));
         Routing.RegisterRoute(nameof(TeacherCourseViewPage), typeof(TeacherCourseViewPage));
         Routing.RegisterRoute(nameof(AttendanceStreaksPage), typeof(AttendanceStreaksPage));
+        Routing.RegisterRoute(nameof(StudentCourseViewPage), typeof(StudentCourseViewPage));
         Routing.RegisterRoute(nameof(CheckInPage), typeof(CheckInPage));
     }
 
@@ -131,5 +133,11 @@ public partial class AppShell : Shell
 
         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
         await toast.Show(cts.Token);
+    }
+
+    private void OnThemeSegmentChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (BindingContext is not AppShellViewModel vm) return;
+        vm.ChangeThemeCommand.Execute(null);
     }
 }

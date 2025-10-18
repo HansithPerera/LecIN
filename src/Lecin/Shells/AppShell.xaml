@@ -15,7 +15,6 @@
     x:DataType="viewModels:AppShellViewModel"
     FlyoutBehavior="{Binding FlyoutBehavior}"
     Title="Lecin">
-
     <Shell.Resources>
         <ResourceDictionary>
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
@@ -70,6 +69,7 @@
             <sf:SfSegmentedControl
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
+                SelectionChanged="OnThemeSegmentChanged"
                 SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
                 SegmentWidth="40"
                 SegmentHeight="40">
