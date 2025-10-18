@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Supabase.Postgrest;
 using Supabase.Postgrest.Interfaces;
 using SupabaseShared.Models;
@@ -23,6 +24,7 @@ public partial class StudentCourseViewPageModel(Client client) : BasePageModel
     
     [ObservableProperty] private bool _isLeaderboardEmpty;
 
+    [RelayCommand]
     public override async Task LoadDataAsync()
     {
         if (Course == null) return;

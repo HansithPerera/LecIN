@@ -14,7 +14,10 @@
         <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
     </ContentPage.Resources>
     <ContentPage.Content>
-        <ScrollView>
+        <RefreshView
+            Command="{Binding LoadDataCommand}"
+            IsRefreshing="{Binding IsLoading}">
+            <ScrollView>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -147,5 +150,6 @@
                 </VerticalStackLayout>
             </Grid>
         </ScrollView>
+        </RefreshView>
     </ContentPage.Content>
 </pages:BaseContentPage>
