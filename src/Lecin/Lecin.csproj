@@ -130,10 +130,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" >
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <MauiIcon
+                Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'"
+                Include="Resources\AppIcon\appiconwindows.svg" >
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </MauiIcon>
-        <MauiIcon Include="Resources\AppIcon\appiconfg.svg">
+        <MauiIcon 
+                Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" 
+                Include="Resources\AppIcon\appicon.svg" 
+                Color="#8c52ff" 
+                ForegroundScale="0.45">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </MauiIcon>
     </ItemGroup>
