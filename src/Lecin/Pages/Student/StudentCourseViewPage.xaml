@@ -78,7 +78,7 @@
                                     <Border
                                         Grid.Column="1"
                                         Padding="5"
-                                        StrokeThickness="1"
+                                        StrokeThickness="{OnIdiom Phone=1, Default=0}"
                                         Stroke="{x:StaticResource Gray600}"
                                         HorizontalOptions="End">
                                         <Label FontSize="Medium"
@@ -127,23 +127,25 @@
                         SelectionMode="None">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Class">
-                                <Border Margin="5">
-                                    <Grid ColumnDefinitions="{OnIdiom Phone='*,Auto', Default='*, Auto, Auto, Auto'}"
-                                          RowDefinitions="{OnIdiom Phone='Auto,Auto', Default='Auto'}"
-                                          ColumnSpacing="10">
-                                        <Label Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=0}"
-                                               Text="{Binding StartTime, StringFormat='{0:MMMM d}'}" />
-                                        <Label Grid.Column="{OnIdiom 1, Phone=1, Tablet=1, Desktop=1}"
-                                               Text="{Binding StartTime, StringFormat='{0:h:mm tt}'}" />
-                                        <Label Grid.Column="{OnIdiom 1, Phone=0, Tablet=2, Desktop=2}"
-                                               Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}"
-                                               Text="{Binding Duration, StringFormat='{0:hh}h {0:mm}m'}" />
-                                        <Label Grid.Column="{OnIdiom 2, Phone=1, Tablet=3, Desktop=3}"
-                                               Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}"
-                                               Text="{Binding Location}"
-                                               FontSize="18" />
-                                    </Grid>
-                                </Border>
+                                <VerticalStackLayout Padding="5">
+                                    <Border>
+                                        <Grid ColumnDefinitions="{OnIdiom Phone='*,Auto', Default='*, Auto, Auto, Auto'}"
+                                              RowDefinitions="{OnIdiom Phone='Auto,Auto', Default='Auto'}"
+                                              ColumnSpacing="10">
+                                            <Label Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=0}"
+                                                   Text="{Binding StartTime, StringFormat='{0:MMMM d}'}" />
+                                            <Label Grid.Column="{OnIdiom 1, Phone=1, Tablet=1, Desktop=1}"
+                                                   Text="{Binding StartTime, StringFormat='{0:h:mm tt}'}" />
+                                            <Label Grid.Column="{OnIdiom 1, Phone=0, Tablet=2, Desktop=2}"
+                                                   Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}"
+                                                   Text="{Binding Duration, StringFormat='{0:hh}h {0:mm}m'}" />
+                                            <Label Grid.Column="{OnIdiom 2, Phone=1, Tablet=3, Desktop=3}"
+                                                   Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}"
+                                                   Text="{Binding Location}"
+                                                   FontSize="18" />
+                                        </Grid>
+                                    </Border>
+                                </VerticalStackLayout>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>

@@ -43,9 +43,24 @@
                     <Label Text="{Binding WelcomeMessage}"
                            FontSize="24"
                            HorizontalOptions="Center" />
-                    <Button Text="Check In"
+                    <Grid
+                        ColumnDefinitions="{OnIdiom Phone='*', Default='*, *'}"
+                        RowDefinitions="{OnIdiom Phone='Auto, Auto', Default='Auto'}"
+                        RowSpacing="10"
+                        ColumnSpacing="10">
+                        <Button 
+                            Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=0}"
+                            Grid.Row="{OnIdiom 0, Phone=0, Tablet=0, Desktop=0}"
+                            Text="Check In"
                             Clicked="OnCheckInClicked"
                             HorizontalOptions="Fill" />
+                        <Button 
+                            Grid.Column="{OnIdiom 1, Phone=0, Tablet=1, Desktop=1}"
+                            Grid.Row="{OnIdiom 1, Phone=1, Tablet=0, Desktop=0}"
+                            Text="Attendance History"
+                            Clicked="OnHistoryClicked"
+                            HorizontalOptions="Fill" />
+                    </Grid>
                     <Border>
                         <VerticalStackLayout>
                             <Label
@@ -77,6 +92,7 @@
                         ItemsSource="{Binding UpcomingClasses}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Class">
+                                <VerticalStackLayout Padding="5">
                                 <Border Padding="20">
                                     <Grid ColumnDefinitions="{OnIdiom Phone='*,Auto', Default='Auto, *, Auto, Auto'}"
                                           RowDefinitions="{OnIdiom Phone='Auto,Auto', Default='Auto'}"
@@ -109,12 +125,10 @@
                                         </HorizontalStackLayout>
                                     </Grid>
                                 </Border>
+                                </VerticalStackLayout>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                    <Button Text="Attendance History"
-                            Clicked="OnHistoryClicked"
-                            HorizontalOptions="Fill" />
                     <Label Text="Enrolled Courses"
                            FontSize="20"
                            FontAttributes="Bold"
@@ -123,6 +137,7 @@
                         ItemsSource="{Binding Courses}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Course">
+                                <VerticalStackLayout Padding="5">
                                 <Border Padding="20">
                                     <Grid ColumnSpacing="10"
                                           RowSpacing="10"
@@ -160,6 +175,7 @@
                                                 Text="View" Clicked="GotoCourseView" VerticalOptions="Center" />
                                     </Grid>
                                 </Border>
+                                    </VerticalStackLayout>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
