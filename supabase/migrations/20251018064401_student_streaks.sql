@@ -30,20 +30,6 @@ revoke truncate on table "public"."Admins" from "authenticated";
 
 revoke update on table "public"."Admins" from "authenticated";
 
-revoke delete on table "public"."Admins" from "service_role";
-
-revoke insert on table "public"."Admins" from "service_role";
-
-revoke references on table "public"."Admins" from "service_role";
-
-revoke select on table "public"."Admins" from "service_role";
-
-revoke trigger on table "public"."Admins" from "service_role";
-
-revoke truncate on table "public"."Admins" from "service_role";
-
-revoke update on table "public"."Admins" from "service_role";
-
 revoke delete on table "public"."ApiKeys" from "anon";
 
 revoke insert on table "public"."ApiKeys" from "anon";
@@ -71,20 +57,6 @@ revoke trigger on table "public"."ApiKeys" from "authenticated";
 revoke truncate on table "public"."ApiKeys" from "authenticated";
 
 revoke update on table "public"."ApiKeys" from "authenticated";
-
-revoke delete on table "public"."ApiKeys" from "service_role";
-
-revoke insert on table "public"."ApiKeys" from "service_role";
-
-revoke references on table "public"."ApiKeys" from "service_role";
-
-revoke select on table "public"."ApiKeys" from "service_role";
-
-revoke trigger on table "public"."ApiKeys" from "service_role";
-
-revoke truncate on table "public"."ApiKeys" from "service_role";
-
-revoke update on table "public"."ApiKeys" from "service_role";
 
 revoke delete on table "public"."Attendance" from "anon";
 
@@ -114,20 +86,6 @@ revoke truncate on table "public"."Attendance" from "authenticated";
 
 revoke update on table "public"."Attendance" from "authenticated";
 
-revoke delete on table "public"."Attendance" from "service_role";
-
-revoke insert on table "public"."Attendance" from "service_role";
-
-revoke references on table "public"."Attendance" from "service_role";
-
-revoke select on table "public"."Attendance" from "service_role";
-
-revoke trigger on table "public"."Attendance" from "service_role";
-
-revoke truncate on table "public"."Attendance" from "service_role";
-
-revoke update on table "public"."Attendance" from "service_role";
-
 revoke delete on table "public"."CameraApiKeys" from "anon";
 
 revoke insert on table "public"."CameraApiKeys" from "anon";
@@ -155,20 +113,6 @@ revoke trigger on table "public"."CameraApiKeys" from "authenticated";
 revoke truncate on table "public"."CameraApiKeys" from "authenticated";
 
 revoke update on table "public"."CameraApiKeys" from "authenticated";
-
-revoke delete on table "public"."CameraApiKeys" from "service_role";
-
-revoke insert on table "public"."CameraApiKeys" from "service_role";
-
-revoke references on table "public"."CameraApiKeys" from "service_role";
-
-revoke select on table "public"."CameraApiKeys" from "service_role";
-
-revoke trigger on table "public"."CameraApiKeys" from "service_role";
-
-revoke truncate on table "public"."CameraApiKeys" from "service_role";
-
-revoke update on table "public"."CameraApiKeys" from "service_role";
 
 revoke delete on table "public"."Cameras" from "anon";
 
@@ -198,20 +142,6 @@ revoke truncate on table "public"."Cameras" from "authenticated";
 
 revoke update on table "public"."Cameras" from "authenticated";
 
-revoke delete on table "public"."Cameras" from "service_role";
-
-revoke insert on table "public"."Cameras" from "service_role";
-
-revoke references on table "public"."Cameras" from "service_role";
-
-revoke select on table "public"."Cameras" from "service_role";
-
-revoke trigger on table "public"."Cameras" from "service_role";
-
-revoke truncate on table "public"."Cameras" from "service_role";
-
-revoke update on table "public"."Cameras" from "service_role";
-
 revoke delete on table "public"."Classes" from "anon";
 
 revoke insert on table "public"."Classes" from "anon";
@@ -239,20 +169,6 @@ revoke trigger on table "public"."Classes" from "authenticated";
 revoke truncate on table "public"."Classes" from "authenticated";
 
 revoke update on table "public"."Classes" from "authenticated";
-
-revoke delete on table "public"."Classes" from "service_role";
-
-revoke insert on table "public"."Classes" from "service_role";
-
-revoke references on table "public"."Classes" from "service_role";
-
-revoke select on table "public"."Classes" from "service_role";
-
-revoke trigger on table "public"."Classes" from "service_role";
-
-revoke truncate on table "public"."Classes" from "service_role";
-
-revoke update on table "public"."Classes" from "service_role";
 
 revoke delete on table "public"."CourseTeachers" from "anon";
 
@@ -282,20 +198,6 @@ revoke truncate on table "public"."CourseTeachers" from "authenticated";
 
 revoke update on table "public"."CourseTeachers" from "authenticated";
 
-revoke delete on table "public"."CourseTeachers" from "service_role";
-
-revoke insert on table "public"."CourseTeachers" from "service_role";
-
-revoke references on table "public"."CourseTeachers" from "service_role";
-
-revoke select on table "public"."CourseTeachers" from "service_role";
-
-revoke trigger on table "public"."CourseTeachers" from "service_role";
-
-revoke truncate on table "public"."CourseTeachers" from "service_role";
-
-revoke update on table "public"."CourseTeachers" from "service_role";
-
 revoke delete on table "public"."Courses" from "anon";
 
 revoke insert on table "public"."Courses" from "anon";
@@ -323,20 +225,6 @@ revoke trigger on table "public"."Courses" from "authenticated";
 revoke truncate on table "public"."Courses" from "authenticated";
 
 revoke update on table "public"."Courses" from "authenticated";
-
-revoke delete on table "public"."Courses" from "service_role";
-
-revoke insert on table "public"."Courses" from "service_role";
-
-revoke references on table "public"."Courses" from "service_role";
-
-revoke select on table "public"."Courses" from "service_role";
-
-revoke trigger on table "public"."Courses" from "service_role";
-
-revoke truncate on table "public"."Courses" from "service_role";
-
-revoke update on table "public"."Courses" from "service_role";
 
 revoke delete on table "public"."Enrollments" from "anon";
 
@@ -366,20 +254,6 @@ revoke truncate on table "public"."Enrollments" from "authenticated";
 
 revoke update on table "public"."Enrollments" from "authenticated";
 
-revoke delete on table "public"."Enrollments" from "service_role";
-
-revoke insert on table "public"."Enrollments" from "service_role";
-
-revoke references on table "public"."Enrollments" from "service_role";
-
-revoke select on table "public"."Enrollments" from "service_role";
-
-revoke trigger on table "public"."Enrollments" from "service_role";
-
-revoke truncate on table "public"."Enrollments" from "service_role";
-
-revoke update on table "public"."Enrollments" from "service_role";
-
 revoke delete on table "public"."PermissionFlags" from "anon";
 
 revoke insert on table "public"."PermissionFlags" from "anon";
@@ -407,20 +281,6 @@ revoke trigger on table "public"."PermissionFlags" from "authenticated";
 revoke truncate on table "public"."PermissionFlags" from "authenticated";
 
 revoke update on table "public"."PermissionFlags" from "authenticated";
-
-revoke delete on table "public"."PermissionFlags" from "service_role";
-
-revoke insert on table "public"."PermissionFlags" from "service_role";
-
-revoke references on table "public"."PermissionFlags" from "service_role";
-
-revoke select on table "public"."PermissionFlags" from "service_role";
-
-revoke trigger on table "public"."PermissionFlags" from "service_role";
-
-revoke truncate on table "public"."PermissionFlags" from "service_role";
-
-revoke update on table "public"."PermissionFlags" from "service_role";
 
 revoke delete on table "public"."StudentFaces" from "anon";
 
@@ -450,20 +310,6 @@ revoke truncate on table "public"."StudentFaces" from "authenticated";
 
 revoke update on table "public"."StudentFaces" from "authenticated";
 
-revoke delete on table "public"."StudentFaces" from "service_role";
-
-revoke insert on table "public"."StudentFaces" from "service_role";
-
-revoke references on table "public"."StudentFaces" from "service_role";
-
-revoke select on table "public"."StudentFaces" from "service_role";
-
-revoke trigger on table "public"."StudentFaces" from "service_role";
-
-revoke truncate on table "public"."StudentFaces" from "service_role";
-
-revoke update on table "public"."StudentFaces" from "service_role";
-
 revoke delete on table "public"."Students" from "anon";
 
 revoke insert on table "public"."Students" from "anon";
@@ -492,20 +338,6 @@ revoke truncate on table "public"."Students" from "authenticated";
 
 revoke update on table "public"."Students" from "authenticated";
 
-revoke delete on table "public"."Students" from "service_role";
-
-revoke insert on table "public"."Students" from "service_role";
-
-revoke references on table "public"."Students" from "service_role";
-
-revoke select on table "public"."Students" from "service_role";
-
-revoke trigger on table "public"."Students" from "service_role";
-
-revoke truncate on table "public"."Students" from "service_role";
-
-revoke update on table "public"."Students" from "service_role";
-
 revoke delete on table "public"."Teachers" from "anon";
 
 revoke insert on table "public"."Teachers" from "anon";
@@ -533,20 +365,6 @@ revoke trigger on table "public"."Teachers" from "authenticated";
 revoke truncate on table "public"."Teachers" from "authenticated";
 
 revoke update on table "public"."Teachers" from "authenticated";
-
-revoke delete on table "public"."Teachers" from "service_role";
-
-revoke insert on table "public"."Teachers" from "service_role";
-
-revoke references on table "public"."Teachers" from "service_role";
-
-revoke select on table "public"."Teachers" from "service_role";
-
-revoke trigger on table "public"."Teachers" from "service_role";
-
-revoke truncate on table "public"."Teachers" from "service_role";
-
-revoke update on table "public"."Teachers" from "service_role";
 
 create table "public"."Locations" (
     "Id" text not null,
