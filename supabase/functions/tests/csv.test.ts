@@ -90,7 +90,8 @@ const testSuccessWithServiceKey = async () => {
     })
 
     console.log(JSON.stringify(error, null, 2))
-
+    
+    assert(!error);
     assertEquals(data[0].Name, "bar");
     assertEquals(data[0].Location, "baz");
 }
