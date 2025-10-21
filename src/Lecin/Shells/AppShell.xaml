@@ -37,53 +37,53 @@
         Route="{x:Static local:AppShell.TeacherDashboardPageRoute}"
         ContentTemplate="{DataTemplate teacher:TeacherDashboardPage}"
         FlyoutItemIsVisible="{Binding IsTeacher}" />
-    
+
     <ShellContent
         Title="Courses"
         Route="{x:Static local:AppShell.TeacherCourseListPageRoute}"
-        ContentTemplate="{DataTemplate teacher:TeacherCourseListPage}" 
-        FlyoutItemIsVisible="{Binding IsTeacher}"/>
-    
+        ContentTemplate="{DataTemplate teacher:TeacherCourseListPage}"
+        FlyoutItemIsVisible="{Binding IsTeacher}" />
+
     <ShellContent
         Title="Dashboard"
         Route="{x:Static local:AppShell.AdminDashboardPageRoute}"
         ContentTemplate="{DataTemplate admin:AdminDashboardPage}"
         FlyoutItemIsVisible="{Binding IsAdmin}" />
-    
+
     <ShellContent
         Title="Dashboard"
         Route="{x:Static local:AppShell.StudentDashboardPageRoute}"
         FlyoutItemIsVisible="{Binding IsStudent}"
-        ContentTemplate="{DataTemplate student:StudentDashboardPage}">
-    </ShellContent>
-    
+        ContentTemplate="{DataTemplate student:StudentDashboardPage}" />
+
     <ShellContent
         Title="Attendance History"
         Route="{x:Static local:AppShell.AttendanceHistoryPageRoute}"
         FlyoutItemIsVisible="{Binding IsStudent}"
         ContentTemplate="{DataTemplate student:AttendanceHistoryPage}" />
-    
+
     <Shell.FlyoutFooter>
         <Grid Padding="15" RowDefinitions="Auto,Auto" RowSpacing="10">
             <!-- Theme switcher -->
             <sf:SfSegmentedControl
+                x:Name="ThemeSegmentedControl"
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
                 SelectionChanged="OnThemeSegmentChanged"
-                SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
                 SegmentWidth="40"
                 SegmentHeight="40">
                 <sf:SfSegmentedControl.ItemsSource>
                     <x:Array Type="{x:Type sf:SfSegmentItem}">
                         <sf:SfSegmentItem ImageSource="{StaticResource IconLight}" />
                         <sf:SfSegmentItem ImageSource="{StaticResource IconDark}" />
+                        <sf:SfSegmentItem ImageSource="{StaticResource IconSystem}" />
                     </x:Array>
                 </sf:SfSegmentedControl.ItemsSource>
             </sf:SfSegmentedControl>
 
             <!-- Logout button -->
             <Button Grid.Row="1"
-                    IsVisible="{Binding }"
+                    IsVisible="{Binding IsLoggedIn}"
                     Text="Logout"
                     BackgroundColor="DarkRed"
                     TextColor="White"

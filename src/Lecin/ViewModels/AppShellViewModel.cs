@@ -1,10 +1,12 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Lecin.Shells;
-using Supabase;
+using CommunityToolkit.Mvvm.Messaging;
+using Lecin.Messaging;
+using Supabase.Realtime;
 using Supabase.Realtime.PostgresChanges;
 using SupabaseShared.Models;
+using Client = Supabase.Client;
 
 namespace Lecin.ViewModels;
 
@@ -12,6 +14,8 @@ public partial class AppShellViewModel : BasePageModel
 {
     private readonly AuthService _authService;
     private readonly Client _client;
+
+    private RealtimeChannel? _attendanceChannel;
 
     [ObservableProperty] private FlyoutBehavior _flyoutBehavior;
 
@@ -23,40 +27,46 @@ public partial class AppShellViewModel : BasePageModel
 
     [ObservableProperty] private bool _isTeacher;
 
-    public event EventHandler<Attendance>? AttendanceAlertReceived;
-    
-    public event EventHandler? LoggedOut;
-    
-    public event EventHandler<UserType>? LoggedIn;
-
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(ChangeThemeCommand))]
-    private int _selectedIndex;
-
     /// <inheritdoc />
     public AppShellViewModel(AuthService authService, Client client)
     {
         _authService = authService;
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, msg) => OnLoggedIn(msg.UserType));
+        WeakReferenceMessenger.Default.Register<LoggedOutMessage>(this, (_, _) => OnLoggedOut());
         _client = client;
-        _authService.LoggedIn += OnLoggedIn;
-        _authService.LoggedOut += OnLoggedOut;
     }
-    
+
+    public event EventHandler<Attendance>? AttendanceAlertReceived;
+
+    private void UnsubscribeFromAttendanceAlerts()
+    {
+        try
+        {
+            if (_attendanceChannel == null) return;
+            _attendanceChannel.Unsubscribe();
+            _attendanceChannel = null;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Failed to unsubscribe from attendance alerts: {ex.Message}");
+        }
+    }
+
     private async void SubscribeToAttendanceAlerts()
     {
         try
         {
             await _client.Realtime.ConnectAsync();
-            var channel = _client.Realtime.Channel(table: "Attendance");
-            
-            channel.AddPostgresChangeHandler(PostgresChangesOptions.ListenType.Inserts, 
+            _attendanceChannel = _client.Realtime.Channel(table: "Attendance");
+
+            _attendanceChannel.AddPostgresChangeHandler(PostgresChangesOptions.ListenType.Inserts,
                 (_, change) =>
                 {
                     var model = change.Model<Attendance>();
                     if (model == null) return;
                     AttendanceAlertReceived?.Invoke(this, model);
                 });
-            await channel.Subscribe();
+            await _attendanceChannel.Subscribe();
         }
         catch (Exception ex)
         {
@@ -64,9 +74,10 @@ public partial class AppShellViewModel : BasePageModel
         }
     }
 
-    private void OnLoggedIn(object? sender, LoggedInEventArgs e)
+    private void OnLoggedIn(UserType e)
     {
-        switch (e.UserType)
+        ResetRoles();
+        switch (e)
         {
             case UserType.Student:
                 SubscribeToAttendanceAlerts();
@@ -78,29 +89,27 @@ public partial class AppShellViewModel : BasePageModel
             case UserType.Admin:
                 IsAdmin = true;
                 break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
 
         IsLoggedIn = true;
-        SelectedIndex = Application.Current!.UserAppTheme == AppTheme.Light ? 0 : 1;
         FlyoutBehavior = FlyoutBehavior.Flyout;
-        LoggedIn?.Invoke(this, e.UserType);
     }
 
-    public void OnLoggedOut(object? sender, object e)
+    private void OnLoggedOut()
     {
-        IsStudent = false;
-        IsTeacher = false;
-        IsAdmin = false;
+        ResetRoles();
+        UnsubscribeFromAttendanceAlerts();
         IsLoggedIn = false;
         FlyoutBehavior = FlyoutBehavior.Disabled;
     }
 
-    [RelayCommand]
-    private Task ChangeTheme()
+    private void ResetRoles()
     {
-        var theme = SelectedIndex == 0 ? AppTheme.Light : AppTheme.Dark;
-        Application.Current!.UserAppTheme = theme;
-        return Task.CompletedTask;
+        IsAdmin = false;
+        IsStudent = false;
+        IsTeacher = false;
     }
 
     [RelayCommand]
@@ -109,7 +118,7 @@ public partial class AppShellViewModel : BasePageModel
         try
         {
             await _authService.SignOut();
-            LoggedOut?.Invoke(this, EventArgs.Empty);
+            WeakReferenceMessenger.Default.Send(new LoggedOutMessage());
         }
         catch (Exception ex)
         {
