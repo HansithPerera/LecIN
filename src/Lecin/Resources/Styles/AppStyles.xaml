@@ -103,6 +103,12 @@
                      FontFamily="{x:Static f:FluentUI.FontFamily}"
                      Color="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}"
                      Size="{StaticResource size240}" />
+    
+    <FontImageSource x:Key="IconSystem"
+                     Glyph="{x:Static f:FluentUI.settings_28_regular}"
+                     FontFamily="{x:Static f:FluentUI.FontFamily}"
+                     Color="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}"
+                     Size="{StaticResource size240}" />
 
     <Style TargetType="Label">
         <Setter Property="TextColor"

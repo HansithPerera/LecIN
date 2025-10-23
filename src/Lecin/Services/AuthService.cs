@@ -20,20 +20,15 @@ public enum SignInError
     Error
 }
 
-public class LoggedInEventArgs : EventArgs
-{
-    public required UserType UserType { get; set; }
-}
-
 public class AuthService(Client supabase)
 {
     private const string SessionKey = "user_session";
 
     public UserType? CurrentUserType { get; private set; }
 
-    public event EventHandler<LoggedInEventArgs>? LoggedIn;
+    public bool SignedIn => supabase.Auth.CurrentUser != null && CurrentUserType != null;
 
-    public event EventHandler? LoggedOut;
+    public Guid? CurrentUserId => Guid.TryParse(supabase.Auth.CurrentUser?.Id, out var userId) ? userId : null;
 
     public async Task<Result<UserType, SignInError>> SignIn(string email, string password, UserType userType)
     {
@@ -68,7 +63,6 @@ public class AuthService(Client supabase)
 
             CurrentUserType = userType;
             await SaveSession();
-            LoggedIn?.Invoke(this, new LoggedInEventArgs { UserType = userType });
             return Result.Ok<UserType, SignInError>(userType);
         }
         catch (GotrueException ex) when (ex.StatusCode == 400)
@@ -87,7 +81,6 @@ public class AuthService(Client supabase)
         await supabase.Auth.SignOut();
         await ClearSession();
         CurrentUserType = null;
-        LoggedOut?.Invoke(this, EventArgs.Empty);
     }
 
     public async Task SaveSession()
@@ -117,14 +110,11 @@ public class AuthService(Client supabase)
                 return null;
             await supabase.Auth.SetSession(saved.Session.AccessToken, saved.Session.RefreshToken, true);
             CurrentUserType = saved.UserType;
-            LoggedIn?.Invoke(this, new LoggedInEventArgs { UserType = saved.UserType });
             return saved.UserType;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error restoring session: {ex.Message}");
-            // If session restore fails (e.g., config changed from local emulator),
-            // clear any persisted session so the app can proceed to login cleanly.
             await ClearSession();
             return null;
         }

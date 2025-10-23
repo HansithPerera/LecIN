@@ -35,7 +35,7 @@ jobs:
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
         with:
-          version: '2.40.7'
+          version: 2.51.0
 
       - name: Install Deno
         uses: denoland/setup-deno@v2

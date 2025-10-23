@@ -1,6 +1,7 @@
 {
   "imports": {
     "supabase": "npm:@supabase/supabase-js@2/",
-    "uuid": "npm:uuid@13.0.0/"
+    "uuid": "npm:uuid@13.0.0/",
+    "tslib": "npm:tslib@2.8.1"
   }
 }

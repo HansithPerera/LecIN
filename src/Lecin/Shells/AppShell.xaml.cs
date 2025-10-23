@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.Messaging;
+using Lecin.Messaging;
 using Lecin.Pages.Admin;
 using Lecin.Pages.Student;
 using Lecin.Pages.Teacher;
@@ -7,6 +9,7 @@ using Lecin.ViewModels;
 using SupabaseShared.Models;
 using Debug = System.Diagnostics.Debug;
 using Font = Microsoft.Maui.Font;
+using SelectionChangedEventArgs = Syncfusion.Maui.Toolkit.SegmentedControl.SelectionChangedEventArgs;
 
 namespace Lecin.Shells;
 
@@ -15,29 +18,49 @@ public partial class AppShell : Shell
     public AppShell(AppShellViewModel vm)
     {
         BindingContext = vm;
-        InitializeComponent();
-        vm.LoggedIn += OnLoggedIn;
-        vm.LoggedOut += OnLoggedOut;
         vm.AttendanceAlertReceived += OnAttendanceAlertReceived;
+        InitializeComponent();
         RegisterRoutes();
+        WeakReferenceMessenger.Default.Register<LoggedOutMessage>(this, (_, _) => GotoLogin());
+        WeakReferenceMessenger.Default.Register<LoggedInMessage>(this, (_, msg) => NavigateToDashboard(msg.UserType));
     }
 
     public static string LoginPageRoute => nameof(LoginPage);
-    
+
     public static string LandingPageRoute => nameof(LandingPage);
-    
+
     public static string AdminDashboardPageRoute => nameof(AdminDashboardPage);
-    
+
     public static string TeacherDashboardPageRoute => nameof(TeacherDashboardPage);
-    
+
     public static string TeacherCourseListPageRoute => nameof(TeacherCourseListPage);
-    
+
     public static string StudentDashboardPageRoute => nameof(StudentDashboardPage);
-    
+
     public static string StudentProfilePageRoute => nameof(StudentProfilePage);
-    
+
     public static string AttendanceHistoryPageRoute => nameof(AttendanceHistoryPage);
-    
+
+    /// <summary>
+    ///     Update the theme segmented control based on the current app theme before the shell is visible.
+    /// </summary>
+    protected override void OnAppearing()
+    {
+        var theme = Preferences.Get("user_app_theme", "system");
+        Application.Current!.UserAppTheme = theme switch
+        {
+            "light" => AppTheme.Light,
+            "dark" => AppTheme.Dark,
+            _ => Application.Current!.UserAppTheme
+        };
+        ThemeSegmentedControl.SelectedIndex = Application.Current!.UserAppTheme switch
+        {
+            AppTheme.Light => 0,
+            AppTheme.Dark => 1,
+            _ => 2
+        };
+    }
+
     private void RegisterRoutes()
     {
         Routing.RegisterRoute(nameof(AttendanceHistoryPage), typeof(AttendanceHistoryPage));
@@ -45,6 +68,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(TeacherClassViewPage), typeof(TeacherClassViewPage));
         Routing.RegisterRoute(nameof(TeacherCourseViewPage), typeof(TeacherCourseViewPage));
         Routing.RegisterRoute(nameof(AttendanceStreaksPage), typeof(AttendanceStreaksPage));
+        Routing.RegisterRoute(nameof(StudentCourseViewPage), typeof(StudentCourseViewPage));
         Routing.RegisterRoute(nameof(CheckInPage), typeof(CheckInPage));
     }
 
@@ -52,48 +76,12 @@ public partial class AppShell : Shell
     {
         try
         {
-            await DisplaySnackbarAsync($"You checked into checked into your class successfully at {e.Timestamp.ToLocalTime():T}");
+            await DisplaySnackbarAsync(
+                $"You checked into checked into your class successfully at {e.Timestamp.ToLocalTime():T}");
         }
         catch (Exception ex)
         {
             Debug.WriteLine("Failed to display attendance alert: " + ex.Message);
-        }
-    }
-
-    private void OnLoggedOut(object? sender, EventArgs _)
-    {
-        try
-        {
-            Current.GoToAsync($"//{nameof(LoginPage)}");
-        }
-        catch (Exception e)
-        {
-            Debug.WriteLine("Failed to navigate to login page: " + e.Message);
-        }
-    }
-
-    private void OnLoggedIn(object? sender, UserType userType)
-    {
-        try
-        {
-            switch (userType)
-            {
-                case UserType.Admin:
-                    Current.GoToAsync($"//{nameof(AdminDashboardPage)}");
-                    break;
-                case UserType.Teacher:
-                    Current.GoToAsync($"//{nameof(TeacherCourseListPage)}");
-                    break;
-                case UserType.Student:
-                    Current.GoToAsync($"//{nameof(StudentDashboardPage)}");
-                    break;
-                default:
-                    break;
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.WriteLine("Failed to navigate to dashboard: " + e.Message);
         }
     }
 
@@ -131,5 +119,66 @@ public partial class AppShell : Shell
 
         var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
         await toast.Show(cts.Token);
+    }
+
+    /// <summary>
+    ///     Handle theme changes from the segmented control.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OnThemeSegmentChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        var selectedIndex = e.NewIndex;
+        Application.Current!.UserAppTheme = selectedIndex switch
+        {
+            0 => AppTheme.Light,
+            1 => AppTheme.Dark,
+            _ => AppTheme.Unspecified
+        };
+        var themePref = selectedIndex switch
+        {
+            0 => "light",
+            1 => "dark",
+            _ => "system"
+        };
+        Preferences.Set("user_app_theme", themePref);
+    }
+
+    private async void NavigateToDashboard(UserType userType)
+    {
+        try
+        {
+            switch (userType)
+            {
+                case UserType.Admin:
+                    await Current.GoToAsync($"//{nameof(AdminDashboardPage)}");
+                    break;
+                case UserType.Teacher:
+                    await Current.GoToAsync($"//{nameof(TeacherCourseListPage)}");
+                    break;
+                case UserType.Student:
+                    await Current.GoToAsync($"//{nameof(StudentDashboardPage)}");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(userType), userType, null);
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine("Failed to navigate to dashboard: " + e.Message);
+        }
+    }
+
+    private async void GotoLogin()
+    {
+        try
+        {
+            await Task.Delay(1);
+            await Current.GoToAsync($"//{nameof(LoginPage)}");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("Failed to navigate to login page: " + ex.Message);
+        }
     }
 }

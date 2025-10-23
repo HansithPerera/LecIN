@@ -6,40 +6,40 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <PreserveCompilationContext>true</PreserveCompilationContext>
-      <UserSecretsId>83d08ab3-1e21-45e9-afe9-9f38246994bc</UserSecretsId>
-  </PropertyGroup>
+        <UserSecretsId>83d08ab3-1e21-45e9-afe9-9f38246994bc</UserSecretsId>
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.4">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.9" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.9" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-        <PackageReference Include="xunit" Version="2.9.3" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.10"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.10"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0"/>
+        <PackageReference Include="xunit" Version="2.9.3"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="Xunit" />
+        <Using Include="Xunit"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Backend\Backend.csproj" />
-      <ProjectReference Include="..\Camera\Camera.csproj" />
+        <ProjectReference Include="..\Backend\Backend.csproj"/>
+        <ProjectReference Include="..\Camera\Camera.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Unit\haarcascade_frontalface_default.xml">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="Images\OnePerson.jpeg">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <None Update="Unit\haarcascade_frontalface_default.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Images\OnePerson.jpeg">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
