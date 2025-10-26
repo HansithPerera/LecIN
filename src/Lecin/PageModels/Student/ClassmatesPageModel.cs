@@ -9,6 +9,7 @@ public partial class ClassmatesPageModel(Client client) : ObservableObject
 {
     [ObservableProperty] private string _courseName = string.Empty;
     [ObservableProperty] private ObservableCollection<StudentInfo> _classmates = new();
+    [ObservableProperty] private string _debugText = string.Empty;
 
     public class StudentInfo
     {
@@ -28,6 +29,7 @@ public partial class ClassmatesPageModel(Client client) : ObservableObject
     {
         CourseName = courseCode;
         Classmates.Clear();
+        DebugText = "";
 
         try
         {
@@ -36,10 +38,19 @@ public partial class ClassmatesPageModel(Client client) : ObservableObject
                 new { course_code = courseCode }
             );
 
+            var raw = resp.Content ?? "null";
+            DebugText = $"RPC content: {raw}";
+
             var rows = JsonSerializer.Deserialize<List<ClassmateDto>>(
-                resp.Content ?? "[]",
+                raw,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             ) ?? new List<ClassmateDto>();
+
+            if (rows.Count == 0)
+            {
+                DebugText += " | parsed: 0 rows";
+                return;
+            }
 
             foreach (var row in rows)
             {
@@ -52,10 +63,12 @@ public partial class ClassmatesPageModel(Client client) : ObservableObject
                     Email = row.Email ?? string.Empty
                 });
             }
+
+            DebugText += $" | parsed: {rows.Count} rows, first: {Classmates.FirstOrDefault()?.Name}";
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading classmates: {ex.Message}");
+            DebugText = $"Error: {ex.Message}";
         }
     }
 }
