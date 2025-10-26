@@ -5,9 +5,9 @@ using Backend.Database;
 using Backend.Face;
 using Backend.Services;
 using Emgu.CV;
-using Emgu.CV.Face;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Supabase;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,28 +24,28 @@ if (!isMock)
             _ => { }
         );
 
-    builder.Services.AddSingleton<Supabase.Client>(_ =>
-        new Supabase.Client(
-            builder.Configuration["Supabase:Url"] ?? throw new InvalidOperationException("Supabase URL is not configured."),
-            builder.Configuration["Supabase:Key"] ?? throw new InvalidOperationException("Supabase Key is not configured.")
+    builder.Services.AddSingleton<Client>(_ =>
+        new Client(
+            builder.Configuration["Supabase:Url"] ??
+            throw new InvalidOperationException("Supabase URL is not configured."),
+            builder.Configuration["Supabase:Key"] ??
+            throw new InvalidOperationException("Supabase Key is not configured.")
         )
     );
-    
-    builder.Services.AddHostedService<FaceTrainingWorker>();
 }
 
 // Repository service for data access.
 builder.Services.AddSingleton<Repository>();
 
 // Face recognition services.
-builder.Services.AddSingleton<CascadeClassifier>(
-    _ => new CascadeClassifier("haarcascade_frontalface_default.xml")
+builder.Services.AddSingleton<CascadeClassifier>(_ => new CascadeClassifier("haarcascade_frontalface_default.xml")
 );
 
-builder.Services.AddSingleton<LBPHFaceRecognizer>(
-    _ => new LBPHFaceRecognizer(1, 8, 8, 8, 100)
+builder.Services.AddSingleton<ResFaceEmbedder>(_ => new ResFaceEmbedder("arcfaceresnet100-8.onnx", 112, 112, true)
 );
+
 builder.Services.AddSingleton<FaceService>();
+
 builder.Services.AddSingleton<StorageService>();
 
 // Application services.

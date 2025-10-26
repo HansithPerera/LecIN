@@ -377,3 +377,15 @@ entrypoint = "./functions/teacher-set-attendance/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/teacher-set-attendance/*.html" ]
+
+[functions.upload-face]
+enabled = true
+verify_jwt = true
+import_map = "./functions/upload-face/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/upload-face/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/upload-face/*.html" ]
+static_files = [ "./functions/upload-face/*.onnx", "./functions/upload-face/*.wasm" ]

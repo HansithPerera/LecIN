@@ -31,9 +31,11 @@
         <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj"/>
     </ItemGroup>
     <ItemGroup>
-        <None Update="haarcascade_frontalface_default.xml">
+        <None Remove="haarcascade_frontalface_default.xml"/>
+        <Resource Include="haarcascade_frontalface_default.xml">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+        </Resource>
+        <None Remove="arcfaceresnet100-8.onnx"/>
     </ItemGroup>
 
     <PropertyGroup>

@@ -6,18 +6,13 @@ namespace SupabaseShared.Models;
 [Table("StudentFaces")]
 public class StudentFace : BaseModel
 {
-    [PrimaryKey(shouldInsert: true)]
-    public Guid StudentId { get; set; }
+    [PrimaryKey(shouldInsert: true)] public Guid StudentId { get; set; }
 
-    [Column]
-    public string FaceImagePath { get; set; } = string.Empty;
+    [Column] public float[] Embedding { get; set; }
 
-    [Column]
-    public DateTimeOffset CreatedAt { get; set; }
+    [Column] public DateTimeOffset CreatedAt { get; set; }
 
-    [Column]
-    public DateTimeOffset? UpdatedAt { get; set; }
+    [Column] public DateTimeOffset? UpdatedAt { get; set; }
 
-    [Reference(typeof(Student))]
-    public Student? Student { get; set; }
+    [Reference(typeof(Student))] public Student? Student { get; set; }
 }

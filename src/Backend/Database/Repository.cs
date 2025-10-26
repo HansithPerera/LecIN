@@ -2,18 +2,19 @@
 using Supabase.Postgrest.Interfaces;
 using SupabaseShared.Models;
 using static Supabase.Postgrest.Constants;
+using Client = Supabase.Client;
 
 namespace Backend.Database;
 
 public class Repository(
-    Supabase.Client client)
+    Client client)
 {
     public async Task<bool> IsCameraApiKey(Guid apiKeyId)
     {
         var camKey = await client.From<CameraApiKey>().Where(k => k.ApiKeyId == apiKeyId).Single();
         return camKey != null;
     }
-    
+
     public async Task<List<StudentFace>> GetAllStudentFacesAsync()
     {
         var resp = await client.From<StudentFace>().Get();
@@ -36,12 +37,6 @@ public class Repository(
     {
         var resp = await client.From<StudentFace>().Get();
         return resp.Models;
-    }
-
-    public async Task<Student?> GetStudentByFacePath(string path)
-    {
-        var resp = await client.From<StudentFace>().Where(f => f.FaceImagePath == path).Single();
-        return resp?.Student;
     }
 
     public async Task<bool> IsStudentEnrolledInCourseAsync(Guid studentId, string courseCode, int courseYearId,
@@ -70,6 +65,21 @@ public class Repository(
         };
         var resp = await client.From<Attendance>().Upsert(attendance);
         return resp.Model;
+    }
+
+    public async Task<StudentFace?> GetRecognizedFaceAsync(float[] embedding, float distanceThreshold = 0.6f)
+    {
+        var embeddingStr = string.Join(",", embedding);
+
+        var response = await client.Rpc<List<StudentFace>>(
+            "FindClosestStudentFace",
+            new
+            {
+                target_embedding = $"[{embeddingStr}]",
+                max_distance = distanceThreshold
+            });
+
+        return response?.FirstOrDefault();
     }
 
     public async Task<Class?> GetClassByLocationTimeAsync(string? location, DateTimeOffset time)
@@ -106,5 +116,15 @@ public class Repository(
     {
         var resp = await client.From<Student>().Where(s => s.Id == studentId).Single();
         return resp;
+    }
+
+    public async Task StoreStudentFaceAsync(Guid studentId, float[] normalizedEmbedding)
+    {
+        var studentFace = new StudentFace
+        {
+            StudentId = studentId,
+            Embedding = normalizedEmbedding
+        };
+        await client.From<StudentFace>().Insert(studentFace);
     }
 }

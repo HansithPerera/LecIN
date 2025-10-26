@@ -17,7 +17,7 @@ public class CameraService(Repository repo, FaceService faceService)
             ? Result.Err<Class, Errors.ClassRetrievalError>(Errors.ClassRetrievalError.NoClassFound)
             : Result.Ok<Class, Errors.ClassRetrievalError>(classroom);
     }
-    
+
     public async Task<Result<Attendance, Errors.CheckInError>> CheckFaceIntoClass(Guid apiKeyId, Stream imageStream)
     {
         var classResult = await GetOngoingClass(apiKeyId);
@@ -30,24 +30,26 @@ public class CameraService(Repository repo, FaceService faceService)
                     Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.ClassNotFound),
                 _ => Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.UnknownError)
             };
-        
+
         var classValue = classResult.Unwrap();
-        
+
         var recognizedFace = await faceService.RecognizeFaceAsync(imageStream);
-        if (recognizedFace == null) return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.FaceRecognitionFailed);
-        
-        var student = await repo.GetStudentById(recognizedFace.PersonId);
+        if (recognizedFace == null)
+            return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.FaceRecognitionFailed);
+
+        var student = await repo.GetStudentById(recognizedFace.StudentId);
+
         if (student == null) return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.StudentNotFound);
 
         var enrolled = await repo.IsStudentEnrolledInCourseAsync(
-            student.Id, 
+            student.Id,
             classValue.CourseCode,
-            classValue.CourseYear, 
+            classValue.CourseYear,
             classValue.CourseSemesterCode);
-        
+
         if (!enrolled)
             return Result.Err<Attendance, Errors.CheckInError>(Errors.CheckInError.StudentNotEnrolled);
-        
+
         var attendance = await repo.UpsertAttendanceAsync(student.Id, classValue.Id);
 
         if (attendance == null)

@@ -6,8 +6,8 @@ namespace SupabaseShared.Models
     [Table("Students")]
     public class Student : BaseModel
     {
-        [PrimaryKey("Id")]
-        public Guid Id { get; set; }
+        [PrimaryKey("Id", true)]
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Column("FirstName")]
         public string FirstName { get; set; } = string.Empty;
