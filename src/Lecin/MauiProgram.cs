@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Supabase;
 using Syncfusion.Maui.Toolkit.Hosting;
 using StudentCourseViewPageModel = Lecin.PageModels.Student.StudentCourseViewPageModel;
+using Lecin.Services;
 
 namespace Lecin;
 
@@ -22,9 +23,7 @@ public static class MauiProgram
     private static void AddJsonSettings(this MauiAppBuilder builder, string jsonFile)
     {
         var asm = Assembly.GetExecutingAssembly();
-        using var stream = asm
-            .GetManifestResourceStream($"{asm.GetName().Name}.{jsonFile}");
-
+        using var stream = asm.GetManifestResourceStream($"{asm.GetName().Name}.{jsonFile}");
         if (stream != null)
             builder.Configuration.AddJsonStream(stream);
     }
@@ -32,7 +31,6 @@ public static class MauiProgram
     private static void AddAppSettings(this MauiAppBuilder builder)
     {
         builder.AddJsonSettings("appsettings.json");
-
 #if DEBUG
 #if ANDROID
         builder.AddJsonSettings("appsettings.android.Development.json");
@@ -48,15 +46,15 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder.AddAppSettings();
+
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit(options => options.SetShouldEnableSnackbarOnWindows(true)
-            )
+            .UseMauiCommunityToolkit(options => options.SetShouldEnableSnackbarOnWindows(true))
             .ConfigureSyncfusionToolkit()
             .ConfigureMauiHandlers(handlers =>
             {
 #if IOS || MACCATALYST
-				handlers.AddHandler<Microsoft.Maui.Controls.CollectionView, Microsoft.Maui.Controls.Handlers.Items2.CollectionViewHandler2>();
+                handlers.AddHandler<Microsoft.Maui.Controls.CollectionView, Microsoft.Maui.Controls.Handlers.Items2.CollectionViewHandler2>();
 #endif
             })
             .ConfigureFonts(fonts =>
@@ -72,12 +70,11 @@ public static class MauiProgram
         builder.Logging.AddDebug();
         builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
+
         builder.Services.AddSingleton<Client>(sp =>
             new Client(
-                builder.Configuration["Supabase:Url"] ??
-                throw new InvalidOperationException("Supabase URL is not configured."),
-                builder.Configuration["Supabase:Key"] ??
-                throw new InvalidOperationException("Supabase Key is not configured.")
+                "https://maxaduxsenfrbgomfhpi.supabase.co",
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1heGFkdXhzZW5mcmJnb21maHBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYxNzU3MDcsImV4cCI6MjA3MTc1MTcwN30.J5wsDri8BWGsIcdr9pmIM2Pz0B8KXBgOadh583Yxsoc"
             )
         );
 
@@ -89,29 +86,17 @@ public static class MauiProgram
         builder.Services.AddTransient<AppShellViewModel>();
         builder.Services.AddTransient<CheckInPageModel>();
 
-        #region Teacher
-
         builder.Services.AddTransient<TeacherCourseListPageModel>();
         builder.Services.AddTransient<StudentCourseViewPageModel>();
         builder.Services.AddTransient<TeacherClassViewPageModel>();
         builder.Services.AddTransient<TeacherDashboardPageModel>();
-
-        #endregion
-
-        #region Student
 
         builder.Services.AddTransient<AttendanceHistoryPageModel>();
         builder.Services.AddTransient<AttendanceStreaksPageModel>();
         builder.Services.AddTransient<StudentDashboardPageModel>();
         builder.Services.AddTransient<StudentCourseViewPageModel>();
 
-        #endregion
-
-        #region Admin
-
         builder.Services.AddTransient<AdminPageModel>();
-
-        #endregion
 
         return builder.Build();
     }
