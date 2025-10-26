@@ -6,6 +6,7 @@ using Supabase.Postgrest;
 using Supabase.Postgrest.Interfaces;
 using SupabaseShared.Models;
 using Client = Supabase.Client;
+using Lecin.Pages.Student;
 
 namespace Lecin.PageModels.Student;
 
@@ -13,15 +14,10 @@ namespace Lecin.PageModels.Student;
 public partial class StudentCourseViewPageModel(Client client) : BasePageModel
 {
     [ObservableProperty] private ObservableCollection<Class>? _classes;
-    
     [ObservableProperty] private Course? _course;
-
     [ObservableProperty] private bool _isLoading;
-
     [ObservableProperty] private int? _streak;
-
     [ObservableProperty] private ObservableCollection<CourseStreaksAllTime>? _streaksAllTime;
-    
     [ObservableProperty] private bool _isLeaderboardEmpty;
 
     [RelayCommand]
@@ -44,10 +40,8 @@ public partial class StudentCourseViewPageModel(Client client) : BasePageModel
 
             var streakFilters = new List<IPostgrestQueryFilter>
             {
-                new QueryFilter<CourseStreaksAllTime, string>(cs => cs.CourseCode, Constants.Operator.Equals,
-                    Course.Code),
-                new QueryFilter<CourseStreaksAllTime, int>(cs => cs.CourseSemesterCode, Constants.Operator.Equals,
-                    Course.SemesterCode),
+                new QueryFilter<CourseStreaksAllTime, string>(cs => cs.CourseCode, Constants.Operator.Equals, Course.Code),
+                new QueryFilter<CourseStreaksAllTime, int>(cs => cs.CourseSemesterCode, Constants.Operator.Equals, Course.SemesterCode),
                 new QueryFilter<CourseStreaksAllTime, int>(cs => cs.CourseYear, Constants.Operator.Equals, Course.Year),
                 new QueryFilter<CourseStreaksAllTime, int>(cs => cs.StreakLength, Constants.Operator.GreaterThan, 0)
             };
@@ -63,13 +57,10 @@ public partial class StudentCourseViewPageModel(Client client) : BasePageModel
 
             var ownStreakFilters = new List<IPostgrestQueryFilter>
             {
-                new QueryFilter<CourseStreaksAllTime, string>(cs => cs.CourseCode, Constants.Operator.Equals,
-                    Course.Code),
-                new QueryFilter<CourseStreaksAllTime, int>(cs => cs.CourseSemesterCode, Constants.Operator.Equals,
-                    Course.SemesterCode),
+                new QueryFilter<CourseStreaksAllTime, string>(cs => cs.CourseCode, Constants.Operator.Equals, Course.Code),
+                new QueryFilter<CourseStreaksAllTime, int>(cs => cs.CourseSemesterCode, Constants.Operator.Equals, Course.SemesterCode),
                 new QueryFilter<CourseStreaksAllTime, int>(cs => cs.CourseYear, Constants.Operator.Equals, Course.Year),
-                new QueryFilter<CourseStreaksAllTime, Guid>(cs => cs.StudentId, Constants.Operator.Equals,
-                    Guid.Parse(client.Auth.CurrentUser?.Id ?? ""))
+                new QueryFilter<CourseStreaksAllTime, Guid>(cs => cs.StudentId, Constants.Operator.Equals, Guid.Parse(client.Auth.CurrentUser?.Id ?? ""))
             };
             var ownStreak = await client.From<CourseStreaksAllTime>()
                 .Select("*")
@@ -87,5 +78,13 @@ public partial class StudentCourseViewPageModel(Client client) : BasePageModel
         {
             IsLoading = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task ViewClassmates()
+    {
+        var code = Course?.Code;
+        if (string.IsNullOrWhiteSpace(code)) return;
+        await Shell.Current.GoToAsync($"{nameof(ClassmatesPage)}?courseCode={code}");
     }
 }

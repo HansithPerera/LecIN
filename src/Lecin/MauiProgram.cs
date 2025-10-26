@@ -95,6 +95,7 @@ public static class MauiProgram
         builder.Services.AddTransient<AttendanceStreaksPageModel>();
         builder.Services.AddTransient<StudentDashboardPageModel>();
         builder.Services.AddTransient<StudentCourseViewPageModel>();
+        builder.Services.AddTransient<ClassmatesPageModel>();
 
         builder.Services.AddTransient<AdminPageModel>();
 

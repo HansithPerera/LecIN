@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Lecin.PageModels.Student"
+             x:DataType="viewmodels:ClassmatesPageModel"
+             x:Class="Lecin.Pages.Student.ClassmatesPage"
+             Title="Classmates"
+             BackgroundColor="#0F0F12">
+
+    <VerticalStackLayout Padding="20" Spacing="12">
+        <Label Text="{Binding CourseName}"
+               FontAttributes="Bold"
+               FontSize="24"
+               HorizontalOptions="Center"
+               TextColor="#FFFFFF" />
+
+        <CollectionView ItemsSource="{Binding Classmates}"
+                        ItemSizingStrategy="MeasureAllItems">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewmodels:ClassmatesPageModel+StudentInfo">
+                    <Frame BorderColor="#5B4DFF"
+                           BackgroundColor="#16161A"
+                           CornerRadius="10"
+                           Padding="14"
+                           Margin="0,6">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="{Binding Name}"
+                                   FontAttributes="Bold"
+                                   FontSize="18"
+                                   TextColor="#FFFFFF" />
+                            <Label Text="{Binding Email}"
+                                   FontSize="14"
+                                   TextColor="#C9C9C9" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>
