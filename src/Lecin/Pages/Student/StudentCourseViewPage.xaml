@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
 <pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                        xmlns:pages="clr-namespace:Lecin.Pages"
@@ -10,148 +9,141 @@
                        x:DataType="student:StudentCourseViewPageModel"
                        Title="{Binding Course.Name}"
                        x:Class="Lecin.Pages.Student.StudentCourseViewPage">
+
     <ContentPage.Resources>
         <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
     </ContentPage.Resources>
+
     <ContentPage.Content>
-        <RefreshView
-            Command="{Binding LoadDataCommand}"
-            IsRefreshing="{Binding IsLoading}">
+        <RefreshView Command="{Binding LoadDataCommand}" IsRefreshing="{Binding IsLoading}">
             <ScrollView>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <ActivityIndicator
-                    IsRunning="{Binding IsLoading}"
-                    IsVisible="{Binding IsLoading}"
-                    Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
-                    Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center"
-                    WidthRequest="50"
-                    HeightRequest="50" />
-                <VerticalStackLayout
-                    IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
-                    Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
-                    Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
-                    Padding="20"
-                    Spacing="15">
-                    <Border>
-                        <VerticalStackLayout>
-                            <Label
-                                FontSize="18"
-                                HorizontalOptions="Center"
-                                FontAttributes="Bold"
-                                Text="Your Course Streak" />
-                            <HorizontalStackLayout
-                                Spacing="5"
-                                HorizontalOptions="Center">
-                                <Label
-                                    FontSize="24"
-                                    TextColor="OrangeRed"
-                                    VerticalOptions="Center"
-                                    Text="{x:Static fonts:FluentUI.fire_24_regular}"
-                                    FontFamily="{x:Static fonts:FluentUI.FontFamily}" />
-                                <Label
-                                    FontSize="24"
-                                    VerticalOptions="Center"
-                                    Text="{Binding Streak, StringFormat='{0} Days'}" />
-                            </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                    </Border>
-                    <Border>
-                        <toolkit:Expander>
-                            <toolkit:Expander.Header>
-                                <Grid
-                                    ColumnDefinitions="Auto, *">
-                                    <Label Text="Streak Leaderboard"
-                                           FontAttributes="Bold"
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                       IsVisible="{Binding IsLoading}"
+                                       Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                                       Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"
+                                       WidthRequest="50"
+                                       HeightRequest="50" />
+
+                    <VerticalStackLayout IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                                         Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                                         Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                                         Padding="20"
+                                         Spacing="15">
+
+                        <Border>
+                            <VerticalStackLayout>
+                                <Label FontSize="18"
+                                       HorizontalOptions="Center"
+                                       FontAttributes="Bold"
+                                       Text="Your Course Streak" />
+                                <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
+                                    <Label FontSize="24"
+                                           TextColor="OrangeRed"
                                            VerticalOptions="Center"
-                                           HorizontalOptions="Start"
-                                           FontSize="Medium" />
-                                    <Border
-                                        Grid.Column="1"
-                                        Padding="5"
-                                        StrokeThickness="{OnIdiom Phone=1, Default=0}"
-                                        Stroke="{x:StaticResource Gray600}"
-                                        HorizontalOptions="End">
-                                        <Label FontSize="Medium"
-                                               VerticalOptions="Center"
-                                               Text="{x:Static fonts:FluentUI.chevron_down_24_regular}"
-                                               FontFamily="{x:Static fonts:FluentUI.FontFamily}" />
-                                    </Border>
-                                </Grid>
-                            </toolkit:Expander.Header>
-                            <VerticalStackLayout Padding="10">
-                                <Label
-                                    IsVisible="{Binding IsLeaderboardEmpty}"
-                                    HorizontalOptions="Center"
-                                    FontSize="Small"
-                                    Text="No Entries" />
-                                <CollectionView ItemsSource="{Binding StreaksAllTime}">
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate x:DataType="models:CourseStreaksAllTime">
-                                            <Grid ColumnDefinitions="Auto, Auto, *"
-                                                  RowDefinitions="Auto"
-                                                  ColumnSpacing="5"
-                                                  Padding="5"
-                                                  Margin="5">
-                                                <Label Grid.Column="0"
-                                                       Text="{Binding FirstName}" FontSize="18" />
-                                                <Label Grid.Column="1"
-                                                       Text="{Binding LastName}" FontSize="18" />
-                                                <HorizontalStackLayout
-                                                    Grid.Column="2"
-                                                    HorizontalOptions="End">
-                                                    <Label FontSize="24" TextColor="OrangeRed"
-                                                           Text="{x:Static fonts:FluentUI.fire_24_regular}"
-                                                           FontFamily="{x:Static fonts:FluentUI.FontFamily}" />
-                                                    <Label Text="{Binding StreakLength}" FontSize="18" />
-                                                </HorizontalStackLayout>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
+                                           Text="{x:Static fonts:FluentUI.fire_24_regular}"
+                                           FontFamily="{x:Static fonts:FluentUI.FontFamily}" />
+                                    <Label FontSize="24"
+                                           VerticalOptions="Center"
+                                           Text="{Binding Streak, StringFormat='{0} Days'}" />
+                                </HorizontalStackLayout>
                             </VerticalStackLayout>
-                        </toolkit:Expander>
-                    </Border>
-                    <Label Text="Your Classes" FontSize="24" HorizontalOptions="Center" Margin="10" />
-                    <CollectionView
-                        ItemsSource="{Binding Classes}"
-                        SelectionMode="None">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:Class">
-                                <VerticalStackLayout Padding="5">
-                                    <Border>
-                                        <Grid ColumnDefinitions="{OnIdiom Phone='*,Auto', Default='*, Auto, Auto, Auto'}"
-                                              RowDefinitions="{OnIdiom Phone='Auto,Auto', Default='Auto'}"
-                                              ColumnSpacing="10">
-                                            <Label Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=0}"
-                                                   Text="{Binding StartTime, StringFormat='{0:MMMM d}'}" />
-                                            <Label Grid.Column="{OnIdiom 1, Phone=1, Tablet=1, Desktop=1}"
-                                                   Text="{Binding StartTime, StringFormat='{0:h:mm tt}'}" />
-                                            <Label Grid.Column="{OnIdiom 1, Phone=0, Tablet=2, Desktop=2}"
-                                                   Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}"
-                                                   Text="{Binding Duration, StringFormat='{0:hh}h {0:mm}m'}" />
-                                            <Label Grid.Column="{OnIdiom 2, Phone=1, Tablet=3, Desktop=3}"
-                                                   Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}"
-                                                   Text="{Binding Location}"
-                                                   FontSize="18" />
-                                        </Grid>
-                                    </Border>
+                        </Border>
+
+                        <Border>
+                            <toolkit:Expander>
+                                <toolkit:Expander.Header>
+                                    <Grid ColumnDefinitions="Auto, *">
+                                        <Label Text="Streak Leaderboard"
+                                               FontAttributes="Bold"
+                                               VerticalOptions="Center"
+                                               FontSize="Medium" />
+                                        <Border Grid.Column="1"
+                                                Padding="5"
+                                                StrokeThickness="{OnIdiom Phone=1, Default=0}"
+                                                Stroke="{x:StaticResource Gray600}"
+                                                HorizontalOptions="End">
+                                            <Label FontSize="Medium"
+                                                   VerticalOptions="Center"
+                                                   Text="{x:Static fonts:FluentUI.chevron_down_24_regular}"
+                                                   FontFamily="{x:Static fonts:FluentUI.FontFamily}" />
+                                        </Border>
+                                    </Grid>
+                                </toolkit:Expander.Header>
+
+                                <VerticalStackLayout Padding="10">
+                                    <Label IsVisible="{Binding IsLeaderboardEmpty}"
+                                           HorizontalOptions="Center"
+                                           FontSize="Small"
+                                           Text="No Entries" />
+                                    <CollectionView ItemsSource="{Binding StreaksAllTime}">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate x:DataType="models:CourseStreaksAllTime">
+                                                <Grid ColumnDefinitions="Auto, Auto, *"
+                                                      ColumnSpacing="5"
+                                                      Padding="5"
+                                                      Margin="5">
+                                                    <Label Grid.Column="0" Text="{Binding FirstName}" FontSize="18" />
+                                                    <Label Grid.Column="1" Text="{Binding LastName}" FontSize="18" />
+                                                    <HorizontalStackLayout Grid.Column="2" HorizontalOptions="End">
+                                                        <Label FontSize="24"
+                                                               TextColor="OrangeRed"
+                                                               Text="{x:Static fonts:FluentUI.fire_24_regular}"
+                                                               FontFamily="{x:Static fonts:FluentUI.FontFamily}" />
+                                                        <Label Text="{Binding StreakLength}" FontSize="18" />
+                                                    </HorizontalStackLayout>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
                                 </VerticalStackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </VerticalStackLayout>
-            </Grid>
-        </ScrollView>
+                            </toolkit:Expander>
+                        </Border>
+
+                        <Label Text="Your Classes" FontSize="24" HorizontalOptions="Center" Margin="10" />
+
+                        <CollectionView ItemsSource="{Binding Classes}" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Class">
+                                    <VerticalStackLayout Padding="5">
+                                        <Border>
+                                            <Grid ColumnDefinitions="{OnIdiom Phone='*,Auto', Default='*, Auto, Auto, Auto'}"
+                                                  ColumnSpacing="10">
+                                                <Label Grid.Column="0" Text="{Binding StartTime, StringFormat='{0:MMMM d}'}" />
+                                                <Label Grid.Column="1" Text="{Binding StartTime, StringFormat='{0:h:mm tt}'}" />
+                                                <Label Grid.Column="2" Text="{Binding Duration, StringFormat='{0:hh}h {0:mm}m'}" />
+                                                <Label Grid.Column="3" Text="{Binding Location}" FontSize="18" />
+                                            </Grid>
+                                        </Border>
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <Button Text="View Classmates"
+        Command="{Binding ViewClassmatesCommand}"
+        BackgroundColor="#5B3FFF"
+        TextColor="White"
+        CornerRadius="10"
+        HeightRequest="45"
+        HorizontalOptions="Center"
+        WidthRequest="200"
+        Margin="0,20,0,0" />
+
+                    </VerticalStackLayout>
+                </Grid>
+            </ScrollView>
         </RefreshView>
     </ContentPage.Content>
 </pages:BaseContentPage>
