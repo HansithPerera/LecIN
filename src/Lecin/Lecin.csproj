@@ -47,46 +47,44 @@
         <!-- Splash Screen -->
 
         <!-- Images -->
-        <MauiImage Include="Resources\Images\*" />
-        <MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+        <MauiImage Include="Resources\Images\*"/>
+        <MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185"/>
 
         <!-- Custom Fonts -->
-        <MauiFont Include="Resources\Fonts\*" />
+        <MauiFont Include="Resources\Fonts\*"/>
 
         <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.10" />
-        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10" />
-        <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.10"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.10"/>
+        <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.10"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-        <PackageReference Include="CommunityToolkit.Maui" Version="12.2.0" />
-        <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="9.0.10" />
-        <PackageReference Include="ResultSharp" Version="0.3.1" />
-        <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11" />
-        <PackageReference Include="Supabase" Version="1.1.1" />
-        <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.7" />
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0"/>
+        <PackageReference Include="CommunityToolkit.Maui" Version="12.2.0"/>
+        <PackageReference Include="ResultSharp" Version="0.3.1"/>
+        <PackageReference Include="Supabase" Version="1.1.1"/>
+        <PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.7"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="appsettings.json" />
+        <None Remove="appsettings.json"/>
         <EmbeddedResource Include="appsettings.android.Development.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
         <EmbeddedResource Include="appsettings.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
-        <None Remove="appsettings.Production.json" />
+        <None Remove="appsettings.Production.json"/>
         <EmbeddedResource Include="appsettings.Production.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
-        <None Remove="appsettings.Development.json" />
+        <None Remove="appsettings.Development.json"/>
         <EmbeddedResource Include="appsettings.Development.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </EmbeddedResource>
@@ -100,9 +98,6 @@
         <MauiXaml Update="Pages\Student\AttendanceHistoryPage.xaml">
             <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
-        <MauiXaml Update="Pages\Student\ClassmatesPage.xaml">
-          <Generator>MSBuild:Compile</Generator>
-        </MauiXaml>
         <MauiXaml Update="Pages\TeacherDashboardPage.xaml">
             <Generator>MSBuild:Compile</Generator>
         </MauiXaml>
@@ -115,16 +110,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj" />
+        <ProjectReference Include="..\SupabaseShared\SupabaseShared.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Remove="Models\Admin.cs" />
-        <Compile Remove="Models\Student.cs" />
-        <Compile Remove="Pages\StudentDashboardPage.xaml.cs" />
-        <Compile Update="Pages\Student\ClassmatesPage.xaml.cs">
-          <DependentUpon>ClassmatesPage.xaml</DependentUpon>
-        </Compile>
+        <Compile Remove="Models\Admin.cs"/>
+        <Compile Remove="Models\Student.cs"/>
+        <Compile Remove="Pages\StudentDashboardPage.xaml.cs"/>
         <Compile Update="Shells\AppShell.xaml.cs">
             <DependentUpon>AppShell.xaml</DependentUpon>
             <SubType>Code</SubType>
@@ -136,10 +128,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="Resources\AppIcon\appiconwindows.svg">
+        <MauiIcon
+                Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'"
+                Include="Resources\AppIcon\appiconwindows.svg">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </MauiIcon>
-        <MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicon.svg" Color="#8c52ff" ForegroundScale="0.45">
+        <MauiIcon
+                Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'"
+                Include="Resources\AppIcon\appicon.svg"
+                Color="#8c52ff"
+                ForegroundScale="0.45">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </MauiIcon>
     </ItemGroup>
