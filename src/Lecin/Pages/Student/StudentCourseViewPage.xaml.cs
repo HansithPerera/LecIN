@@ -1,15 +1,17 @@
-﻿using Lecin.Pages.Teacher;
+﻿using Lecin.Pages.Student;
+using Lecin.Pages.Teacher;
 using Supabase;
 using SupabaseShared.Models;
 using StudentCourseViewPageModel = Lecin.PageModels.Student.StudentCourseViewPageModel;
 
 namespace Lecin.Pages.Student;
 
-public partial class StudentCourseViewPage
+public partial class StudentCourseViewPage : BaseContentPage
 {
     public StudentCourseViewPage(StudentCourseViewPageModel vm, Client client) : base(vm)
     {
         InitializeComponent();
+        Routing.RegisterRoute(nameof(ClassmatesPage), typeof(ClassmatesPage));
     }
 
     private async void GotoClassView(object? sender, EventArgs e)

@@ -17,7 +17,15 @@ public partial class StudentDashboardPage : BaseContentPage
 
     private async void OnCheckInClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(CheckInPage));
+        try
+        {
+            await Shell.Current.GoToAsync($"//{nameof(Pages.CheckInPage)}");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to open check-in page: {ex.Message}", "OK");
+            System.Diagnostics.Debug.WriteLine($"CheckIn navigation error: {ex}");
+        }
     }
 
     private void GotoCourseView(object? sender, EventArgs e)

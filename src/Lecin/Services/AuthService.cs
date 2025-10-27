@@ -35,23 +35,18 @@ public class AuthService(Client supabase)
         try
         {
             var session = await supabase.Auth.SignInWithPassword(email, password);
+
             if (!Guid.TryParse(session?.User?.Id, out var userId))
                 return Result.Err<UserType, SignInError>(SignInError.InvalidCredentials);
 
             var success = userType switch
             {
                 UserType.Admin =>
-                    await supabase.From<Admin>()
-                        .Where(a => a.Id == userId)
-                        .Single() != null,
+                    await supabase.From<Admin>().Where(a => a.Id == userId).Single() != null,
                 UserType.Teacher =>
-                    await supabase.From<Teacher>()
-                        .Where(t => t.Id == userId)
-                        .Single() != null,
+                    await supabase.From<Teacher>().Where(t => t.Id == userId).Single() != null,
                 UserType.Student =>
-                    await supabase.From<Student>()
-                        .Where(s => s.Id == userId)
-                        .Single() != null,
+                    await supabase.From<Student>().Where(s => s.Id == userId).Single() != null,
                 _ => false
             };
 
@@ -105,9 +100,11 @@ public class AuthService(Client supabase)
             var sessionJson = await SecureStorage.GetAsync(SessionKey);
             if (string.IsNullOrEmpty(sessionJson))
                 return null;
+
             var saved = JsonConvert.DeserializeObject<SavedSession>(sessionJson);
             if (saved == null)
                 return null;
+
             await supabase.Auth.SetSession(saved.Session.AccessToken, saved.Session.RefreshToken, true);
             CurrentUserType = saved.UserType;
             return saved.UserType;

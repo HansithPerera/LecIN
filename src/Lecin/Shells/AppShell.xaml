@@ -62,6 +62,12 @@
         FlyoutItemIsVisible="{Binding IsStudent}"
         ContentTemplate="{DataTemplate student:AttendanceHistoryPage}" />
 
+    <ShellContent
+        Title="Check-In"
+        Route="{x:Static local:AppShell.CheckInPageRoute}"
+        FlyoutItemIsVisible="False"
+        ContentTemplate="{DataTemplate pages:CheckInPage}" />
+
     <Shell.FlyoutFooter>
         <Grid Padding="15" RowDefinitions="Auto,Auto" RowSpacing="10">
             <!-- Theme switcher -->
