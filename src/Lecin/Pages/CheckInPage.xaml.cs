@@ -1,71 +1,49 @@
-using CommunityToolkit.Maui.Core;
-using Lecin.PageModels;
-
 namespace Lecin.Pages;
 
- public partial class CheckInPage : ContentPage
+public partial class CheckInPage : ContentPage
 {
-    public CheckInPage(CheckInPageModel viewModel)
+    private bool _hasPhoto = false;
+
+    public CheckInPage()
+    {
+        InitializeComponent();
+        UpdateTime();
+    }
+
+    private void UpdateTime()
+    {
+        TimeLabel.Text = $"Time: {DateTime.Now:hh:mm:ss tt}";
+
+        Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MainThread.BeginInvokeOnMainThread(() => UpdateTime());
+        });
+    }
+
+    private async void OnCaptureClicked(object sender, EventArgs e)
     {
         try
         {
-            InitializeComponent();
-            BindingContext = viewModel;
+            var photo = await MediaPicker.Default.CapturePhotoAsync();
+
+            if (photo != null)
+            {
+                PhotoLabel.Text = "Photo Captured!";
+                CaptureButton.Text = "Recapture";
+                _hasPhoto = true;
+                ConfirmButton.IsEnabled = true;
+            }
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"CheckInPage initialization error: {ex}");
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                await DisplayAlert("Error", "Failed to initialize check-in page. Please try again.", "OK");
-            });
+            await DisplayAlert("Error", $"Camera error: {ex.Message}", "OK");
         }
     }
 
-    protected override void OnAppearing()
+    private async void OnConfirmClicked(object sender, EventArgs e)
     {
-        base.OnAppearing();
-        if (BindingContext is CheckInPageModel viewModel)
-        {
-            viewModel.OnPageAppearing();
-        }
-    }
-
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        if (BindingContext is CheckInPageModel viewModel)
-        {
-            viewModel.ClearPhoto();
-        }
-    }
-
-    private async void CapturePhotoButton_Clicked(object? sender, EventArgs e)
-    {
-        if (BindingContext is PageModels.CheckInPageModel vm) await vm.OnCaptureRequested();
-    }
-
-    private async void ConfirmButton_Clicked(object? sender, EventArgs e)
-    {
-        if (BindingContext is PageModels.CheckInPageModel vm) await vm.Confirm();
-    }
-
-    private async void OnCameraStatusTapped(object? sender, EventArgs e)
-    {
-        if (BindingContext is PageModels.CheckInPageModel vm) 
-        {
-            await vm.RetryCameraPermission();
-        }
-    }
-
-    private async void RetakePhotoButton_Clicked(object? sender, EventArgs e)
-    {
-        if (BindingContext is PageModels.CheckInPageModel vm) 
-        {
-            vm.ClearPhoto();
-            await vm.OnCaptureRequested();
-        }
+        await DisplayAlert("Success", "Check-In Successful! Your attendance has been recorded.", "OK");
+        await Shell.Current.GoToAsync("..");
     }
 }
-
-

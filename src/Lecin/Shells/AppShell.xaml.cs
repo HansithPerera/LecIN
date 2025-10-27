@@ -43,6 +43,8 @@ public partial class AppShell : Shell
 
     public static string CheckInPageRoute => nameof(CheckInPage);
 
+    public static string TeacherReportsPageRoute => nameof(TeacherReportsPage);
+
     /// <summary>
     ///     Update the theme segmented control based on the current app theme before the shell is visible.
     /// </summary>
@@ -71,10 +73,8 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(TeacherCourseViewPage), typeof(TeacherCourseViewPage));
         Routing.RegisterRoute(nameof(AttendanceStreaksPage), typeof(AttendanceStreaksPage));
         Routing.RegisterRoute(nameof(StudentCourseViewPage), typeof(StudentCourseViewPage));
-
-        // Register CheckInPage as both a standard route and a root-level route
         Routing.RegisterRoute(nameof(Pages.CheckInPage), typeof(Pages.CheckInPage));
-        Routing.RegisterRoute($"//{nameof(Pages.CheckInPage)}", typeof(Pages.CheckInPage));
+        Routing.RegisterRoute(nameof(TeacherReportsPage), typeof(TeacherReportsPage));
     }
 
     private async void OnAttendanceAlertReceived(object? sender, Attendance e)

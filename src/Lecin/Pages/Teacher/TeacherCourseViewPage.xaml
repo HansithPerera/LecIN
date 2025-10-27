@@ -10,6 +10,17 @@
     <ContentPage.Content>
         <VerticalStackLayout Padding="20" Spacing="15">
             <Label Text="Your Classes" FontSize="24" HorizontalOptions="Center" Margin="10"/>
+
+            <Button Text="View Attendance Reports"
+                    x:Name="AttendanceReportsButton"
+                    Clicked="OnAttendanceReportsClicked"
+                    BackgroundColor="#7B2CBF"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    HeightRequest="50"
+                    Margin="0,0,0,10" />
+
             <CollectionView
                 ItemsSource="{Binding Classes}"
                 SelectionMode="None">

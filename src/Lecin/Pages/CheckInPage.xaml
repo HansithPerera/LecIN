@@ -1,87 +1,61 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:pageModels="clr-namespace:Lecin.PageModels"
              x:Class="Lecin.Pages.CheckInPage"
-             x:DataType="pageModels:CheckInPageModel"
-             Title="Attendance Check-In">
+             Title="Check In"
+             BackgroundColor="White">
 
-    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="20" RowSpacing="12">
-        <Label Text="Attendance Check-In" Style="{StaticResource Title1}" />
+    <VerticalStackLayout Padding="30" Spacing="30" BackgroundColor="White">
 
-        <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="8">
-            <StackLayout Orientation="Horizontal" Spacing="4">
-                <Label Text="📷" 
-                       Style="{StaticResource BodySmall}"
-                       TextColor="{Binding IsCameraPermissionGranted, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Green:Red'}" />
-                <Label Text="{Binding CameraStatus}" 
-                       Style="{StaticResource BodySmall}"
-                       TextColor="{Binding IsCameraPermissionGranted, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Green:Red'}">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnCameraStatusTapped" />
-                    </Label.GestureRecognizers>
-                </Label>
-            </StackLayout>
-            <Label Text="•" 
-                   Style="{StaticResource BodySmall}"
-                   TextColor="Gray" />
-            <StackLayout Orientation="Horizontal" Spacing="4">
-                <Label Text="📍" 
-                       Style="{StaticResource BodySmall}"
-                       TextColor="Gray" />
-                <Label Text="{Binding LocationDisplay}" 
-                       Style="{StaticResource BodySmall}"
-                       TextColor="Gray" />
-            </StackLayout>
-        </StackLayout>
+        <Label Text="Attendance Check In"
+               FontSize="32"
+               FontAttributes="Bold"
+               TextColor="#7B2CBF"
+               HorizontalOptions="Center" />
 
-        <Border Grid.Row="2" StrokeShape="RoundRectangle 16" Stroke="LightGray" StrokeThickness="1">
-            <Grid>
-                <Image Source="{Binding PhotoPreview}"
-                       Aspect="AspectFill" />
-                <Label Text="No photo captured"
-                       IsVisible="{Binding HasCapturedPhoto, Converter={StaticResource InvertedBoolConverter}}"
-                       HorizontalOptions="Center"
-                       VerticalOptions="Center"
-                       Style="{StaticResource BodyMedium}"
-                       TextColor="Gray" />
-            </Grid>
+        <Label Text="Time: 00:00:00"
+               x:Name="TimeLabel"
+               FontSize="20"
+               FontAttributes="Bold"
+               TextColor="Black"
+               HorizontalOptions="Center" />
+
+        <Label Text="Location: Not available"
+               x:Name="LocationLabel"
+               FontSize="16"
+               TextColor="Black"
+               HorizontalOptions="Center" />
+
+        <Border HeightRequest="300"
+                BackgroundColor="LightGray"
+                Stroke="Gray"
+                StrokeThickness="2">
+            <Label Text="No Photo"
+                   x:Name="PhotoLabel"
+                   FontSize="24"
+                   TextColor="Gray"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
         </Border>
 
-        <VerticalStackLayout Grid.Row="3" Spacing="12">
-            <Grid ColumnDefinitions="*,*" >
-                <VerticalStackLayout>
-                    <Label Text="Time" Style="{StaticResource Subtitle}" />
-                    <Label Text="{Binding CapturedAt, StringFormat='{0:HH:mm:ss}'}"
-                           Style="{StaticResource BodyMedium}" />
-                </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="1">
-                    <Label Text="Status" Style="{StaticResource Subtitle}" />
-                    <Label Text="{Binding CameraStatus}" Style="{StaticResource BodyMedium}" />
-                </VerticalStackLayout>
-            </Grid>
+        <Button Text="Capture Photo"
+                x:Name="CaptureButton"
+                Clicked="OnCaptureClicked"
+                BackgroundColor="#FF6F00"
+                TextColor="White"
+                FontSize="18"
+                FontAttributes="Bold"
+                HeightRequest="60" />
 
-            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
-                <Button Text="Capture Photo"
-                        Clicked="CapturePhotoButton_Clicked"
-                        Grid.Column="0"
-                        IsEnabled="{Binding IsCameraPermissionGranted}"
-                        IsVisible="{Binding HasCapturedPhoto, Converter={StaticResource InvertedBoolConverter}}" />
-                <Button Text="Retake Photo"
-                        Clicked="RetakePhotoButton_Clicked"
-                        Grid.Column="0"
-                        IsEnabled="{Binding IsCameraPermissionGranted}"
-                        IsVisible="{Binding HasCapturedPhoto}"
-                        BackgroundColor="Orange" />
-                <Button Text="Confirm Check-In"
-                        Clicked="ConfirmButton_Clicked"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        IsEnabled="{Binding HasCapturedPhoto}"
-                        BackgroundColor="Green" />
-            </Grid>
-        </VerticalStackLayout>
-    </Grid>
+        <Button Text="Confirm Check-In"
+                x:Name="ConfirmButton"
+                Clicked="OnConfirmClicked"
+                BackgroundColor="#7B2CBF"
+                TextColor="White"
+                FontSize="18"
+                FontAttributes="Bold"
+                HeightRequest="60"
+                IsEnabled="False" />
+
+    </VerticalStackLayout>
 </ContentPage>
-

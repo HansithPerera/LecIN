@@ -1,4 +1,5 @@
 ﻿using Lecin.PageModels.Student;
+using Microsoft.Extensions.DependencyInjection;
 using SupabaseShared.Models;
 
 namespace Lecin.Pages.Student;
@@ -19,12 +20,15 @@ public partial class StudentDashboardPage : BaseContentPage
     {
         try
         {
-            await Shell.Current.GoToAsync($"//{nameof(Pages.CheckInPage)}");
+            System.Diagnostics.Debug.WriteLine("OnCheckInClicked: Starting navigation to CheckInPage");
+            await Shell.Current.GoToAsync(nameof(Pages.CheckInPage));
+            System.Diagnostics.Debug.WriteLine("OnCheckInClicked: Navigation completed");
         }
         catch (Exception ex)
         {
             await DisplayAlert("Error", $"Failed to open check-in page: {ex.Message}", "OK");
             System.Diagnostics.Debug.WriteLine($"CheckIn navigation error: {ex}");
+            System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
         }
     }
 

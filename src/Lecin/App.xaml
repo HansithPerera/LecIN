@@ -16,6 +16,7 @@
             <local:Converters.ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
             <local:Converters.BoolToColorConverter x:Key="BoolToColorConverter" />
             <local:Converters.InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <local:Converters.HasPhotoToButtonTextConverter x:Key="HasPhotoToButtonTextConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
