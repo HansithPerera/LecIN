@@ -39,11 +39,11 @@ const testClientCreation = async () => {
     if (newStudentError) {
         throw new Error('Failed to insert new student: ' + newStudentError.message)
     }
-    
+
     const { data: newLocationData, error: newLocationError } = await client
         .from('Locations')
         .upsert({ Id: 'Room 101', Room: '101', Level: '1', Building: 'Main', Coords: 'POINT(-122.4194 37.7749)' })
-    
+
     if (newLocationError) {
         throw new Error('Failed to insert new location: ' + newLocationError.message)
     }

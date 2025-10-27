@@ -18,11 +18,10 @@ async function getKey(supabaseClient: SupabaseClient){
         throw new Error('Failed to hash API key: ' + resp_hash.error);
     }
     
-    const token = key_resp.data;
+    const key = key_resp.data;
     const hash = resp_hash.data;
-    const prefix = token.slice(0, 8);
-    const plaintextKey = `${prefix}_${token}`;
-    return { prefix, plaintextKey, hash };
+    const prefix = key.slice(0, 8);
+    return { prefix, key, hash };
 }
 
 Deno.serve(async (req: Request) => {
@@ -60,7 +59,7 @@ Deno.serve(async (req: Request) => {
 
         const supabaseClient = await getServiceRoleClient();
 
-        const { prefix, plaintextKey, hash } = await getKey(supabaseClient)
+        const { prefix, key, hash } = await getKey(supabaseClient)
         
         const camera_resp = await supabaseClient
             .from('Cameras')
@@ -118,8 +117,8 @@ Deno.serve(async (req: Request) => {
         }
 
         return new Response(
-            JSON.stringify({ 
-                Key: plaintextKey,
+            JSON.stringify({
+                Key: key,
                 CameraApiKey: cameraApiKeyResp.data
             }), 
             {
