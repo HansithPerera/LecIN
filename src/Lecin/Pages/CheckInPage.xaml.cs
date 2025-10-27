@@ -17,14 +17,31 @@ namespace Lecin.Pages;
         base.OnAppearing();
     }
 
-    private void CapturePhotoButton_Clicked(object? sender, EventArgs e)
+    private async void CapturePhotoButton_Clicked(object? sender, EventArgs e)
     {
-        if (BindingContext is PageModels.CheckInPageModel vm) vm.OnCaptureRequested();
+        if (BindingContext is PageModels.CheckInPageModel vm) await vm.OnCaptureRequested();
     }
 
     private async void ConfirmButton_Clicked(object? sender, EventArgs e)
     {
         if (BindingContext is PageModels.CheckInPageModel vm) await vm.Confirm();
+    }
+
+    private async void OnCameraStatusTapped(object? sender, EventArgs e)
+    {
+        if (BindingContext is PageModels.CheckInPageModel vm) 
+        {
+            await vm.RetryCameraPermission();
+        }
+    }
+
+    private async void RetakePhotoButton_Clicked(object? sender, EventArgs e)
+    {
+        if (BindingContext is PageModels.CheckInPageModel vm) 
+        {
+            vm.ClearPhoto();
+            await vm.OnCaptureRequested();
+        }
     }
 }
 

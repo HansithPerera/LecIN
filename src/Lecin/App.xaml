@@ -10,6 +10,12 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 <ResourceDictionary Source="Resources/Styles/AppStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Converters -->
+            <local:Converters.StringToBoolConverter x:Key="StringToBoolConverter" />
+            <local:Converters.ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
+            <local:Converters.BoolToColorConverter x:Key="BoolToColorConverter" />
+            <local:Converters.InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

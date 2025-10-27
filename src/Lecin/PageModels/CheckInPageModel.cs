@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Maui.Devices.Sensors;
+using Microsoft.Maui.Media;
 
 namespace Lecin.PageModels;
 
@@ -10,6 +11,8 @@ public partial class CheckInPageModel : BasePageModel
     [ObservableProperty] private DateTime _capturedAt = DateTime.Now;
     [ObservableProperty] private Location? _location;
     [ObservableProperty] private string _locationDisplay = "";
+    [ObservableProperty] private bool _isCameraPermissionGranted;
+    [ObservableProperty] private string _cameraStatus = "Initializing...";
 
     public CheckInPageModel()
     {
@@ -26,8 +29,37 @@ public partial class CheckInPageModel : BasePageModel
 
     private async Task EnsurePermissions()
     {
-        await Permissions.RequestAsync<Permissions.Camera>();
-        await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+        try
+        {
+            // Check camera permission
+            var cameraStatus = await Permissions.CheckStatusAsync<Permissions.Camera>();
+            if (cameraStatus == PermissionStatus.Denied)
+            {
+                IsCameraPermissionGranted = false;
+                CameraStatus = "Camera permission denied - enable in settings";
+                return;
+            }
+            
+            if (cameraStatus != PermissionStatus.Granted)
+            {
+                cameraStatus = await Permissions.RequestAsync<Permissions.Camera>();
+            }
+            
+            IsCameraPermissionGranted = cameraStatus == PermissionStatus.Granted;
+            CameraStatus = IsCameraPermissionGranted ? "Camera ready" : "Camera permission required";
+            
+            // Check location permission
+            var locationStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (locationStatus != PermissionStatus.Granted)
+            {
+                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            }
+        }
+        catch (Exception ex)
+        {
+            CameraStatus = $"Permission error: {ex.Message}";
+            IsCameraPermissionGranted = false;
+        }
     }
 
     private async Task CaptureLocation()
@@ -47,15 +79,74 @@ public partial class CheckInPageModel : BasePageModel
         finally { }
     }
 
-    public void OnCaptureRequested()
+    public async Task OnCaptureRequested()
     {
-        CapturedAt = DateTime.Now;
+        if (!IsCameraPermissionGranted)
+        {
+            CameraStatus = "Camera permission required - tap to retry";
+            return;
+        }
+
+        try
+        {
+            CameraStatus = "Capturing photo...";
+            
+            // Check if MediaPicker is available
+            if (MediaPicker.Default == null)
+            {
+                CameraStatus = "Camera not available on this device";
+                return;
+            }
+
+            var photo = await MediaPicker.Default.CapturePhotoAsync();
+            
+            if (photo != null)
+            {
+                using var stream = await photo.OpenReadAsync();
+                using var memoryStream = new MemoryStream();
+                await stream.CopyToAsync(memoryStream);
+                var imageData = memoryStream.ToArray();
+                
+                OnMediaCaptured(imageData);
+                CapturedAt = DateTime.Now;
+                CameraStatus = "Photo captured successfully";
+            }
+            else
+            {
+                CameraStatus = "Photo capture cancelled";
+            }
+        }
+        catch (UnauthorizedAccessException)
+        {
+            CameraStatus = "Camera permission denied - tap to retry";
+            IsCameraPermissionGranted = false;
+        }
+        catch (FeatureNotSupportedException)
+        {
+            CameraStatus = "Camera not supported on this device";
+        }
+        catch (Exception ex)
+        {
+            CameraStatus = $"Capture error: {ex.Message}";
+        }
+    }
+
+    public async Task RetryCameraPermission()
+    {
+        await EnsurePermissions();
     }
 
     public void OnMediaCaptured(byte[] imageData)
     {
         PhotoPreview = ImageSource.FromStream(() => new MemoryStream(imageData));
         HasCapturedPhoto = true;
+    }
+
+    public void ClearPhoto()
+    {
+        PhotoPreview = null;
+        HasCapturedPhoto = false;
+        CameraStatus = "Camera ready";
     }
 
     public async Task Confirm()
