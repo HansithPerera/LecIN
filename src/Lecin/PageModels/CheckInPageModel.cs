@@ -14,29 +14,60 @@ public partial class CheckInPageModel : BasePageModel
     [ObservableProperty] private bool _isCameraPermissionGranted;
     [ObservableProperty] private string _cameraStatus = "Initializing...";
 
+    private bool _isInitialized;
+
     public CheckInPageModel()
     {
+        // Constructor intentionally empty
     }
 
-    public void OnPageAppearing() => _ = PrepareAsync();
+    public async void OnPageAppearing()
+    {
+        if (!_isInitialized)
+        {
+            _isInitialized = true;
+            await PrepareAsync();
+        }
+    }
 
     private async Task PrepareAsync()
     {
-        await EnsurePermissions();
-        CapturedAt = DateTime.Now;
-        await CaptureLocation();
+        try
+        {
+            CameraStatus = "Initializing...";
+            IsCameraPermissionGranted = false;
+            HasCapturedPhoto = false;
+            PhotoPreview = null;
+            
+            await EnsurePermissions();
+            CapturedAt = DateTime.Now;
+            await CaptureLocation();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"PrepareAsync error: {ex}");
+            CameraStatus = "Initialization failed - tap to retry";
+            throw;
+        }
     }
 
     private async Task EnsurePermissions()
     {
         try
         {
+            var window = Application.Current?.Windows[0];
+            if (window?.Page == null) return;
+
             // Check camera permission
             var cameraStatus = await Permissions.CheckStatusAsync<Permissions.Camera>();
             if (cameraStatus == PermissionStatus.Denied)
             {
                 IsCameraPermissionGranted = false;
-                CameraStatus = "Camera permission denied - enable in settings";
+                CameraStatus = "Camera permission denied - tap to enable in settings";
+                await window.Page.DisplayAlert(
+                    "Camera Permission Required",
+                    "Please enable camera access in your device settings to use the check-in feature.",
+                    "OK");
                 return;
             }
             
@@ -50,15 +81,40 @@ public partial class CheckInPageModel : BasePageModel
             
             // Check location permission
             var locationStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (locationStatus == PermissionStatus.Denied)
+            {
+                LocationDisplay = "Location access denied - tap to enable in settings";
+                await window.Page.DisplayAlert(
+                    "Location Permission Required",
+                    "Please enable location access in your device settings to use the check-in feature.",
+                    "OK");
+                return;
+            }
+
             if (locationStatus != PermissionStatus.Granted)
             {
-                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                locationStatus = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            }
+
+            if (locationStatus == PermissionStatus.Granted)
+            {
+                await CaptureLocation();
             }
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Permission error: {ex}");
             CameraStatus = $"Permission error: {ex.Message}";
             IsCameraPermissionGranted = false;
+            
+            var window = Application.Current?.Windows[0];
+            if (window?.Page != null)
+            {
+                await window.Page.DisplayAlert(
+                    "Error", 
+                    "Failed to initialize camera and location services. Please try again.", 
+                    "OK");
+            }
         }
     }
 
@@ -81,14 +137,15 @@ public partial class CheckInPageModel : BasePageModel
 
     public async Task OnCaptureRequested()
     {
-        if (!IsCameraPermissionGranted)
-        {
-            CameraStatus = "Camera permission required - tap to retry";
-            return;
-        }
-
         try
         {
+            if (!IsCameraPermissionGranted)
+            {
+                CameraStatus = "Camera permission required - tap to retry";
+                await EnsurePermissions();
+                return;
+            }
+
             CameraStatus = "Capturing photo...";
             
             // Check if MediaPicker is available
@@ -120,6 +177,7 @@ public partial class CheckInPageModel : BasePageModel
         {
             CameraStatus = "Camera permission denied - tap to retry";
             IsCameraPermissionGranted = false;
+            await EnsurePermissions();
         }
         catch (FeatureNotSupportedException)
         {
@@ -127,6 +185,7 @@ public partial class CheckInPageModel : BasePageModel
         }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Camera error: {ex}");
             CameraStatus = $"Capture error: {ex.Message}";
         }
     }

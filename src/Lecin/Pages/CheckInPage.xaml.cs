@@ -1,20 +1,43 @@
 using CommunityToolkit.Maui.Core;
+using Lecin.PageModels;
 
 namespace Lecin.Pages;
 
  public partial class CheckInPage : ContentPage
 {
-    public CheckInPage()
+    public CheckInPage(CheckInPageModel viewModel)
     {
-        InitializeComponent();
-        var vm = new PageModels.CheckInPageModel();
-        BindingContext = vm;
-        vm.OnPageAppearing();
+        try
+        {
+            InitializeComponent();
+            BindingContext = viewModel;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"CheckInPage initialization error: {ex}");
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await DisplayAlert("Error", "Failed to initialize check-in page. Please try again.", "OK");
+            });
+        }
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        if (BindingContext is CheckInPageModel viewModel)
+        {
+            viewModel.OnPageAppearing();
+        }
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        if (BindingContext is CheckInPageModel viewModel)
+        {
+            viewModel.ClearPhoto();
+        }
     }
 
     private async void CapturePhotoButton_Clicked(object? sender, EventArgs e)

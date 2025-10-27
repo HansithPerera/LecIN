@@ -85,6 +85,7 @@ public static class MauiProgram
         builder.Services.AddTransient<LandingPageModel>();
         builder.Services.AddTransient<AppShellViewModel>();
         builder.Services.AddTransient<CheckInPageModel>();
+        builder.Services.AddTransient<CheckInPage>();
 
         builder.Services.AddTransient<TeacherCourseListPageModel>();
         builder.Services.AddTransient<StudentCourseViewPageModel>();
