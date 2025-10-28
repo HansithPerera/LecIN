@@ -70,4 +70,21 @@ namespace Lecin.Converters
             return false;
         }
     }
+
+    public class HasPhotoToButtonTextConverter : IValueConverter
+    {
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            if (value is bool hasPhoto)
+            {
+                return hasPhoto ? "Recapture" : "Capture Photo";
+            }
+            return "Capture Photo";
+        }
+
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

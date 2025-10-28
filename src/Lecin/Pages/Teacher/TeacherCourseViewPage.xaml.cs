@@ -27,4 +27,19 @@ public partial class TeacherCourseViewPage
             await DisplayAlert("Error", $"Failed to navigate to class view: {ex.Message}", "OK");
         }
     }
+
+    private async void OnAttendanceReportsClicked(object? sender, EventArgs e)
+    {
+        try
+        {
+            if (BindingContext is not TeacherCourseViewPageModel vm) return;
+            if (vm.Course == null) return;
+
+            await Shell.Current.GoToAsync($"{nameof(TeacherReportsPage)}?courseCode={vm.Course.Code}&courseName={Uri.EscapeDataString(vm.Course.Name)}");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to navigate to attendance reports: {ex.Message}", "OK");
+        }
+    }
 }
