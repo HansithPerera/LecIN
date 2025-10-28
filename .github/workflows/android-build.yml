@@ -1,0 +1,49 @@
+name: Android Build (MAUI)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/mobile-ui-fixes
+
+jobs:
+  build-android:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install MAUI Android workload
+        shell: pwsh
+        run: |
+          dotnet workload install maui-android
+
+      - name: Accept Android SDK licenses (best effort)
+        shell: pwsh
+        run: |
+          $sdk = "$env:ANDROID_SDK_ROOT\cmdline-tools\latest\bin\sdkmanager.bat"
+          if (Test-Path $sdk) { echo "y" | & $sdk --licenses }
+          else { Write-Host "sdkmanager not found; continuing." }
+
+      - name: Restore
+        shell: pwsh
+        run: |
+          dotnet restore src/Lecin/Lecin.csproj
+
+      - name: Build Release APK
+        shell: pwsh
+        run: |
+          dotnet build src/Lecin/Lecin.csproj -f net9.0-android -c Release
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lecin-Android-APK
+          path: src/Lecin/bin/Release/net9.0-android/*.apk
+          if-no-files-found: warn
+

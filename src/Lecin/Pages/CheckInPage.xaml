@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Lecin.Pages.CheckInPage"
              Title="Check In"
-             BackgroundColor="White">
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}">
 
-    <VerticalStackLayout Padding="30" Spacing="30" BackgroundColor="White">
+    <VerticalStackLayout Padding="30" Spacing="30" BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}">
 
         <Label Text="Attendance Check In"
                FontSize="32"
@@ -17,18 +17,18 @@
                x:Name="TimeLabel"
                FontSize="20"
                FontAttributes="Bold"
-               TextColor="Black"
+               TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
                HorizontalOptions="Center" />
 
         <Label Text="Location: Not available"
                x:Name="LocationLabel"
                FontSize="16"
-               TextColor="Black"
+               TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
                HorizontalOptions="Center" />
 
-        <Border HeightRequest="300"
-                BackgroundColor="LightGray"
-                Stroke="Gray"
+        <Border HeightRequest="{OnIdiom Phone=220, Tablet=260, Desktop=300}"
+                BackgroundColor="{AppThemeBinding Light={StaticResource LightSecondaryBackground}, Dark={StaticResource DarkSecondaryBackground}}"
+                Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
                 StrokeThickness="2">
             <Label Text="No Photo"
                    x:Name="PhotoLabel"
@@ -43,18 +43,18 @@
                 Clicked="OnCaptureClicked"
                 BackgroundColor="#FF6F00"
                 TextColor="White"
-                FontSize="18"
+                FontSize="{OnIdiom Phone=16, Default=18}"
                 FontAttributes="Bold"
-                HeightRequest="60" />
+                HeightRequest="{OnIdiom Phone=48, Default=60}" />
 
         <Button Text="Confirm Check-In"
                 x:Name="ConfirmButton"
                 Clicked="OnConfirmClicked"
                 BackgroundColor="#7B2CBF"
                 TextColor="White"
-                FontSize="18"
+                FontSize="{OnIdiom Phone=16, Default=18}"
                 FontAttributes="Bold"
-                HeightRequest="60"
+                HeightRequest="{OnIdiom Phone=48, Default=60}"
                 IsEnabled="False" />
 
     </VerticalStackLayout>
