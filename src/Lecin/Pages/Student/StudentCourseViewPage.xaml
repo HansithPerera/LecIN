@@ -62,6 +62,14 @@
                         </Border>
 
                         <Border>
+                            <Grid Padding="10" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                                <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Teacher" FontAttributes="Bold" FontSize="Medium" />
+                                <Label Grid.Row="1" Grid.Column="0" Text="{Binding TeacherName}" FontSize="18" />
+                                <Label Grid.Row="1" Grid.Column="1" Text="{Binding TeacherEmail}" FontSize="16" HorizontalOptions="End" />
+                            </Grid>
+                        </Border>
+
+                        <Border>
                             <toolkit:Expander>
                                 <toolkit:Expander.Header>
                                     <Grid ColumnDefinitions="Auto, *">
@@ -132,15 +140,14 @@
                         </CollectionView>
 
                         <Button Text="View Classmates"
-        Command="{Binding ViewClassmatesCommand}"
-        BackgroundColor="#5B3FFF"
-        TextColor="White"
-        CornerRadius="10"
-        HeightRequest="45"
-        HorizontalOptions="Center"
-        WidthRequest="200"
-        Margin="0,20,0,0" />
-
+                                Command="{Binding ViewClassmatesCommand}"
+                                BackgroundColor="#5B3FFF"
+                                TextColor="White"
+                                CornerRadius="10"
+                                HeightRequest="45"
+                                HorizontalOptions="Center"
+                                WidthRequest="200"
+                                Margin="0,20,0,0" />
                     </VerticalStackLayout>
                 </Grid>
             </ScrollView>
