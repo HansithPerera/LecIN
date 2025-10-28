@@ -388,3 +388,25 @@ entrypoint = "./functions/camera-check-in/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/camera-check-in/*.html" ]
+
+[functions.register-student-face]
+enabled = true
+verify_jwt = true
+import_map = "./functions/register-student-face/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/register-student-face/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/register-student-face/*.html" ]
+
+[functions.remove-student-face]
+enabled = true
+verify_jwt = true
+import_map = "./functions/remove-student-face/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/remove-student-face/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/remove-student-face/*.html" ]
