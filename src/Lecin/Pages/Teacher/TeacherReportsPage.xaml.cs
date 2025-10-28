@@ -1,4 +1,6 @@
 using SupabaseShared.Models;
+using Supabase;
+using Lecin.Services;
 
 namespace Lecin.Pages.Teacher;
 
@@ -6,6 +8,8 @@ namespace Lecin.Pages.Teacher;
 [QueryProperty(nameof(CourseName), "courseName")]
 public partial class TeacherReportsPage : ContentPage
 {
+    private Client? _client;
+    private AuthService? _authService;
     private List<CourseInfo> _courses = new();
     private List<AtRiskStudent> _atRiskStudents = new();
     private string? _preselectedCourseCode = null;
@@ -14,8 +18,25 @@ public partial class TeacherReportsPage : ContentPage
     public TeacherReportsPage()
     {
         InitializeComponent();
-        LoadCourses();
         InitializeDatePickers();
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        // Resolve dependencies from service provider
+        if (_client == null || _authService == null)
+        {
+            var services = Application.Current?.Handler?.MauiContext?.Services;
+            if (services != null)
+            {
+                _client = services.GetService<Client>();
+                _authService = services.GetService<AuthService>();
+            }
+        }
+
+        await LoadCourses();
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -47,18 +68,76 @@ public partial class TeacherReportsPage : ContentPage
         set => _preselectedCourseName = value;
     }
 
-    private void LoadCourses()
+    private async Task LoadCourses()
     {
-        // Mock data for now - in real implementation, this would load from database
-        _courses = new List<CourseInfo>
+        try
         {
-            new CourseInfo { Id = 1, Name = "Mathematics 101" },
-            new CourseInfo { Id = 2, Name = "Computer Science 201" },
-            new CourseInfo { Id = 3, Name = "Physics 101" },
-            new CourseInfo { Id = 4, Name = "Chemistry 101" }
-        };
+            if (_client == null || _authService == null)
+            {
+                await DisplayAlert("Error", "Services not available", "OK");
+                return;
+            }
 
-        CoursePicker.ItemsSource = _courses.Select(c => c.Name).ToList();
+            var teacherId = _authService.CurrentUserId;
+            if (teacherId == null)
+            {
+                await DisplayAlert("Error", "Not logged in as a teacher", "OK");
+                return;
+            }
+
+            // Query courses that this teacher teaches via CourseTeachers junction table
+            var courseTeachers = await _client
+                .From<CourseTeacher>()
+                .Where(ct => ct.TeacherId == teacherId.Value)
+                .Get();
+
+            if (courseTeachers.Models.Count == 0)
+            {
+                await DisplayAlert("Info", "No courses assigned to you yet", "OK");
+                _courses = new List<CourseInfo>();
+                CoursePicker.ItemsSource = new List<string>();
+                return;
+            }
+
+            // Get the unique courses
+            var uniqueCourses = courseTeachers.Models
+                .Select(ct => new { ct.CourseCode, ct.CourseYear, ct.CourseSemesterCode })
+                .Distinct()
+                .ToList();
+
+            // Fetch full course details
+            var courses = new List<Course>();
+            foreach (var ct in uniqueCourses)
+            {
+                var result = await _client
+                    .From<Course>()
+                    .Where(c => c.Code == ct.CourseCode)
+                    .Where(c => c.Year == ct.CourseYear)
+                    .Where(c => c.SemesterCode == ct.CourseSemesterCode)
+                    .Get();
+
+                if (result.Models.Count > 0)
+                {
+                    courses.Add(result.Models[0]);
+                }
+            }
+
+            // Convert to CourseInfo for UI binding
+            _courses = courses.Select((c, index) => new CourseInfo
+            {
+                Id = index,
+                Code = c.Code,
+                Name = $"{c.Code} - {c.Name}",
+                Year = c.Year,
+                SemesterCode = c.SemesterCode
+            }).ToList();
+
+            CoursePicker.ItemsSource = _courses.Select(c => c.Name).ToList();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Failed to load courses: {ex.Message}", "OK");
+        }
     }
 
     private void InitializeDatePickers()
@@ -165,7 +244,10 @@ public partial class TeacherReportsPage : ContentPage
 public class CourseInfo
 {
     public int Id { get; set; }
+    public string Code { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
+    public int Year { get; set; }
+    public int SemesterCode { get; set; }
 }
 
 public class AtRiskStudent
