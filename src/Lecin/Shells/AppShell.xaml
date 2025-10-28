@@ -52,15 +52,24 @@
 
     <ShellContent
         Title="Dashboard"
+        Icon="Images/home.png"
         Route="{x:Static local:AppShell.StudentDashboardPageRoute}"
         FlyoutItemIsVisible="{Binding IsStudent}"
         ContentTemplate="{DataTemplate student:StudentDashboardPage}" />
 
     <ShellContent
         Title="Attendance History"
+        Icon="Images/calendar_checkmark.png"
         Route="{x:Static local:AppShell.AttendanceHistoryPageRoute}"
         FlyoutItemIsVisible="{Binding IsStudent}"
         ContentTemplate="{DataTemplate student:AttendanceHistoryPage}" />
+
+    <ShellContent
+        Title="Profile"
+        Icon="Images/person.png"
+        Route="{x:Static local:AppShell.StudentViewProfilePageRoute}"
+        FlyoutItemIsVisible="{Binding IsStudent}"
+        ContentTemplate="{DataTemplate student:StudentViewProfilePage}" />
 
     <ShellContent
         Title="Check-In"

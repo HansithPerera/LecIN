@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:pages="clr-namespace:Lecin.Pages"
+                       xmlns:pageModels="clr-namespace:Lecin.PageModels.Student"
+                       x:DataType="pageModels:StudentRegisterFacePageModel"
+                       x:Class="Lecin.Pages.Student.StudentRegisterFacePage">
+    <ContentPage.Content>
+        <RefreshView
+            IsRefreshing="{Binding IsLoading}"
+            Command="{Binding LoadDataCommand}">
+            <ScrollView>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ActivityIndicator
+                        IsRunning="{Binding IsLoading}"
+                        IsVisible="{Binding IsLoading}"
+                        Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                        Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        WidthRequest="50"
+                        HeightRequest="50" />
+                    <Label
+                        IsVisible="{Binding SelectedImage, Converter={StaticResource NullToBoolConverter}}"
+                        Grid.Row="0"
+                        Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                        Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Text="Register Your Face"
+                        FontSize="24">
+                    </Label>
+                    <Image
+                        x:Name="Image"
+                        Source="{Binding SelectedImage}"
+                        Aspect="AspectFit"
+                        Grid.Row="0"
+                        Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                        Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}" />
+                    <Grid
+                        VerticalOptions="End"
+                        Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                        Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                        Grid.Row="0"
+                        Padding="10"
+                        ColumnSpacing="10"
+                        ColumnDefinitions="*,*">
+                        <Button
+                            Grid.Column="0"
+                            Text="Upload Photo"
+                            Command="{Binding UploadPhotoCommand}" />
+                        <Button
+                            Grid.Column="1"
+                            IsEnabled="{Binding SelectedImage, Converter={StaticResource NotNullToBoolConverter}}"
+                            Text="Submit"
+                            Command="{Binding ProcessImageCommand}" />
+                    </Grid>
+                </Grid>
+            </ScrollView>
+        </RefreshView>
+    </ContentPage.Content>
+</pages:BaseContentPage>

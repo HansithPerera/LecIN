@@ -28,15 +28,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Backend\Backend.csproj"/>
         <ProjectReference Include="..\Camera\Camera.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
         <None Update="Images\OnePerson.jpeg">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Update="haarcascade_frontalface_default.xml">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Images\Similar1.png">

@@ -1,7 +1,9 @@
-﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:Lecin"
+             xmlns:converters="clr-namespace:Lecin.Converters"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="Lecin.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -10,12 +12,14 @@
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
                 <ResourceDictionary Source="Resources/Styles/AppStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <!-- Converters -->
-            <local:Converters.StringToBoolConverter x:Key="StringToBoolConverter" />
-            <local:Converters.ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
-            <local:Converters.BoolToColorConverter x:Key="BoolToColorConverter" />
-            <local:Converters.InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
+            <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+            <converters:NotNullToBoolConverter x:Key="NotNullToBoolConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

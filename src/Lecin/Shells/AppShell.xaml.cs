@@ -39,6 +39,8 @@ public partial class AppShell : Shell
 
     public static string StudentProfilePageRoute => nameof(StudentProfilePage);
 
+    public static string StudentViewProfilePageRoute => nameof(StudentViewProfilePage);
+
     public static string AttendanceHistoryPageRoute => nameof(AttendanceHistoryPage);
 
     public static string CheckInPageRoute => nameof(CheckInPage);
@@ -63,7 +65,7 @@ public partial class AppShell : Shell
         };
     }
 
-        private void RegisterRoutes()
+    private void RegisterRoutes()
     {
         Routing.RegisterRoute(nameof(AttendanceHistoryPage), typeof(AttendanceHistoryPage));
         Routing.RegisterRoute(nameof(StudentProfilePage), typeof(StudentProfilePage));
@@ -71,10 +73,11 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(TeacherCourseViewPage), typeof(TeacherCourseViewPage));
         Routing.RegisterRoute(nameof(AttendanceStreaksPage), typeof(AttendanceStreaksPage));
         Routing.RegisterRoute(nameof(StudentCourseViewPage), typeof(StudentCourseViewPage));
+        Routing.RegisterRoute(nameof(StudentRegisterFacePage), typeof(StudentRegisterFacePage));
 
         // Register CheckInPage as both a standard route and a root-level route
-        Routing.RegisterRoute(nameof(Pages.CheckInPage), typeof(Pages.CheckInPage));
-        Routing.RegisterRoute($"//{nameof(Pages.CheckInPage)}", typeof(Pages.CheckInPage));
+        Routing.RegisterRoute(nameof(CheckInPage), typeof(CheckInPage));
+        Routing.RegisterRoute($"//{nameof(CheckInPage)}", typeof(CheckInPage));
     }
 
     private async void OnAttendanceAlertReceived(object? sender, Attendance e)
