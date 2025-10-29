@@ -2,6 +2,7 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Lecin"
+             xmlns:converters="clr-namespace:Lecin.Converters"
              x:Class="Lecin.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -15,10 +16,10 @@
             <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
             <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
-            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
             <converters:NotNullToBoolConverter x:Key="NotNullToBoolConverter" />
-            <converters.HasPhotoToButtonTextConverter x:Key="HasPhotoToButtonTextConverter" />
+            <converters:HasPhotoToButtonTextConverter x:Key="HasPhotoToButtonTextConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
