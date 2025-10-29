@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CommunityToolkit.Mvvm.Messaging;
 using Lecin.Messaging;
@@ -45,6 +45,8 @@ public partial class AppShell : Shell
 
     public static string CheckInPageRoute => nameof(CheckInPage);
 
+    public static string TeacherReportsPageRoute => nameof(TeacherReportsPage);
+
     /// <summary>
     ///     Update the theme segmented control based on the current app theme before the shell is visible.
     /// </summary>
@@ -74,12 +76,12 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(AttendanceStreaksPage), typeof(AttendanceStreaksPage));
         Routing.RegisterRoute(nameof(StudentCourseViewPage), typeof(StudentCourseViewPage));
         Routing.RegisterRoute(nameof(StudentRegisterFacePage), typeof(StudentRegisterFacePage));
-
+        Routing.RegisterRoute(nameof(TeacherReportsPage), typeof(TeacherReportsPage));
         // Register CheckInPage as both a standard route and a root-level route
         Routing.RegisterRoute(nameof(CheckInPage), typeof(CheckInPage));
         Routing.RegisterRoute($"//{nameof(CheckInPage)}", typeof(CheckInPage));
     }
-
+    
     private async void OnAttendanceAlertReceived(object? sender, Attendance e)
     {
         try

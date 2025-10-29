@@ -1,18 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Models;
 
-namespace Lecin.Models
+namespace Lecin.Models;
+
+[Table("Teachers")]
+public class Teacher : BaseModel
 {
-    internal class Teacher
-    {
-            public string Id { get; set; }
-            public string Name { get; set; }
-            public string Email { get; set; }
-            public string Phone { get; set; }
-        
+    [PrimaryKey("Id")]
+    public Guid Id { get; set; }
 
-    }
+    [Column("FirstName")]
+    public string FirstName { get; set; } = string.Empty;
+
+    [Column("LastName")]
+    public string LastName { get; set; } = string.Empty;
+
+    [Column("Email")]
+    public string Email { get; set; } = string.Empty;
 }

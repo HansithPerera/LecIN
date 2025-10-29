@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CommunityToolkit.Maui;
 using Lecin.PageModels.Admin;
 using Lecin.PageModels.Student;

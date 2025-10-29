@@ -62,6 +62,14 @@
                         </Border>
 
                         <Border>
+                            <Grid Padding="10" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                                <Label Grid.Row="0" Grid.ColumnSpan="2" Text="Teacher" FontAttributes="Bold" FontSize="Medium" />
+                                <Label Grid.Row="1" Grid.Column="0" Text="{Binding TeacherName}" FontSize="18" />
+                                <Label Grid.Row="1" Grid.Column="1" Text="{Binding TeacherEmail}" FontSize="16" HorizontalOptions="End" />
+                            </Grid>
+                        </Border>
+
+                        <Border>
                             <toolkit:Expander>
                                 <toolkit:Expander.Header>
                                     <Grid ColumnDefinitions="Auto, *">
@@ -115,15 +123,18 @@
 
                         <CollectionView ItemsSource="{Binding Classes}" SelectionMode="None">
                             <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:Class">
+                                <DataTemplate x:DataType="student:ClassStatusItem">
                                     <VerticalStackLayout Padding="5">
                                         <Border>
-                                            <Grid ColumnDefinitions="{OnIdiom Phone='*,Auto', Default='*, Auto, Auto, Auto'}"
+                                            <Grid ColumnDefinitions="{OnIdiom Phone='*,Auto,Auto', Default='*, Auto, Auto, Auto, Auto'}"
                                                   ColumnSpacing="10">
                                                 <Label Grid.Column="0" Text="{Binding StartTime, StringFormat='{0:MMMM d}'}" />
-                                                <Label Grid.Column="1" Text="{Binding StartTime, StringFormat='{0:h:mm tt}'}" />
+                                                <Label Grid.Column="1" Text="{Binding StartTime, StringFormat='{0:HH:mm}'}" />
                                                 <Label Grid.Column="2" Text="{Binding Duration, StringFormat='{0:hh}h {0:mm}m'}" />
                                                 <Label Grid.Column="3" Text="{Binding Location}" FontSize="18" />
+                                                <Label Grid.Column="4" Text="{Binding Status}"
+                                                       TextColor="{Binding StatusColor}"
+                                                       FontAttributes="Bold" />
                                             </Grid>
                                         </Border>
                                     </VerticalStackLayout>
@@ -132,15 +143,14 @@
                         </CollectionView>
 
                         <Button Text="View Classmates"
-        Command="{Binding ViewClassmatesCommand}"
-        BackgroundColor="#5B3FFF"
-        TextColor="White"
-        CornerRadius="10"
-        HeightRequest="45"
-        HorizontalOptions="Center"
-        WidthRequest="200"
-        Margin="0,20,0,0" />
-
+                                Command="{Binding ViewClassmatesCommand}"
+                                BackgroundColor="#5B3FFF"
+                                TextColor="White"
+                                CornerRadius="10"
+                                HeightRequest="45"
+                                HorizontalOptions="Center"
+                                WidthRequest="200"
+                                Margin="0,20,0,0" />
                     </VerticalStackLayout>
                 </Grid>
             </ScrollView>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             x:Class="Lecin.Pages.Teacher.TeacherReportsPage"
+             Title="Attendance Reports"
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20" BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}">
+
+            <Label Text="Attendance Reports"
+                   FontSize="32"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource White}}"
+                   HorizontalOptions="Center" />
+
+            <!-- Filter Section -->
+            <Border Stroke="{StaticResource Primary}"
+                    StrokeThickness="2"
+                    Padding="15"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource DarkSecondaryBackground}}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Filters"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource Primary}" />
+
+                    <Label Text="Select Course:"
+                           FontSize="16"
+                           TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource White}}" />
+                    <Picker x:Name="CoursePicker"
+                            BackgroundColor="Transparent" />
+
+                    <Label Text="Date Range:"
+                           FontSize="16"
+                           TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource White}}" />
+                    <HorizontalStackLayout Spacing="10">
+                        <DatePicker x:Name="StartDatePicker"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand" />
+                        <Label Text="to"
+                               TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource White}}"
+                               VerticalOptions="Center" />
+                        <DatePicker x:Name="EndDatePicker"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+
+                    <Button Text="Generate Report"
+                            x:Name="GenerateReportButton"
+                            Clicked="OnGenerateReportClicked"
+                            BackgroundColor="{StaticResource Primary}"
+                            TextColor="{StaticResource White}"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            HeightRequest="50"
+                            Margin="0,10,0,0" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Overall Statistics -->
+            <Border Stroke="#FF6F00"
+                    StrokeThickness="2"
+                    Padding="15"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightSecondaryBackground}, Dark={StaticResource DarkSecondaryBackground}}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Overall Statistics"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#FF6F00" />
+
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
+                        <Label Text="Total Students:"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource White}}"
+                               Grid.Row="0" Grid.Column="0" />
+                        <Label x:Name="TotalStudentsLabel"
+                               Text="0"
+                               FontSize="14"
+                               TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource White}}"
+                               Grid.Row="0" Grid.Column="1" />
+
+                        <Label Text="Average Attendance:"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource White}}"
+                               Grid.Row="1" Grid.Column="0" />
+                        <Label x:Name="AverageAttendanceLabel"
+                               Text="0%"
+                               FontSize="14"
+                               TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource White}}"
+                               Grid.Row="1" Grid.Column="1" />
+
+                        <Label Text="At-Risk Students:"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource White}}"
+                               Grid.Row="2" Grid.Column="0" />
+                        <Label x:Name="AtRiskStudentsLabel"
+                               Text="0"
+                               FontSize="14"
+                               TextColor="#D32F2F"
+                               FontAttributes="Bold"
+                               Grid.Row="2" Grid.Column="1" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- At-Risk Students Section -->
+            <Border Stroke="#D32F2F"
+                    StrokeThickness="2"
+                    Padding="15"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource LightSecondaryBackground}, Dark={StaticResource DarkSecondaryBackground}}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="At-Risk Students"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#D32F2F" />
+
+                    <Label Text="Students with attendance below 75% or 3+ consecutive absences"
+                           FontSize="12"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray700}, Dark={StaticResource Gray300}}"
+                           Margin="0,0,0,10" />
+
+                    <CollectionView x:Name="AtRiskStudentsCollection">
+                        <CollectionView.EmptyView>
+                            <Label Text="No at-risk students found"
+                                   HorizontalOptions="Center"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray700}, Dark={StaticResource Gray300}}" />
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Stroke="Gray"
+                                        StrokeThickness="1"
+                                        Padding="10"
+                                        Margin="0,5,0,5"
+                                        BackgroundColor="{AppThemeBinding Light=#FFF8F8, Dark={StaticResource DarkSecondaryBackground}}">
+                                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                                        <Label Text="{Binding StudentName}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource White}}"
+                                               Grid.Row="0" Grid.Column="0" />
+                                        <Label Text="{Binding AttendancePercentage, StringFormat='{0}%'}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="#D32F2F"
+                                               Grid.Row="0" Grid.Column="1" />
+                                        <Label Text="{Binding RiskReason}"
+                                               FontSize="12"
+                                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"
+                                               Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Button Text="Provide Academic Support"
+                            x:Name="SupportButton"
+                            Clicked="OnProvideSupportClicked"
+                            BackgroundColor="#FF6F00"
+                            TextColor="White"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            HeightRequest="50"
+                            Margin="0,10,0,0" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

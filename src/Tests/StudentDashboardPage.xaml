@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:pageModels="clr-namespace:Lecin.PageModels.Student"
+                       xmlns:pages="clr-namespace:Lecin.Pages"
+                       xmlns:models="clr-namespace:SupabaseShared.Models;assembly=SupabaseShared"
+                       xmlns:fonts="using:Lecin.Resources.Fonts"
+                       xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                       x:Class="Lecin.Pages.Student.StudentDashboardPage"
+                       x:DataType="pageModels:StudentDashboardPageModel">
+    <ContentPage.Resources>
+        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+    </ContentPage.Resources>
+    <RefreshView
+        IsRefreshing="{Binding IsLoading}"
+        Command="{Binding LoadDataCommand}">
+        <ScrollView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ActivityIndicator
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}"
+                    Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                    Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    WidthRequest="50"
+                    HeightRequest="50" />
+                <VerticalStackLayout
+                    IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                    Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                    Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                    Padding="20"
+                    Spacing="15">
+                    
+                    <!-- Welcome Message -->
+                    <Label Text="{Binding WelcomeMessage}"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center" />
+                    
+                    <!-- Action Buttons -->
+                    <Grid
+                        ColumnDefinitions="{OnIdiom Phone='*', Default='*, *'}"
+                        RowDefinitions="{OnIdiom Phone='Auto, Auto', Default='Auto'}"
+                        RowSpacing="10"
+                        ColumnSpacing="10">
+                        <Button 
+                            Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=0}"
+                            Grid.Row="{OnIdiom 0, Phone=0, Tablet=0, Desktop=0}"
+                            Text="Check In"
+                            Clicked="OnCheckInClicked"
+                            HorizontalOptions="Fill" />
+                        <Button 
+                            Grid.Column="{OnIdiom 1, Phone=0, Tablet=1, Desktop=1}"
+                            Grid.Row="{OnIdiom 1, Phone=1, Tablet=0, Desktop=0}"
+                            Text="Attendance History"
+                            Clicked="OnHistoryClicked"
+                            HorizontalOptions="Fill" />
+                    </Grid>
+                    
+                    <!-- Global Streak Card -->
+                    <Border>
+                        <VerticalStackLayout>
+                            <Label
+                                FontSize="18"
+                                HorizontalOptions="Center"
+                                FontAttributes="Bold"
+                                Text="Global Streak" />
+                            <HorizontalStackLayout
+                                Spacing="5"
+                                HorizontalOptions="Center">
+                                <Label
+                                    FontSize="32"
+                                    TextColor="OrangeRed"
+                                    VerticalOptions="Center"
+                                    Text="{x:Static fonts:FluentUI.fire_24_regular}"
+                                    FontFamily="{x:Static fonts:FluentUI.FontFamily}" />
+                                <Label
+                                    FontSize="32"
+                                    VerticalOptions="Center"
+                                    Text="{Binding TotalStreak, StringFormat='{0} Days'}" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                    
+                    <!-- UPCOMING CLASSES SECTION - IMPROVED -->
+                    <Label Text="Upcoming Classes"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           Margin="0,20,0,10" />
+                    
+                    <!-- Empty State for No Upcoming Classes -->
+                    <Border IsVisible="{Binding UpcomingClasses.Count, Converter={StaticResource InvertedBoolConverter}}"
+                            Padding="20"
+                            Stroke="Gray"
+                            StrokeThickness="1">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="📅"
+                                   FontSize="48"
+                                   HorizontalOptions="Center" />
+                            <Label Text="No Upcoming Classes"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   HorizontalOptions="Center" />
+                            <Label Text="You're all caught up! Check back later for new classes."
+                                   FontSize="14"
+                                   TextColor="Gray"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+                    
+                    <!-- Upcoming Classes List -->
+                    <CollectionView
+                        ItemsSource="{Binding UpcomingClasses}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Class">
+                                <VerticalStackLayout Padding="0,5">
+                                    <Border Padding="15"
+                                            Stroke="#7B2CBF"
+                                            StrokeThickness="2"
+                                            BackgroundColor="#F5F5F5">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10"/>
+                                        </Border.StrokeShape>
+                                        
+                                        <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                                              ColumnDefinitions="Auto,*"
+                                              RowSpacing="8"
+                                              ColumnSpacing="10">
+                                            
+                                            <!-- Course Name -->
+                                            <Label Grid.Row="0" Grid.ColumnSpan="2"
+                                                   Text="{Binding Course.Name}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#7B2CBF" />
+                                            
+                                            <!-- Course Code -->
+                                            <Label Grid.Row="1" Grid.Column="0"
+                                                   Text="📚"
+                                                   FontSize="18"
+                                                   VerticalOptions="Center" />
+                                            <Label Grid.Row="1" Grid.Column="1"
+                                                   Text="{Binding CourseCode}"
+                                                   FontSize="16"
+                                                   VerticalOptions="Center" />
+                                            
+                                            <!-- Date & Time -->
+                                            <Label Grid.Row="2" Grid.Column="0"
+                                                   Text="🕐"
+                                                   FontSize="18"
+                                                   VerticalOptions="Center" />
+                                            <HorizontalStackLayout Grid.Row="2" Grid.Column="1"
+                                                                   Spacing="10">
+                                                <Label Text="{Binding StartTime, StringFormat='{0:MMM dd, yyyy}'}"
+                                                       FontSize="16"
+                                                       FontAttributes="Bold"
+                                                       VerticalOptions="Center" />
+                                                <Label Text="at"
+                                                       FontSize="14"
+                                                       TextColor="Gray"
+                                                       VerticalOptions="Center" />
+                                                <Label Text="{Binding StartTime, StringFormat='{0:h:mm tt}'}"
+                                                       FontSize="16"
+                                                       FontAttributes="Bold"
+                                                       VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+                                            
+                                            <!-- Location -->
+                                            <Label Grid.Row="3" Grid.Column="0"
+                                                   Text="📍"
+                                                   FontSize="18"
+                                                   VerticalOptions="Center" />
+                                            <Label Grid.Row="3" Grid.Column="1"
+                                                   Text="{Binding Location}"
+                                                   FontSize="16"
+                                                   VerticalOptions="Center" />
+                                        </Grid>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    
+                    <!-- Enrolled Courses Section -->
+                    <Label Text="Enrolled Courses"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           Margin="0,20,0,10" />
+                    
+                    <CollectionView
+                        ItemsSource="{Binding Courses}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Course">
+                                <VerticalStackLayout Padding="5">
+                                    <Border Padding="20">
+                                        <Grid ColumnSpacing="10"
+                                              RowSpacing="10"
+                                              RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto', Default='Auto'}"
+                                              ColumnDefinitions="{OnIdiom Phone='*,*', Default='2*,Auto,Auto,*'}">
+                                            <Label
+                                                Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=0}"
+                                                Grid.Row="{OnIdiom 0, Phone=0, Tablet=0, Desktop=0}"
+                                                Grid.ColumnSpan="{OnIdiom 1, Phone=2, Tablet=1, Desktop=1}"
+                                                Text="{Binding Name}" FontSize="18"
+                                                VerticalOptions="Center"
+                                                HorizontalOptions="{OnIdiom Start, Phone=Center, Tablet=Start, Desktop=Start}"
+                                                FontAttributes="Bold" />
+                                            <Label
+                                                Grid.Column="{OnIdiom 1, Phone=0, Tablet=1, Desktop=1}"
+                                                Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center"
+                                                Text="{Binding Code}" />
+                                            <HorizontalStackLayout
+                                                Spacing="5"
+                                                Grid.Column="{OnIdiom 2, Phone=1, Tablet=2, Desktop=2}"
+                                                Grid.Row="{OnIdiom 0, Phone=1, Tablet=0, Desktop=0}"
+                                                VerticalOptions="Center"
+                                                HorizontalOptions="Center">
+                                                <HorizontalStackLayout>
+                                                    <Label Text="S" />
+                                                    <Label Text="{Binding SemesterCode}" />
+                                                </HorizontalStackLayout>
+                                                <Label Text="{Binding Year}" />
+                                            </HorizontalStackLayout>
+                                            <Button Grid.Column="{OnIdiom 3, Phone=0, Tablet=3, Desktop=3}"
+                                                    Grid.Row="{OnIdiom 0, Phone=2, Tablet=0, Desktop=0}"
+                                                    Grid.ColumnSpan="{OnIdiom 1, Phone=4, Tablet=1, Desktop=1}"
+                                                    Text="View" Clicked="GotoCourseView" VerticalOptions="Center" />
+                                        </Grid>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Grid>
+        </ScrollView>
+    </RefreshView>
+</pages:BaseContentPage>

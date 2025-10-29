@@ -12,7 +12,7 @@ public class Attendance: BaseModel
     [Reference(typeof(Student), foreignKey: nameof(StudentId))]
     public Student? Student { get; set; }
     
-    [PrimaryKey]
+    [PrimaryKey(shouldInsert: true)]
     public Guid ClassId { get; set; }
     
     [Reference(typeof(Class), foreignKey: nameof(ClassId))]

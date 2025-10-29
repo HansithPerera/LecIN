@@ -17,5 +17,10 @@
         <Button Clicked="GotoCourseList"
                 Text="View Courses">
         </Button>
+        <Button Clicked="GotoAttendanceReports"
+                Text="Attendance Reports"
+                BackgroundColor="#7B2CBF"
+                TextColor="White">
+        </Button>
     </VerticalStackLayout>
 </ContentPage>
