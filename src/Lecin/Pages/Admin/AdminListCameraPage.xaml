@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:pages="clr-namespace:Lecin.Pages"
+                       xmlns:models="clr-namespace:SupabaseShared.Models;assembly=SupabaseShared"
+                       xmlns:admin="clr-namespace:Lecin.PageModels.Admin"
+                       x:DataType="admin:AdminListCameraPageModel"
+                       x:Class="Lecin.Pages.Admin.AdminListCameraPage">
+    <pages:BaseContentPage.Content>
+        <RefreshView
+        IsRefreshing="{Binding IsLoading}"
+        Command="{Binding LoadDataCommand}">
+        <ScrollView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ActivityIndicator
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}"
+                    Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                    Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    WidthRequest="50"
+                    HeightRequest="50" />
+                <VerticalStackLayout
+                    IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                    Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                    Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                    Padding="20"
+                    Spacing="15">
+                    <Label Text="Camera List"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center" />
+                    <Border>
+                        <VerticalStackLayout
+                            Spacing="10">
+                            <Label>New Camera</Label>
+                            <Entry
+                                Placeholder="Camera Name"
+                                Text="{Binding NewCameraName}" />
+                            <Picker
+                                Title="Select Location"
+                                ItemsSource="{Binding Locations}"
+                                ItemDisplayBinding="{Binding Id}"
+                                SelectedItem="{Binding NewCameraLocation}" />
+                            <Button Command="{Binding CreateCameraCommand}" Text="Submit"></Button>
+                        </VerticalStackLayout>
+                    </Border>
+                    <CollectionView
+                        ItemsSource="{Binding Cameras}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Camera">
+                                <VerticalStackLayout Padding="5">
+                                <Border Padding="20">
+                                    <Grid RowDefinitions="Auto,Auto,Auto,Auto"
+                                          RowSpacing="10"
+                                          ColumnSpacing="10">
+                                        <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" />
+                                        <Label Grid.Row="1"
+                                               Text="{Binding Location}" />
+                                        <Label Grid.Row="2"
+                                               Text="{Binding CreatedAt, StringFormat='Added on: {0:MMMM dd, yyyy}'}" />
+                                        <Button Grid.Row="2"
+                                                Text="Edit" 
+                                                Clicked="GotoEditCameraView" 
+                                                VerticalOptions="Center" />
+                                        <Button Grid.Row="3"
+                                                Text="Delete" 
+                                                Clicked="DeleteCameraClicked" 
+                                                VerticalOptions="Center" />
+                                    </Grid>
+                                </Border>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Grid>
+        </ScrollView>
+    </RefreshView>
+    </pages:BaseContentPage.Content>
+</pages:BaseContentPage>

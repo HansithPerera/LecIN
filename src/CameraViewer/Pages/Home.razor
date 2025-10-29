@@ -1,0 +1,34 @@
+﻿@page "/"
+@inject IConfiguration Configuration;
+
+
+<PageTitle>Viewing Camera</PageTitle>
+
+<img src="@imageSrc" alt="Camera Image" style="max-width: 100%; height: auto;"/>
+
+@code{
+
+    private readonly int _refreshMs = 200;
+
+    private string imageSrc = "http://localhost:5105/latest-frame";
+
+    private async Task RefreshImage()
+    {
+        while (true)
+        {
+            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            imageSrc = $"http://localhost:5105/latest-frame?t={timestamp}";
+            StateHasChanged();
+            await Task.Delay(_refreshMs);
+        }
+    }
+
+    private string BaseUrl => Configuration["CameraBaseUrl"] ?? "http://localhost:5105";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _ = RefreshImage();
+    }
+
+}

@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:viewModels="clr-namespace:Lecin.PageModels.Student"
+                       xmlns:fonts="clr-namespace:Lecin.Resources.Fonts"
+                       xmlns:pages="clr-namespace:Lecin.Pages"
+                       x:DataType="viewModels:StudentViewProfilePageModel"
+                       x:Class="Lecin.Pages.Student.StudentViewProfilePage">
+    <ContentPage.Content>
+        <RefreshView
+            IsRefreshing="{Binding IsLoading}"
+            Command="{Binding LoadDataCommand}">
+            <ScrollView>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ActivityIndicator
+                        IsRunning="{Binding IsLoading}"
+                        IsVisible="{Binding IsLoading}"
+                        Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                        Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        WidthRequest="50"
+                        HeightRequest="50" />
+                    <VerticalStackLayout
+                        IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                        Grid.Column="{OnIdiom 0, Phone=0, Tablet=0, Desktop=1}"
+                        Grid.ColumnSpan="{OnIdiom 3, Phone=3, Tablet=3, Desktop=1}"
+                        Padding="20"
+                        Spacing="15">
+                        <Button
+                            Command="{Binding LogoutCommand}"
+                            HorizontalOptions="End"
+                            CornerRadius="100"
+                            Padding="5"
+                            BackgroundColor="DarkRed"
+                            Text="{x:Static fonts:FluentUI.arrow_exit_20_regular}"
+                            FontFamily="{x:Static fonts:FluentUI.FontFamily}"
+                            FontSize="24" />
+                        <Border
+                            HorizontalOptions="Center"
+                            Padding="15"
+                            StrokeShape="Ellipse">
+                            <Label
+                                FontSize="128"
+                                VerticalOptions="Center"
+                                HorizontalOptions="Center"
+                                LineHeight="1"
+                                Text="{x:Static fonts:FluentUI.person_48_regular}"
+                                FontFamily="{x:Static fonts:FluentUI.FontFamily}" />
+                        </Border>
+                        <HorizontalStackLayout
+                            Spacing="10"
+                            HorizontalOptions="Center">
+                            <Label
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Center"
+                                Text="{Binding Student.FirstName}" />
+                            <Label
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                HorizontalOptions="Center"
+                                Text="{Binding Student.LastName}" />
+                        </HorizontalStackLayout>
+                        <Label
+                            HorizontalOptions="Center"
+                            Text="{Binding Student.CreatedAt, StringFormat='Joined on {0:MMMM dd, yyyy}'}" />
+                        <Border
+                            IsVisible="{Binding StudentFace, Converter={StaticResource NotNullToBoolConverter}}">
+                            <Grid
+                                ColumnDefinitions="Auto,*,Auto">
+                                <Label
+                                    Grid.Column="0"
+                                    FontSize="22"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    Text="{x:Static fonts:FluentUI.person_passkey_16_regular}"
+                                    FontFamily="{x:Static fonts:FluentUI.FontFamily}" />
+                                <Label
+                                    Grid.Column="1"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding StudentFace.CreatedAt, StringFormat='Face added {0:MMMM dd, yyyy}'}" />
+                                <Button
+                                    Grid.Column="2"
+                                    FontFamily="{x:Static fonts:FluentUI.FontFamily}"
+                                    FontSize="20"
+                                    Text="{x:Static fonts:FluentUI.delete_20_regular}"
+                                    Command="{Binding RemoveFaceCommand}" />
+                            </Grid>
+                        </Border>
+                        <Button Text="Register Face"
+                                IsVisible="{Binding StudentFace, Converter={StaticResource NullToBoolConverter}}"
+                                Clicked="GotoRegisterFaceView" />
+                    </VerticalStackLayout>
+                </Grid>
+            </ScrollView>
+        </RefreshView>
+    </ContentPage.Content>
+</pages:BaseContentPage>

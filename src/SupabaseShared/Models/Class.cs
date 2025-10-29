@@ -20,6 +20,9 @@ public class Class: BaseModel
 
     [Column]
     public string? Location { get; set; }
+    
+    [Reference(typeof(Location))]
+    public Location? LocationRef { get; set; }
 
     [Column]
     public DateTimeOffset StartTime { get; set; }

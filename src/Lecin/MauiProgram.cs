@@ -1,20 +1,14 @@
-﻿using System.Reflection;
+using System.Reflection;
 using CommunityToolkit.Maui;
 using Lecin.PageModels.Admin;
 using Lecin.PageModels.Student;
 using Lecin.PageModels.Teacher;
-using Lecin.Pages.Admin;
-using Lecin.Pages.Student;
-using Lecin.Pages.Teacher;
-using Lecin.Pages;
 using Lecin.Resources.Fonts;
 using Lecin.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Supabase;
 using Syncfusion.Maui.Toolkit.Hosting;
-using StudentCourseViewPageModel = Lecin.PageModels.Student.StudentCourseViewPageModel;
-using Lecin.Services;
 
 namespace Lecin;
 
@@ -49,6 +43,7 @@ public static class MauiProgram
 
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkitCamera()
             .UseMauiCommunityToolkit(options => options.SetShouldEnableSnackbarOnWindows(true))
             .ConfigureSyncfusionToolkit()
             .ConfigureMauiHandlers(handlers =>
@@ -65,14 +60,16 @@ public static class MauiProgram
                 fonts.AddFont("MauiMaterialAssets.ttf", "MaterialAssets");
                 fonts.AddFont("FluentSystemIcons-Regular.ttf", FluentUI.FontFamily);
             });
+
 #if DEBUG
         builder.Logging.AddDebug();
+        builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
 
         builder.Services.AddSingleton<Client>(sp =>
             new Client(
-                "https://maxaduxsenfrbgomfhpi.supabase.co",
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1heGFkdXhzZW5mcmJnb21maHBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYxNzU3MDcsImV4cCI6MjA3MTc1MTcwN30.J5wsDri8BWGsIcdr9pmIM2Pz0B8KXBgOadh583Yxsoc"
+                builder.Configuration["Supabase:Url"]!,
+                builder.Configuration["Supabase:Key"]!
             )
         );
 
@@ -89,14 +86,21 @@ public static class MauiProgram
         builder.Services.AddTransient<StudentCourseViewPageModel>();
         builder.Services.AddTransient<TeacherClassViewPageModel>();
         builder.Services.AddTransient<TeacherDashboardPageModel>();
+        builder.Services.AddTransient<TeacherCourseViewPageModel>();
 
         builder.Services.AddTransient<AttendanceHistoryPageModel>();
         builder.Services.AddTransient<AttendanceStreaksPageModel>();
         builder.Services.AddTransient<StudentDashboardPageModel>();
         builder.Services.AddTransient<StudentCourseViewPageModel>();
+        builder.Services.AddTransient<StudentViewProfilePageModel>();
+        builder.Services.AddTransient<StudentRegisterFacePageModel>();
         builder.Services.AddTransient<ClassmatesPageModel>();
 
         builder.Services.AddTransient<AdminPageModel>();
+        builder.Services.AddTransient<AdminListLocationPageModel>();
+        builder.Services.AddTransient<AdminViewLocationPageModel>();
+        builder.Services.AddTransient<AdminViewCameraPageModel>();
+        builder.Services.AddTransient<AdminListCameraPageModel>();
 
         return builder.Build();
     }

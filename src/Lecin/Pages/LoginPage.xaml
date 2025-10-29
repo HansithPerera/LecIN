@@ -1,4 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                        xmlns:pageModels="clr-namespace:Lecin.PageModels"
@@ -9,11 +10,9 @@
 
     <ContentPage.Content>
         <Grid>
-            
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -23,21 +22,18 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-
-            
             <Border Grid.Row="0"
                     Grid.ColumnSpan="3"
+                    Margin="12"
                     Padding="12"
                     StrokeThickness="0"
-                    BackgroundColor="#FFF4CE"   
-                IsVisible="{Binding ShowMaintenance}">
+                    StrokeShape="RoundRectangle 8"
+                    BackgroundColor="#FFF4CE"
+                    IsVisible="{Binding ShowMaintenance}">
                 <Label Text="{Binding MaintenanceMessage}"
                        FontAttributes="Bold"
                        HorizontalTextAlignment="Center" />
             </Border>
-
-           
-
             <VerticalStackLayout
                 Grid.Row="1"
                 Grid.ColumnSpan="3"
@@ -49,14 +45,13 @@
                 <Image
                     HorizontalOptions="Center"
                     Source="lecin_dark.png"
-                    WidthRequest="150"/>
+                    WidthRequest="150" />
                 <Label
                     LineBreakMode="NoWrap"
                     HorizontalOptions="Center"
                     Text="Please Sign In"
                     FontSize="24" />
             </VerticalStackLayout>
-
             <HorizontalStackLayout
                 Grid.Row="2"
                 Grid.Column="0"
@@ -73,7 +68,6 @@
                 <RadioButton Content="Admin"
                              Value="{x:Static lecin:UserType.Admin}" />
             </HorizontalStackLayout>
-
             <VerticalStackLayout
                 Spacing="15"
                 Padding="15, 0"
@@ -89,7 +83,6 @@
                 <Button Text="Sign In"
                         Command="{Binding LoginCommand}" />
             </VerticalStackLayout>
-
             <Label
                 Grid.Column="1"
                 Grid.Row="4"

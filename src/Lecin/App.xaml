@@ -1,7 +1,8 @@
-﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<?xml version = "1.0" encoding = "UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Lecin"
+             xmlns:converters="clr-namespace:Lecin.Converters"
              x:Class="Lecin.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -12,11 +13,13 @@
             </ResourceDictionary.MergedDictionaries>
             
             <!-- Converters -->
-            <local:Converters.StringToBoolConverter x:Key="StringToBoolConverter" />
-            <local:Converters.ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
-            <local:Converters.BoolToColorConverter x:Key="BoolToColorConverter" />
-            <local:Converters.InvertedBoolConverter x:Key="InvertedBoolConverter" />
-            <local:Converters.HasPhotoToButtonTextConverter x:Key="HasPhotoToButtonTextConverter" />
+            <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
+            <converters:ObjectToBoolConverter x:Key="ObjectToBoolConverter" />
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+            <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+            <converters:NotNullToBoolConverter x:Key="NotNullToBoolConverter" />
+            <converters:HasPhotoToButtonTextConverter x:Key="HasPhotoToButtonTextConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

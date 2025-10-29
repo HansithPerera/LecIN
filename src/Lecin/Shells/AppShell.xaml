@@ -49,18 +49,45 @@
         Route="{x:Static local:AppShell.AdminDashboardPageRoute}"
         ContentTemplate="{DataTemplate admin:AdminDashboardPage}"
         FlyoutItemIsVisible="{Binding IsAdmin}" />
+    
+    <ShellContent
+        Title="Cameras"
+        Route="{x:Static local:AppShell.AdminListCameraPageRoute}"
+        ContentTemplate="{DataTemplate admin:AdminListCameraPage}"
+        FlyoutItemIsVisible="{Binding IsAdmin}" />
+    
+    <ShellContent
+        Title="Locations"
+        Route="{x:Static local:AppShell.AdminListLocationPageRoute}"
+        ContentTemplate="{DataTemplate admin:AdminListLocationPage}"
+        FlyoutItemIsVisible="{Binding IsAdmin}" />
 
     <ShellContent
         Title="Dashboard"
+        Icon="Images/home.png"
         Route="{x:Static local:AppShell.StudentDashboardPageRoute}"
         FlyoutItemIsVisible="{Binding IsStudent}"
         ContentTemplate="{DataTemplate student:StudentDashboardPage}" />
 
     <ShellContent
         Title="Attendance History"
+        Icon="Images/calendar_checkmark.png"
         Route="{x:Static local:AppShell.AttendanceHistoryPageRoute}"
         FlyoutItemIsVisible="{Binding IsStudent}"
         ContentTemplate="{DataTemplate student:AttendanceHistoryPage}" />
+
+    <ShellContent
+        Title="Profile"
+        Icon="Images/person.png"
+        Route="{x:Static local:AppShell.StudentViewProfilePageRoute}"
+        FlyoutItemIsVisible="{Binding IsStudent}"
+        ContentTemplate="{DataTemplate student:StudentViewProfilePage}" />
+
+    <ShellContent
+        Title="Check-In"
+        Route="{x:Static local:AppShell.CheckInPageRoute}"
+        FlyoutItemIsVisible="False"
+        ContentTemplate="{DataTemplate pages:CheckInPage}" />
 
     <Shell.FlyoutFooter>
         <Grid Padding="15" RowDefinitions="Auto,Auto" RowSpacing="10">

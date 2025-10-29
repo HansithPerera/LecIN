@@ -12,6 +12,12 @@ public class Camera: BaseModel
     [Column]
     public string Name { get; set; } = string.Empty;
 
+    [Reference(typeof(Location))]
+    public Location LocationRef { get; set; }
+    
+    [Reference(typeof(CameraApiKey))]
+    public List<CameraApiKey> ApiKeys { get; set; } = new();
+    
     [Column]
     public string Location { get; set; } = string.Empty;
 

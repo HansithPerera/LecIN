@@ -9,53 +9,61 @@
                        x:Class="Lecin.Pages.Admin.AdminDashboardPage"
                        x:DataType="adminPageModels:AdminPageModel"
                        Title="Admin Dashboard">
-
-    <VerticalStackLayout Padding="20" Spacing="15">
-        <Label Text="Welcome Admin!"
-               FontSize="24"
-               HorizontalOptions="Center"
-               VerticalOptions="Center" />
-
-        <Label Text="You can manage users, courses, and system settings here."
-               FontSize="16"
-               HorizontalOptions="Center"
-               VerticalOptions="Center" />
-        <CollectionView ItemsSource="{Binding Courses}"
-                        SelectionMode="None">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Course">
-                    <Grid 
-                          ColumnDefinitions="{OnIdiom Phone='*', Default='Auto,*,Auto,Auto,Auto'}"
-                          RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto,Auto,Auto', Default='Auto'}"
-                          ColumnSpacing="10"
-                          Padding="10"
-                          Margin="5">
-                        <Label Grid.Column="{OnIdiom Phone=0, Default=0}"
-                               Grid.Row="{OnIdiom Phone=0, Default=0}"
-                               Text="{Binding Code}" FontSize="18" FontAttributes="Bold" />
-                        <Label Grid.Column="{OnIdiom Phone=0, Default=1}"
-                               Grid.Row="{OnIdiom Phone=1, Default=0}"
-                               Text="{Binding Name}"
-                               FontSize="18"
-                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
-                        <Label Grid.Column="{OnIdiom Phone=0, Default=2}"
-                               Grid.Row="{OnIdiom Phone=2, Default=0}"
-                               Text="{Binding Year}"
-                               FontSize="18"
-                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
-                        <Label Grid.Column="{OnIdiom Phone=0, Default=3}"
-                               Grid.Row="{OnIdiom Phone=3, Default=0}"
-                               Text="{Binding SemesterCode}"
-                               FontSize="18"
-                               TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
-                        <Button Grid.Column="{OnIdiom Phone=0, Default=4}"
-                                Grid.Row="{OnIdiom Phone=4, Default=0}"
-                                Text="Download Attendance CSV"
-                                HorizontalOptions="{OnIdiom Phone=Fill, Default=End}"
-                                Clicked="OnDownloadCsvClicked" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Label Text="Welcome Admin!"
+                   FontSize="24"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+            <Button Text="Cameras" Clicked="GotoCameras"/>
+            <Button Text="Locations" Clicked="GotoLocations"/>
+            <Label Text="You can export courses attendance CSV's here."
+                   FontSize="16"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center" />
+            <CollectionView ItemsSource="{Binding Courses}"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Course">
+                        <VerticalStackLayout
+                            Padding="10">
+                            <Border
+                                Padding="5">
+                                <Grid
+                                    ColumnDefinitions="{OnIdiom Phone='*', Default='Auto,*,Auto,Auto,Auto'}"
+                                    RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto,Auto,Auto', Default='Auto'}"
+                                    ColumnSpacing="10"
+                                    Padding="10"
+                                    Margin="5">
+                                    <Label Grid.Column="{OnIdiom Phone=0, Default=0}"
+                                           Grid.Row="{OnIdiom Phone=0, Default=0}"
+                                           Text="{Binding Code}" FontSize="18" FontAttributes="Bold" />
+                                    <Label Grid.Column="{OnIdiom Phone=0, Default=1}"
+                                           Grid.Row="{OnIdiom Phone=1, Default=0}"
+                                           Text="{Binding Name}"
+                                           FontSize="18"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                                    <Label Grid.Column="{OnIdiom Phone=0, Default=2}"
+                                           Grid.Row="{OnIdiom Phone=2, Default=0}"
+                                           Text="{Binding Year}"
+                                           FontSize="18"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                                    <Label Grid.Column="{OnIdiom Phone=0, Default=3}"
+                                           Grid.Row="{OnIdiom Phone=3, Default=0}"
+                                           Text="{Binding SemesterCode, StringFormat='Semester: {0}'}"
+                                           FontSize="18"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                                    <Button Grid.Column="{OnIdiom Phone=0, Default=4}"
+                                            Grid.Row="{OnIdiom Phone=4, Default=0}"
+                                            Text="Download Attendance CSV"
+                                            HorizontalOptions="{OnIdiom Phone=Fill, Default=End}"
+                                            Clicked="OnDownloadCsvClicked" />
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
 </pages:BaseContentPage>

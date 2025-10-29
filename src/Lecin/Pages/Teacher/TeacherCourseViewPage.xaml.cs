@@ -1,13 +1,13 @@
 ﻿using Lecin.PageModels.Teacher;
-using Supabase;
 using SupabaseShared.Models;
 
 namespace Lecin.Pages.Teacher;
 
 public partial class TeacherCourseViewPage
 {
-    public TeacherCourseViewPage(TeacherCourseViewPageModel vm, Client client) : base(vm)
+    public TeacherCourseViewPage(TeacherCourseViewPageModel vm) : base(vm)
     {
+        BindingContext = vm;
         InitializeComponent();
     }
 
@@ -19,12 +19,12 @@ public partial class TeacherCourseViewPage
 
             await Shell.Current.GoToAsync(nameof(TeacherClassViewPage), new Dictionary<string, object>
             {
-                { "class", cls }
+                { "course", cls }
             });
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", $"Failed to navigate to class view: {ex.Message}", "OK");
+            await DisplayAlert("Error", $"Failed to navigate to course view: {ex.Message}", "OK");
         }
     }
 

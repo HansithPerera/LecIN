@@ -12,11 +12,32 @@
           "Microsoft.Maui.Controls": "[9.0.90, 10.0.0)"
         }
       },
+      "CommunityToolkit.Maui.Camera": {
+        "type": "Direct",
+        "requested": "[3.0.2, )",
+        "resolved": "3.0.2",
+        "contentHash": "wfL20GxS7kCPaB1VhChibP3RNy8k1Pni6xRj4YSy0J0SlR7f+NbjBA4bp25cbK9b8zJIT7itC4jKXzBxqLILQg==",
+        "dependencies": {
+          "Microsoft.Maui.Controls": "[9.0.90, 10.0.0)",
+          "Xamarin.AndroidX.Camera.Camera2": "1.4.1",
+          "Xamarin.AndroidX.Camera.View": "1.4.1"
+        }
+      },
       "CommunityToolkit.Mvvm": {
         "type": "Direct",
         "requested": "[8.4.0, )",
         "resolved": "8.4.0",
         "contentHash": "tqVU8yc/ADO9oiTRyTnwhFN68hCwvkliMierptWOudIAvWY1mWCh5VFh+guwHJmpMwfg0J0rY+yyd5Oy7ty9Uw=="
+      },
+      "FaceONNX": {
+        "type": "Direct",
+        "requested": "[4.1.1.2, )",
+        "resolved": "4.1.1.2",
+        "contentHash": "yC30/HMGRsrbnYQlQN5XgM1jZ24FdDjv7OrjqPcGYRKMKUE9+ukevMuZWHY4Vv5uvSvHhM1Ye7yoa24m7pAwhQ==",
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.9.0",
+          "UMapx": "7.5.1.3"
+        }
       },
       "Microsoft.Extensions.Configuration.Json": {
         "type": "Direct",
@@ -67,11 +88,20 @@
           "Microsoft.Maui.Resizetizer": "9.0.120"
         }
       },
+      "Microsoft.ML.OnnxRuntime": {
+        "type": "Direct",
+        "requested": "[1.23.2, )",
+        "resolved": "1.23.2",
+        "contentHash": "849xImRO0vxDH7DNlg/FAVGExKfjN1r2CIZevZGI5JQCoOj+0T23ShqPEgu5mLTwElot5X7V0qkO0jUz/yJZbA==",
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.23.2"
+        }
+      },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
-        "requested": "[9.0.7, )",
-        "resolved": "9.0.7",
-        "contentHash": "SZ1brSGoLnhLbE8QUZrtN6YwzN2gDT1wbx9qDBEfFFJcstiDTjJ6ygNuTPBV/K7SjGfx2YNbcJi5+ygbPOZpDg=="
+        "requested": "[9.0.5, )",
+        "resolved": "9.0.5",
+        "contentHash": "4L7wbb3Y4BJgIeSnmAf/C6S/qCs9rT1b0dX72uj3qo0qvUH7D0U1tU5ZlC7A3Wb8E/dXK4caOi4JkdLTVJaXhw=="
       },
       "ResultSharp": {
         "type": "Direct",
@@ -92,6 +122,16 @@
           "Supabase.Postgrest": "4.0.3",
           "Supabase.Realtime": "7.0.2",
           "Supabase.Storage": "2.0.2"
+        }
+      },
+      "Syncfusion.Maui.Picker": {
+        "type": "Direct",
+        "requested": "[31.2.4, )",
+        "resolved": "31.2.4",
+        "contentHash": "xG6HTtP7p00Le6+V3WKPZ1NUZ2G/J5PK88bkWtE537kOpxJoNgw1T6HZTPS2CGc5tX6hVjrhGhk+UDCh31l6MQ==",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "31.2.4",
+          "Syncfusion.Maui.Popup": "31.2.4"
         }
       },
       "Syncfusion.Maui.Toolkit": {
@@ -360,6 +400,20 @@
         "resolved": "9.0.120",
         "contentHash": "/Jz6niEsmnHHTEKEiBz18ohTEFYNbA9ce3IVH1THefIDEaQ+wbQq6Dq7mUzDNg9OI/qtUJ5+1vGcFad2X9q2Wg=="
       },
+      "Microsoft.ML.OnnxRuntime.Managed": {
+        "type": "Transitive",
+        "resolved": "1.23.2",
+        "contentHash": "HtlQuzmVrqhnkmwfmkQ+2re8xPxtVmeLRQaYSJ3pXfzKs4b36+yBfa/LnDuzfX1bGcyWn/McKxmbY87TCAmo1Q==",
+        "dependencies": {
+          "System.Memory": "4.5.5",
+          "System.Numerics.Tensors": "9.0.0"
+        }
+      },
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw=="
+      },
       "MimeMapping": {
         "type": "Transitive",
         "resolved": "3.0.1",
@@ -369,6 +423,25 @@
         "type": "Transitive",
         "resolved": "13.0.3",
         "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
+      },
+      "SixLabors.Fonts": {
+        "type": "Transitive",
+        "resolved": "2.1.3",
+        "contentHash": "ORWbZ5BHrC/LZvo+Y09MnoJq5VUKD85LsYALk+YI7CHFra+m5arCkz00IntDM6SrAiB22bvSdKtKmuCyHOKlqg=="
+      },
+      "SixLabors.ImageSharp": {
+        "type": "Transitive",
+        "resolved": "3.1.11",
+        "contentHash": "JfPLyigLthuE50yi6tMt7Amrenr/fA31t2CvJyhy/kQmfulIBAqo5T/YFUSRHtuYPXRSaUHygFeh6Qd933EoSw=="
+      },
+      "SixLabors.ImageSharp.Drawing": {
+        "type": "Transitive",
+        "resolved": "2.1.7",
+        "contentHash": "9KwCo9Fa350cx6ckpsy8NqXQZKwir4RQ8Kj0sdCmJA7wsK9FMyfgC527Sn4l/D6bj2ditSHlhS7dGzcgGszvSQ==",
+        "dependencies": {
+          "SixLabors.Fonts": "2.1.3",
+          "SixLabors.ImageSharp": "3.1.11"
+        }
       },
       "Supabase.Core": {
         "type": "Transitive",
@@ -424,6 +497,40 @@
           "Supabase.Core": "1.0.0"
         }
       },
+      "Syncfusion.Licensing": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "XdQautXkBTsz2RECY9FoXPfvxDjoweUllzaG0Du2IN/MOKGjrJUwrWxWg9omaKkZMcJUYXHgMZtw6jbxJsYjtQ=="
+      },
+      "Syncfusion.Maui.Core": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "AZ/bUyRthatPa6dBlG37r1qX7bZXw9xfvmWBWzpEZqItYIAGwDDGnCL605yuBHGb8so4S9Tiipw+GB6WaxrYnA==",
+        "dependencies": {
+          "Syncfusion.Licensing": "31.2.4"
+        }
+      },
+      "Syncfusion.Maui.Popup": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "7j52+lyLxSCGSmas1dOTqSeczMd+/OEZcq1Ms8enIsT5hALg95uH5UTIynTa/dSyfsYTxt7KYm9prscUn4KjRw==",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "31.2.4"
+        }
+      },
+      "System.Buffers": {
+        "type": "Transitive",
+        "resolved": "4.5.1",
+        "contentHash": "Rw7ijyl1qqRS0YQD/WycNst8hUUMgrMH4FCn1nNm27M4VxchZ1js3fVjQaANHO5f3sN4isvP4a+Met9Y4YomAg=="
+      },
+      "System.Drawing.Common": {
+        "type": "Transitive",
+        "resolved": "8.0.1",
+        "contentHash": "x0rAZECxIGx/YVjN28YRdpqka0+H7YMN9741FUDzipXPDzesd60gef/LI0ZCOcYSDsacTLTHvMAvxHG+TjbNNQ==",
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "8.0.0"
+        }
+      },
       "System.IdentityModel.Tokens.Jwt": {
         "type": "Transitive",
         "resolved": "7.5.1",
@@ -433,10 +540,48 @@
           "Microsoft.IdentityModel.Tokens": "7.5.1"
         }
       },
+      "System.Memory": {
+        "type": "Transitive",
+        "resolved": "4.5.5",
+        "contentHash": "XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw==",
+        "dependencies": {
+          "System.Buffers": "4.5.1",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.3"
+        }
+      },
+      "System.Numerics.Tensors": {
+        "type": "Transitive",
+        "resolved": "9.0.0",
+        "contentHash": "hyJB4UlpAi19Xr9AXzu2NuagKC4lPfHObNMEAA0HmqFz2rX7wKgzeYzO/jM/eBHDhnUGFFEjk5cOoJaxqg5J4A=="
+      },
+      "System.Numerics.Vectors": {
+        "type": "Transitive",
+        "resolved": "4.4.0",
+        "contentHash": "UiLzLW+Lw6HLed1Hcg+8jSRttrbuXv7DANVj0DkL9g6EnnzbL75EB7EWsw5uRbhxd/4YdG8li5XizGWepmG3PQ=="
+      },
       "System.Reactive": {
         "type": "Transitive",
         "resolved": "6.0.0",
         "contentHash": "31kfaW4ZupZzPsI5PVe77VhnvFF55qgma7KZr/E0iFTs6fmdhhG8j0mgEx620iLTey1EynOkEfnyTjtNEpJzGw=="
+      },
+      "System.Runtime.CompilerServices.Unsafe": {
+        "type": "Transitive",
+        "resolved": "4.5.3",
+        "contentHash": "3TIsJhD1EiiT0w2CcDMN/iSSwnNnsrnbzeVHSKkaEgV85txMprmuO+Yq2AdSbeVGcg28pdNDTPK87tJhX7VFHw=="
+      },
+      "System.Threading.Channels": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "CMaFr7v+57RW7uZfZkPExsPB6ljwzhjACWW1gfU35Y56rk72B/Wu+sTqxVmGSk4SFUlPc3cjeKND0zktziyjBA=="
+      },
+      "UMapx": {
+        "type": "Transitive",
+        "resolved": "7.5.1.3",
+        "contentHash": "HlLsjlGkMLaIlb8oMf1ICx+i4GIc2wzod9RNpi7VG98U0V9XCaESPyxzR5ewoMnZggs/3G5gDLyV8yelhwYQww==",
+        "dependencies": {
+          "System.Drawing.Common": "8.0.1",
+          "System.Numerics.Vectors": "4.4.0"
+        }
       },
       "Websocket.Client": {
         "type": "Transitive",
@@ -445,7 +590,8 @@
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
           "Microsoft.IO.RecyclableMemoryStream": "3.0.0",
-          "System.Reactive": "6.0.0"
+          "System.Reactive": "6.0.0",
+          "System.Threading.Channels": "8.0.0"
         }
       },
       "Xamarin.Android.Glide": {
@@ -602,6 +748,86 @@
           "Xamarin.Google.Guava.ListenableFuture": "1.0.0.27"
         }
       },
+      "Xamarin.AndroidX.Camera.Camera2": {
+        "type": "Transitive",
+        "resolved": "1.4.1",
+        "contentHash": "hdQSXEX3fezFgaLgB47KYRhzSu3uOeurlqgTrdmCWRqiAzqrcqq5NvjCDF0kz8R/vde4sywPgUJ4VjPdihBGgA==",
+        "dependencies": {
+          "Xamarin.AndroidX.Annotation": "1.9.1.1",
+          "Xamarin.AndroidX.Camera.Core": "[1.4.1, 1.4.2)",
+          "Xamarin.AndroidX.Concurrent.Futures": "1.2.0.4",
+          "Xamarin.AndroidX.Core": "1.15.0.1",
+          "Xamarin.AndroidX.Tracing.Tracing": "1.2.0.8",
+          "Xamarin.Google.AutoValue.Annotations": "1.11.0.4",
+          "Xamarin.Google.Guava.ListenableFuture": "1.0.0.25"
+        }
+      },
+      "Xamarin.AndroidX.Camera.Core": {
+        "type": "Transitive",
+        "resolved": "1.4.1",
+        "contentHash": "PrXAHF3BphUtjI9hhNe9gEes7i+JxpHKdehCGTJV+nxcdP4gWTxkaXGI64IxLYVVVGr9qiH2FpaMnkectkWWiA==",
+        "dependencies": {
+          "Xamarin.AndroidX.Annotation": "1.9.1.1",
+          "Xamarin.AndroidX.Annotation.Experimental": "1.4.1.7",
+          "Xamarin.AndroidX.Concurrent.Futures": "1.2.0.4",
+          "Xamarin.AndroidX.Concurrent.Futures.Ktx": "1.2.0.4",
+          "Xamarin.AndroidX.Core": "1.15.0.1",
+          "Xamarin.AndroidX.ExifInterface": "1.3.7.8",
+          "Xamarin.AndroidX.Lifecycle.Common": "2.8.7.1",
+          "Xamarin.AndroidX.Lifecycle.LiveData": "2.8.7.1",
+          "Xamarin.AndroidX.Tracing.Tracing": "1.2.0.8",
+          "Xamarin.Google.AutoValue.Annotations": "1.11.0.4",
+          "Xamarin.Google.Guava.ListenableFuture": "1.0.0.25",
+          "Xamarin.Kotlin.StdLib": "2.0.21.1",
+          "Xamarin.KotlinX.Coroutines.Android": "1.9.0.1"
+        }
+      },
+      "Xamarin.AndroidX.Camera.Lifecycle": {
+        "type": "Transitive",
+        "resolved": "1.4.1",
+        "contentHash": "oPNJTTvXO4GGsLGWZ4K5qIrRr/QKnzrjfz6AyDJEIjsTs97v4LfkgXmXoIinEHy8f1L6OrCHoraGvO5xIhpq2Q==",
+        "dependencies": {
+          "Xamarin.AndroidX.Camera.Core": "[1.4.1, 1.4.2)",
+          "Xamarin.AndroidX.Concurrent.Futures": "1.2.0.4",
+          "Xamarin.AndroidX.Concurrent.Futures.Ktx": "1.2.0.4",
+          "Xamarin.AndroidX.Core": "1.15.0.1",
+          "Xamarin.AndroidX.Lifecycle.Common": "2.8.7.1",
+          "Xamarin.AndroidX.Tracing.Tracing.Ktx": "1.2.0.8",
+          "Xamarin.Google.AutoValue.Annotations": "1.11.0.4",
+          "Xamarin.Google.Guava.ListenableFuture": "1.0.0.25",
+          "Xamarin.KotlinX.Coroutines.Android": "1.9.0.1"
+        }
+      },
+      "Xamarin.AndroidX.Camera.Video": {
+        "type": "Transitive",
+        "resolved": "1.4.1",
+        "contentHash": "CIdqWRDf0ImePEnVuTbi4in7ko8CN/HKB5B2n4hcsQMJ2KYSY5EK7GvNuOAjzXvnXxmpjMmTlFeLH6PBpAKSQA==",
+        "dependencies": {
+          "Xamarin.AndroidX.Annotation": "1.9.1.1",
+          "Xamarin.AndroidX.Camera.Core": "[1.4.1, 1.4.2)",
+          "Xamarin.AndroidX.Concurrent.Futures": "1.2.0.4",
+          "Xamarin.AndroidX.Core": "1.15.0.1",
+          "Xamarin.Google.AutoValue.Annotations": "1.11.0.4"
+        }
+      },
+      "Xamarin.AndroidX.Camera.View": {
+        "type": "Transitive",
+        "resolved": "1.4.1",
+        "contentHash": "xhBZUjJMD0FQEZN6XvOnN0e4BtDOe2uxvjc6OABrqaBNRQA86ycuPmWcBQANaQ/z3XRHZk32uwZZsm4WecPJzw==",
+        "dependencies": {
+          "Xamarin.AndroidX.Annotation": "1.9.1.1",
+          "Xamarin.AndroidX.Annotation.Experimental": "1.4.1.7",
+          "Xamarin.AndroidX.AppCompat": "1.7.0.4",
+          "Xamarin.AndroidX.Camera.Core": "[1.4.1, 1.4.2)",
+          "Xamarin.AndroidX.Camera.Lifecycle": "[1.4.1, 1.4.2)",
+          "Xamarin.AndroidX.Camera.Video": "[1.4.1, 1.4.2)",
+          "Xamarin.AndroidX.Concurrent.Futures": "1.2.0.4",
+          "Xamarin.AndroidX.Core": "1.15.0.1",
+          "Xamarin.AndroidX.Lifecycle.Common": "2.8.7.1",
+          "Xamarin.Google.AutoValue.Annotations": "1.11.0.4",
+          "Xamarin.Google.Guava.ListenableFuture": "1.0.0.25"
+        }
+      },
       "Xamarin.AndroidX.CardView": {
         "type": "Transitive",
         "resolved": "1.0.0.34",
@@ -644,6 +870,16 @@
         "dependencies": {
           "Xamarin.AndroidX.Annotation": "1.9.1.3",
           "Xamarin.Google.Guava.ListenableFuture": "1.0.0.27"
+        }
+      },
+      "Xamarin.AndroidX.Concurrent.Futures.Ktx": {
+        "type": "Transitive",
+        "resolved": "1.2.0.4",
+        "contentHash": "SY0dGUK+yCo6FjCttl4RVUCC9j5jTb2mGpT8QRLiDG8yFp3ajz15pGFx45sdsS+CtbvD0IV8tx4CLVz0R7Zw+Q==",
+        "dependencies": {
+          "Xamarin.AndroidX.Concurrent.Futures": "[1.2.0.4, 1.2.1)",
+          "Xamarin.Kotlin.StdLib": "2.0.21.1",
+          "Xamarin.KotlinX.Coroutines.Core": "1.9.0.1"
         }
       },
       "Xamarin.AndroidX.ConstraintLayout": {
@@ -1167,6 +1403,15 @@
           "Xamarin.AndroidX.Annotation": "1.9.1.3"
         }
       },
+      "Xamarin.AndroidX.Tracing.Tracing.Ktx": {
+        "type": "Transitive",
+        "resolved": "1.2.0.8",
+        "contentHash": "6oua69rPncbHwq40TXLSApkjh4pUHcRTsE8EdmwHmb0sVToo0I1EIXHHSQr+DHsnZVFflGYZv64lHZeUXc2rxw==",
+        "dependencies": {
+          "Xamarin.AndroidX.Tracing.Tracing": "[1.2.0.8, 1.2.1)",
+          "Xamarin.Kotlin.StdLib": "2.0.21.1"
+        }
+      },
       "Xamarin.AndroidX.Transition": {
         "type": "Transitive",
         "resolved": "1.5.1.5",
@@ -1281,6 +1526,11 @@
           "Xamarin.Google.ErrorProne.Annotations": "2.37.0.1"
         }
       },
+      "Xamarin.Google.AutoValue.Annotations": {
+        "type": "Transitive",
+        "resolved": "1.11.0.4",
+        "contentHash": "xgiNp7YiPAtZ1Uv/zIRqJjHymdo1HCLormxSdg1F7T6WW2+GtAUs8XE83UY8LOMNb69Trr/+Tpd5qKDKoWyqLA=="
+      },
       "Xamarin.Google.Code.FindBugs.JSR305": {
         "type": "Transitive",
         "resolved": "3.0.2.19",
@@ -1391,6 +1641,14 @@
           "Xamarin.Kotlin.StdLib": "2.0.21.3"
         }
       },
+      "faceshared": {
+        "type": "Project",
+        "dependencies": {
+          "FaceONNX": "[4.1.1.2, )",
+          "SixLabors.ImageSharp": "[3.1.11, )",
+          "SixLabors.ImageSharp.Drawing": "[2.1.7, )"
+        }
+      },
       "supabaseshared": {
         "type": "Project",
         "dependencies": {
@@ -1398,9 +1656,54 @@
         }
       }
     },
-    "net9.0-android35.0/android-arm64": {},
-    "net9.0-android35.0/android-x64": {},
-    "net9.0-android35.0/win10-x64": {},
+    "net9.0-android35.0/android-arm64": {
+      "Microsoft.ML.OnnxRuntime": {
+        "type": "Direct",
+        "requested": "[1.23.2, )",
+        "resolved": "1.23.2",
+        "contentHash": "849xImRO0vxDH7DNlg/FAVGExKfjN1r2CIZevZGI5JQCoOj+0T23ShqPEgu5mLTwElot5X7V0qkO0jUz/yJZbA==",
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.23.2"
+        }
+      },
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw=="
+      }
+    },
+    "net9.0-android35.0/android-x64": {
+      "Microsoft.ML.OnnxRuntime": {
+        "type": "Direct",
+        "requested": "[1.23.2, )",
+        "resolved": "1.23.2",
+        "contentHash": "849xImRO0vxDH7DNlg/FAVGExKfjN1r2CIZevZGI5JQCoOj+0T23ShqPEgu5mLTwElot5X7V0qkO0jUz/yJZbA==",
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.23.2"
+        }
+      },
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw=="
+      }
+    },
+    "net9.0-android35.0/win10-x64": {
+      "Microsoft.ML.OnnxRuntime": {
+        "type": "Direct",
+        "requested": "[1.23.2, )",
+        "resolved": "1.23.2",
+        "contentHash": "849xImRO0vxDH7DNlg/FAVGExKfjN1r2CIZevZGI5JQCoOj+0T23ShqPEgu5mLTwElot5X7V0qkO0jUz/yJZbA==",
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.23.2"
+        }
+      },
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw=="
+      }
+    },
     "net9.0-windows10.0.19041": {
       "CommunityToolkit.Maui": {
         "type": "Direct",
@@ -1412,11 +1715,30 @@
           "Microsoft.Maui.Controls": "[9.0.90, 10.0.0)"
         }
       },
+      "CommunityToolkit.Maui.Camera": {
+        "type": "Direct",
+        "requested": "[3.0.2, )",
+        "resolved": "3.0.2",
+        "contentHash": "wfL20GxS7kCPaB1VhChibP3RNy8k1Pni6xRj4YSy0J0SlR7f+NbjBA4bp25cbK9b8zJIT7itC4jKXzBxqLILQg==",
+        "dependencies": {
+          "Microsoft.Maui.Controls": "[9.0.90, 10.0.0)"
+        }
+      },
       "CommunityToolkit.Mvvm": {
         "type": "Direct",
         "requested": "[8.4.0, )",
         "resolved": "8.4.0",
         "contentHash": "tqVU8yc/ADO9oiTRyTnwhFN68hCwvkliMierptWOudIAvWY1mWCh5VFh+guwHJmpMwfg0J0rY+yyd5Oy7ty9Uw=="
+      },
+      "FaceONNX": {
+        "type": "Direct",
+        "requested": "[4.1.1.2, )",
+        "resolved": "4.1.1.2",
+        "contentHash": "yC30/HMGRsrbnYQlQN5XgM1jZ24FdDjv7OrjqPcGYRKMKUE9+ukevMuZWHY4Vv5uvSvHhM1Ye7yoa24m7pAwhQ==",
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.9.0",
+          "UMapx": "7.5.1.3"
+        }
       },
       "Microsoft.Extensions.Configuration.Json": {
         "type": "Direct",
@@ -1467,6 +1789,15 @@
           "Microsoft.Maui.Resizetizer": "9.0.120"
         }
       },
+      "Microsoft.ML.OnnxRuntime": {
+        "type": "Direct",
+        "requested": "[1.23.2, )",
+        "resolved": "1.23.2",
+        "contentHash": "849xImRO0vxDH7DNlg/FAVGExKfjN1r2CIZevZGI5JQCoOj+0T23ShqPEgu5mLTwElot5X7V0qkO0jUz/yJZbA==",
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.23.2"
+        }
+      },
       "ResultSharp": {
         "type": "Direct",
         "requested": "[0.3.1, )",
@@ -1486,6 +1817,16 @@
           "Supabase.Postgrest": "4.0.3",
           "Supabase.Realtime": "7.0.2",
           "Supabase.Storage": "2.0.2"
+        }
+      },
+      "Syncfusion.Maui.Picker": {
+        "type": "Direct",
+        "requested": "[31.2.4, )",
+        "resolved": "31.2.4",
+        "contentHash": "xG6HTtP7p00Le6+V3WKPZ1NUZ2G/J5PK88bkWtE537kOpxJoNgw1T6HZTPS2CGc5tX6hVjrhGhk+UDCh31l6MQ==",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "31.2.4",
+          "Syncfusion.Maui.Popup": "31.2.4"
         }
       },
       "Syncfusion.Maui.Toolkit": {
@@ -1764,10 +2105,24 @@
         "resolved": "9.0.120",
         "contentHash": "/Jz6niEsmnHHTEKEiBz18ohTEFYNbA9ce3IVH1THefIDEaQ+wbQq6Dq7mUzDNg9OI/qtUJ5+1vGcFad2X9q2Wg=="
       },
+      "Microsoft.ML.OnnxRuntime.Managed": {
+        "type": "Transitive",
+        "resolved": "1.23.2",
+        "contentHash": "HtlQuzmVrqhnkmwfmkQ+2re8xPxtVmeLRQaYSJ3pXfzKs4b36+yBfa/LnDuzfX1bGcyWn/McKxmbY87TCAmo1Q==",
+        "dependencies": {
+          "System.Memory": "4.5.5",
+          "System.Numerics.Tensors": "9.0.0"
+        }
+      },
       "Microsoft.Web.WebView2": {
         "type": "Transitive",
         "resolved": "1.0.3179.45",
         "contentHash": "3pokSH5CnN0G6rGhGFo1y87inxYhNxBQ2Vdf0wlvBj99KHxQJormjDACmqRnFeUsmuNFIhWwfAL1ztq7wD5qRA=="
+      },
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw=="
       },
       "Microsoft.Windows.SDK.BuildTools": {
         "type": "Transitive",
@@ -1792,6 +2147,25 @@
         "type": "Transitive",
         "resolved": "13.0.3",
         "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
+      },
+      "SixLabors.Fonts": {
+        "type": "Transitive",
+        "resolved": "2.1.3",
+        "contentHash": "ORWbZ5BHrC/LZvo+Y09MnoJq5VUKD85LsYALk+YI7CHFra+m5arCkz00IntDM6SrAiB22bvSdKtKmuCyHOKlqg=="
+      },
+      "SixLabors.ImageSharp": {
+        "type": "Transitive",
+        "resolved": "3.1.11",
+        "contentHash": "JfPLyigLthuE50yi6tMt7Amrenr/fA31t2CvJyhy/kQmfulIBAqo5T/YFUSRHtuYPXRSaUHygFeh6Qd933EoSw=="
+      },
+      "SixLabors.ImageSharp.Drawing": {
+        "type": "Transitive",
+        "resolved": "2.1.7",
+        "contentHash": "9KwCo9Fa350cx6ckpsy8NqXQZKwir4RQ8Kj0sdCmJA7wsK9FMyfgC527Sn4l/D6bj2ditSHlhS7dGzcgGszvSQ==",
+        "dependencies": {
+          "SixLabors.Fonts": "2.1.3",
+          "SixLabors.ImageSharp": "3.1.11"
+        }
       },
       "Supabase.Core": {
         "type": "Transitive",
@@ -1847,6 +2221,35 @@
           "Supabase.Core": "1.0.0"
         }
       },
+      "Syncfusion.Licensing": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "XdQautXkBTsz2RECY9FoXPfvxDjoweUllzaG0Du2IN/MOKGjrJUwrWxWg9omaKkZMcJUYXHgMZtw6jbxJsYjtQ=="
+      },
+      "Syncfusion.Maui.Core": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "AZ/bUyRthatPa6dBlG37r1qX7bZXw9xfvmWBWzpEZqItYIAGwDDGnCL605yuBHGb8so4S9Tiipw+GB6WaxrYnA==",
+        "dependencies": {
+          "Syncfusion.Licensing": "31.2.4"
+        }
+      },
+      "Syncfusion.Maui.Popup": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "7j52+lyLxSCGSmas1dOTqSeczMd+/OEZcq1Ms8enIsT5hALg95uH5UTIynTa/dSyfsYTxt7KYm9prscUn4KjRw==",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "31.2.4"
+        }
+      },
+      "System.Drawing.Common": {
+        "type": "Transitive",
+        "resolved": "8.0.1",
+        "contentHash": "x0rAZECxIGx/YVjN28YRdpqka0+H7YMN9741FUDzipXPDzesd60gef/LI0ZCOcYSDsacTLTHvMAvxHG+TjbNNQ==",
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "8.0.0"
+        }
+      },
       "System.IdentityModel.Tokens.Jwt": {
         "type": "Transitive",
         "resolved": "7.5.1",
@@ -1855,6 +2258,21 @@
           "Microsoft.IdentityModel.JsonWebTokens": "7.5.1",
           "Microsoft.IdentityModel.Tokens": "7.5.1"
         }
+      },
+      "System.Memory": {
+        "type": "Transitive",
+        "resolved": "4.5.5",
+        "contentHash": "XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw=="
+      },
+      "System.Numerics.Tensors": {
+        "type": "Transitive",
+        "resolved": "9.0.0",
+        "contentHash": "hyJB4UlpAi19Xr9AXzu2NuagKC4lPfHObNMEAA0HmqFz2rX7wKgzeYzO/jM/eBHDhnUGFFEjk5cOoJaxqg5J4A=="
+      },
+      "System.Numerics.Vectors": {
+        "type": "Transitive",
+        "resolved": "4.4.0",
+        "contentHash": "UiLzLW+Lw6HLed1Hcg+8jSRttrbuXv7DANVj0DkL9g6EnnzbL75EB7EWsw5uRbhxd/4YdG8li5XizGWepmG3PQ=="
       },
       "System.Reactive": {
         "type": "Transitive",
@@ -1866,6 +2284,20 @@
         "resolved": "9.0.5",
         "contentHash": "nPZ2rcEVaZlxaLwBamFzz8f5MVM7Y08kzmDbcedXgeSWCGS9NN8mFjSsuTZm3W5pQLI4QhHmcu4h7A0Wf+cD/Q=="
       },
+      "System.Threading.Channels": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "CMaFr7v+57RW7uZfZkPExsPB6ljwzhjACWW1gfU35Y56rk72B/Wu+sTqxVmGSk4SFUlPc3cjeKND0zktziyjBA=="
+      },
+      "UMapx": {
+        "type": "Transitive",
+        "resolved": "7.5.1.3",
+        "contentHash": "HlLsjlGkMLaIlb8oMf1ICx+i4GIc2wzod9RNpi7VG98U0V9XCaESPyxzR5ewoMnZggs/3G5gDLyV8yelhwYQww==",
+        "dependencies": {
+          "System.Drawing.Common": "8.0.1",
+          "System.Numerics.Vectors": "4.4.0"
+        }
+      },
       "Websocket.Client": {
         "type": "Transitive",
         "resolved": "5.1.1",
@@ -1873,7 +2305,16 @@
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
           "Microsoft.IO.RecyclableMemoryStream": "3.0.0",
-          "System.Reactive": "6.0.0"
+          "System.Reactive": "6.0.0",
+          "System.Threading.Channels": "8.0.0"
+        }
+      },
+      "faceshared": {
+        "type": "Project",
+        "dependencies": {
+          "FaceONNX": "[4.1.1.2, )",
+          "SixLabors.ImageSharp": "[3.1.11, )",
+          "SixLabors.ImageSharp.Drawing": "[2.1.7, )"
         }
       },
       "supabaseshared": {
@@ -1884,6 +2325,15 @@
       }
     },
     "net9.0-windows10.0.19041/android-arm64": {
+      "Microsoft.ML.OnnxRuntime": {
+        "type": "Direct",
+        "requested": "[1.23.2, )",
+        "resolved": "1.23.2",
+        "contentHash": "849xImRO0vxDH7DNlg/FAVGExKfjN1r2CIZevZGI5JQCoOj+0T23ShqPEgu5mLTwElot5X7V0qkO0jUz/yJZbA==",
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.23.2"
+        }
+      },
       "Microsoft.Graphics.Win2D": {
         "type": "Transitive",
         "resolved": "1.3.2",
@@ -1896,6 +2346,11 @@
         "type": "Transitive",
         "resolved": "1.0.3179.45",
         "contentHash": "3pokSH5CnN0G6rGhGFo1y87inxYhNxBQ2Vdf0wlvBj99KHxQJormjDACmqRnFeUsmuNFIhWwfAL1ztq7wD5qRA=="
+      },
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw=="
       },
       "Microsoft.WindowsAppSDK": {
         "type": "Transitive",
@@ -1913,6 +2368,15 @@
       }
     },
     "net9.0-windows10.0.19041/android-x64": {
+      "Microsoft.ML.OnnxRuntime": {
+        "type": "Direct",
+        "requested": "[1.23.2, )",
+        "resolved": "1.23.2",
+        "contentHash": "849xImRO0vxDH7DNlg/FAVGExKfjN1r2CIZevZGI5JQCoOj+0T23ShqPEgu5mLTwElot5X7V0qkO0jUz/yJZbA==",
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.23.2"
+        }
+      },
       "Microsoft.Graphics.Win2D": {
         "type": "Transitive",
         "resolved": "1.3.2",
@@ -1925,6 +2389,11 @@
         "type": "Transitive",
         "resolved": "1.0.3179.45",
         "contentHash": "3pokSH5CnN0G6rGhGFo1y87inxYhNxBQ2Vdf0wlvBj99KHxQJormjDACmqRnFeUsmuNFIhWwfAL1ztq7wD5qRA=="
+      },
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw=="
       },
       "Microsoft.WindowsAppSDK": {
         "type": "Transitive",
@@ -1942,6 +2411,15 @@
       }
     },
     "net9.0-windows10.0.19041/win10-x64": {
+      "Microsoft.ML.OnnxRuntime": {
+        "type": "Direct",
+        "requested": "[1.23.2, )",
+        "resolved": "1.23.2",
+        "contentHash": "849xImRO0vxDH7DNlg/FAVGExKfjN1r2CIZevZGI5JQCoOj+0T23ShqPEgu5mLTwElot5X7V0qkO0jUz/yJZbA==",
+        "dependencies": {
+          "Microsoft.ML.OnnxRuntime.Managed": "1.23.2"
+        }
+      },
       "Microsoft.Graphics.Win2D": {
         "type": "Transitive",
         "resolved": "1.3.2",
@@ -1954,6 +2432,11 @@
         "type": "Transitive",
         "resolved": "1.0.3179.45",
         "contentHash": "3pokSH5CnN0G6rGhGFo1y87inxYhNxBQ2Vdf0wlvBj99KHxQJormjDACmqRnFeUsmuNFIhWwfAL1ztq7wD5qRA=="
+      },
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Transitive",
+        "resolved": "8.0.0",
+        "contentHash": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw=="
       },
       "Microsoft.WindowsAppSDK": {
         "type": "Transitive",

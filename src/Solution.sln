@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{A6D1A937-E671-4263-9A9F-501EFAA47422}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camera", "Camera\Camera.csproj", "{A6D1A937-E671-4263-9A9F-501EFAA47422}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{F8966871-7120-441B-AB19-3F03AA468ADA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lecin", "Lecin\Lecin.csproj", "{FBA65F19-1543-4098-99C2-4126EAAFE9E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Api", "Backend.Api\Backend.Api.csproj", "{28FC8B9A-9563-45F9-AE03-8AD7067E8A23}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Camera", "Camera\Camera.csproj", "{750FB9E9-4BF7-47F6-9225-C42FC5C9640C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupabaseShared", "SupabaseShared\SupabaseShared.csproj", "{7F34BA7A-D12C-4AA8-ACB0-532C884212B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraViewer", "CameraViewer\CameraViewer.csproj", "{90682776-6FFC-4BBD-8571-260B0E867C65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceShared", "FaceShared\FaceShared.csproj", "{7E4E17EC-37F9-430A-8269-1368D846E819}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,17 +36,17 @@ Global
 		{FBA65F19-1543-4098-99C2-4126EAAFE9E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBA65F19-1543-4098-99C2-4126EAAFE9E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBA65F19-1543-4098-99C2-4126EAAFE9E1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{28FC8B9A-9563-45F9-AE03-8AD7067E8A23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{28FC8B9A-9563-45F9-AE03-8AD7067E8A23}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{28FC8B9A-9563-45F9-AE03-8AD7067E8A23}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{28FC8B9A-9563-45F9-AE03-8AD7067E8A23}.Release|Any CPU.Build.0 = Release|Any CPU
-		{750FB9E9-4BF7-47F6-9225-C42FC5C9640C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{750FB9E9-4BF7-47F6-9225-C42FC5C9640C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{750FB9E9-4BF7-47F6-9225-C42FC5C9640C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{750FB9E9-4BF7-47F6-9225-C42FC5C9640C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7F34BA7A-D12C-4AA8-ACB0-532C884212B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7F34BA7A-D12C-4AA8-ACB0-532C884212B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F34BA7A-D12C-4AA8-ACB0-532C884212B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F34BA7A-D12C-4AA8-ACB0-532C884212B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90682776-6FFC-4BBD-8571-260B0E867C65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90682776-6FFC-4BBD-8571-260B0E867C65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90682776-6FFC-4BBD-8571-260B0E867C65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90682776-6FFC-4BBD-8571-260B0E867C65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E4E17EC-37F9-430A-8269-1368D846E819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E4E17EC-37F9-430A-8269-1368D846E819}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E4E17EC-37F9-430A-8269-1368D846E819}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E4E17EC-37F9-430A-8269-1368D846E819}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
