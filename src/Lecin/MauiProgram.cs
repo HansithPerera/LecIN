@@ -65,10 +65,8 @@ public static class MauiProgram
                 fonts.AddFont("MauiMaterialAssets.ttf", "MaterialAssets");
                 fonts.AddFont("FluentSystemIcons-Regular.ttf", FluentUI.FontFamily);
             });
-
 #if DEBUG
         builder.Logging.AddDebug();
-        builder.Services.AddLogging(configure => configure.AddDebug());
 #endif
 
         builder.Services.AddSingleton<Client>(sp =>

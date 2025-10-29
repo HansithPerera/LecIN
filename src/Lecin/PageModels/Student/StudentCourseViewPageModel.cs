@@ -12,13 +12,14 @@ using Pg = Supabase.Postgrest;
 using CourseTeacherModel = Lecin.Models.CourseTeacher;
 using TeacherModel = Lecin.Models.Teacher;
 using System.Text.Json;
+using Color = Microsoft.Maui.Graphics.Color;
 
 namespace Lecin.PageModels.Student;
 
 [QueryProperty(nameof(Course), "course")]
 public partial class StudentCourseViewPageModel(Client client) : BasePageModel
 {
-    [ObservableProperty] private ObservableCollection<Class>? _classes;
+    [ObservableProperty] private ObservableCollection<ClassStatusItem>? _classes;
     [ObservableProperty] private Course? _course;
     [ObservableProperty] private bool _isLoading;
     [ObservableProperty] private int? _streak;
@@ -42,9 +43,11 @@ public partial class StudentCourseViewPageModel(Client client) : BasePageModel
                 new QueryFilter<Class, int>(c => c.CourseSemesterCode, Constants.Operator.Equals, Course.SemesterCode),
                 new QueryFilter<Class, int>(c => c.CourseYear, Constants.Operator.Equals, Course.Year)
             };
+            var sixMonthsAgo = DateTimeOffset.Now.AddMonths(-6);
             var classes = await client.From<Class>()
                 .Select("*")
                 .And(filters)
+                .Filter(nameof(Class.StartTime), Pg.Constants.Operator.GreaterThanOrEqual, sixMonthsAgo.ToString("O"))
                 .Get();
 
             var streakFilters = new List<IPostgrestQueryFilter>
@@ -64,20 +67,73 @@ public partial class StudentCourseViewPageModel(Client client) : BasePageModel
             StreaksAllTime = new ObservableCollection<CourseStreaksAllTime>(streak.Models);
             IsLeaderboardEmpty = !StreaksAllTime.Any();
 
-            var ownStreakFilters = new List<IPostgrestQueryFilter>
-            {
-                new QueryFilter<CourseStreaksAllTime, string>(cs => cs.CourseCode, Constants.Operator.Equals, Course.Code),
-                new QueryFilter<CourseStreaksAllTime, int>(cs => cs.CourseSemesterCode, Constants.Operator.Equals, Course.SemesterCode),
-                new QueryFilter<CourseStreaksAllTime, int>(cs => cs.CourseYear, Constants.Operator.Equals, Course.Year),
-                new QueryFilter<CourseStreaksAllTime, Guid>(cs => cs.StudentId, Constants.Operator.Equals, Guid.Parse(client.Auth.CurrentUser?.Id ?? ""))
-            };
-            var ownStreak = await client.From<CourseStreaksAllTime>()
-                .Select("*")
-                .And(ownStreakFilters)
-                .Single();
+            // Use RPC to calculate current user's consecutive streak for this course
+            var ownStreak = await client.Postgrest.Rpc<int>(
+                "CalculateCourseStreak",
+                new Dictionary<string, object>
+                {
+                    { "code", Course.Code },
+                    { "year", Course.Year },
+                    { "semester", Course.SemesterCode }
+                });
 
-            Streak = ownStreak?.StreakLength;
-            Classes = new ObservableCollection<Class>(classes.Models);
+            Streak = ownStreak;
+
+            var items = new ObservableCollection<ClassStatusItem>();
+            if (Guid.TryParse(client.Auth.CurrentUser?.Id, out var userId))
+            {
+                var nowTs = DateTimeOffset.Now;
+                foreach (var c in classes.Models.OrderByDescending(c => c.StartTime))
+                {
+                    // Future classes should not be marked Absent; label as Upcoming
+                    if (c.StartTime > nowTs)
+                    {
+                        items.Add(new ClassStatusItem
+                        {
+                            StartTime = c.StartTime,
+                            EndTime = c.EndTime,
+                            Location = c.Location,
+                            Status = "Upcoming",
+                            StatusColor = Colors.Gray
+                        });
+                        continue;
+                    }
+
+                    // Fetch attendance for this past class and user
+                    SupabaseShared.Models.Attendance? att = null;
+                    try
+                    {
+                        att = await client.From<SupabaseShared.Models.Attendance>()
+                            .Select("*")
+                            .Filter(nameof(SupabaseShared.Models.Attendance.StudentId), Pg.Constants.Operator.Equals, userId.ToString())
+                            .Filter(nameof(SupabaseShared.Models.Attendance.ClassId), Pg.Constants.Operator.Equals, c.Id.ToString())
+                            .Single();
+                    }
+                    catch
+                    {
+                        // ignore not found
+                    }
+
+                    var status = att == null ? "Absent" : (string.IsNullOrWhiteSpace(att.Reason) ? "Present" : att.Reason);
+                    var color = status switch
+                    {
+                        "Late" => Colors.Orange,
+                        "Excused" => Colors.DodgerBlue,
+                        "Absent" => Colors.Red,
+                        _ => Colors.Green
+                    };
+
+                    items.Add(new ClassStatusItem
+                    {
+                        StartTime = c.StartTime,
+                        EndTime = c.EndTime,
+                        Location = c.Location,
+                        Status = status,
+                        StatusColor = color
+                    });
+                }
+            }
+            Classes = items;
 
             await LoadTeacherAsync(client);
         }
@@ -89,7 +145,7 @@ public partial class StudentCourseViewPageModel(Client client) : BasePageModel
         {
             IsLoading = false;
         }
-    }
+}
 
     private async Task LoadTeacherAsync(Client client)
     {
@@ -163,4 +219,14 @@ public partial class StudentCourseViewPageModel(Client client) : BasePageModel
         if (string.IsNullOrWhiteSpace(code)) return;
         await Shell.Current.GoToAsync($"{nameof(ClassmatesPage)}?courseCode={code}");
     }
+}
+
+public class ClassStatusItem
+{
+    public DateTimeOffset StartTime { get; set; }
+    public DateTimeOffset EndTime { get; set; }
+    public string? Location { get; set; }
+    public string Status { get; set; } = "Present";
+    public Color StatusColor { get; set; } = Colors.Green;
+    public TimeSpan Duration => EndTime - StartTime;
 }

@@ -19,14 +19,27 @@
                 SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Attendance">
-                        <Grid ColumnDefinitions="Auto, Auto, Auto, Auto, Auto"
+                        <Grid 
+                              ColumnDefinitions="{OnIdiom Phone='*', Default='Auto,Auto,Auto,Auto,Auto'}"
+                              RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto,Auto', Default='Auto'}"
                               ColumnSpacing="10"
                               Padding="10"
                               Margin="5">
-                            <Label Grid.Column="0" Text="{Binding Student.FirstName}" FontSize="18" FontAttributes="Bold" />
-                            <Label Grid.Column="1" Text="{Binding Student.LastName}" FontSize="18" TextColor="White" />
-                            <Label Grid.Column="2" Text="{Binding Timestamp, StringFormat='{0:MM/dd/yyyy HH:mm}'}" FontSize="18" TextColor="White" />
-                            <Label Grid.Column="3" Text="{Binding Reason}" FontSize="18" TextColor="White" />
+                            <Label Grid.Column="{OnIdiom Phone=0, Default=0}"
+                                   Grid.Row="{OnIdiom Phone=0, Default=0}"
+                                   Text="{Binding Student.FirstName}" FontSize="18" FontAttributes="Bold" />
+                            <Label Grid.Column="{OnIdiom Phone=0, Default=1}"
+                                   Grid.Row="{OnIdiom Phone=1, Default=0}"
+                                   Text="{Binding Student.LastName}" FontSize="18"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Grid.Column="{OnIdiom Phone=0, Default=2}"
+                                   Grid.Row="{OnIdiom Phone=2, Default=0}"
+                                   Text="{Binding Timestamp, StringFormat='{0:MM/dd/yyyy HH:mm}'}" FontSize="18"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Label Grid.Column="{OnIdiom Phone=0, Default=3}"
+                                   Grid.Row="{OnIdiom Phone=3, Default=0}"
+                                   Text="{Binding Reason}" FontSize="18"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -37,14 +50,27 @@
                 SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Student">
-                        <Grid ColumnDefinitions="Auto, *, Auto, Auto"
+                        <Grid 
+                              ColumnDefinitions="{OnIdiom Phone='*', Default='Auto,*,Auto,Auto'}"
+                              RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto,Auto', Default='Auto'}"
                               ColumnSpacing="10"
                               Padding="10"
                               Margin="5">
-                            <Label Grid.Column="0" Text="{Binding FirstName}" FontSize="18" FontAttributes="Bold" />
-                            <Label Grid.Column="1" Text="{Binding LastName}" FontSize="18" TextColor="White" />
-                            <Button Grid.Column="2" Text="Mark Late" Clicked="MarkLate"/>
-                            <Button Grid.Column="3" Text="Mark Present" Clicked="MarkPresent"/>
+                            <Label Grid.Column="{OnIdiom Phone=0, Default=0}"
+                                   Grid.Row="{OnIdiom Phone=0, Default=0}"
+                                   Text="{Binding FirstName}" FontSize="18" FontAttributes="Bold" />
+                            <Label Grid.Column="{OnIdiom Phone=0, Default=1}"
+                                   Grid.Row="{OnIdiom Phone=1, Default=0}"
+                                   Text="{Binding LastName}" FontSize="18"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                            <Button Grid.Column="{OnIdiom Phone=0, Default=2}"
+                                    Grid.Row="{OnIdiom Phone=2, Default=0}"
+                                    Text="Mark Late" Clicked="MarkLate"
+                                    HorizontalOptions="{OnIdiom Phone=Fill, Default=Start}"/>
+                            <Button Grid.Column="{OnIdiom Phone=0, Default=3}"
+                                    Grid.Row="{OnIdiom Phone=3, Default=0}"
+                                    Text="Mark Present" Clicked="MarkPresent"
+                                    HorizontalOptions="{OnIdiom Phone=Fill, Default=Start}"/>
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

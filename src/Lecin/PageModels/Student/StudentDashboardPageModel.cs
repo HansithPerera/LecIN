@@ -38,11 +38,16 @@ public partial class StudentDashboardPageModel(Client client) : BasePageModel
                 .Where(e => e.StudentId == userId)
                 .Get();
 
+            var now = DateTimeOffset.Now;
+            var startOfDay = new DateTimeOffset(now.Year, now.Month, now.Day, 0, 0, 0, now.Offset);
+            var startOfTomorrow = startOfDay.AddDays(1);
+
+            // Only show today's upcoming classes (today and starting after now)
             var upcomingClassesTask = client.From<Class>()
                 .Select("*")
                 .Order(nameof(Class.StartTime), Constants.Ordering.Ascending)
-                .Where(e => e.StartTime >= DateTimeOffset.Now)
-                .Limit(5)
+                .Where(e => e.StartTime >= now && e.StartTime < startOfTomorrow)
+                .Limit(10)
                 .Get();
 
             var totalStreakTask = client.Postgrest.Rpc<int>("CalculateStudentStreak");
