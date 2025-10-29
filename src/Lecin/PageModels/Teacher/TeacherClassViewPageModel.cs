@@ -12,7 +12,7 @@ namespace Lecin.PageModels.Teacher;
 public partial class TeacherClassViewPageModel(Supabase.Client client): BasePageModel
 {
     [ObservableProperty] 
-    private SupabaseShared.Models.Class? _class;
+    private Class? _class;
     
     [ObservableProperty]
     private ObservableCollection<Attendance>? _attendances;
@@ -65,16 +65,11 @@ public partial class TeacherClassViewPageModel(Supabase.Client client): BasePage
         try
         {
             if (Class == null) return;
-
-            var courseEqualityFilters = new List<IPostgrestQueryFilter>()
-            {
-                new QueryFilter("CourseCode", Constants.Operator.Equals, Class.CourseCode),
-                new QueryFilter("CourseYear", Constants.Operator.Equals, Class.CourseYear),
-                new QueryFilter("CourseSemesterCode", Constants.Operator.Equals, Class.CourseSemesterCode)
-            };
             var students = await client.From<Enrollment>()
                 .Select("*")
-                .And(courseEqualityFilters)
+                .Filter(e => e.CourseCode, Constants.Operator.Equals, Class.CourseCode)
+                .Filter(e => e.CourseYear, Constants.Operator.Equals, Class.CourseYear)
+                .Filter(e => e.CourseSemesterCode, Constants.Operator.Equals, Class.CourseSemesterCode)
                 .Get();
             
             var attendances = await client.From<Attendance>()

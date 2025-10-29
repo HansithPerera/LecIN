@@ -643,7 +643,49 @@ const testCheckInCameraSuccessfully = async () => {
     newStudentData,
     "Failed to insert new student: " + newStudentError?.message,
   );
-
+  
+  const { data: newCourseData, error: newCourseError } = await client
+    .from("Courses")
+    .upsert({
+        Code: "TEST101",
+        Year: "2024",
+        SemesterCode: 1,
+        Name: "Test Course"
+    })
+    .select()
+    .single();
+  
+    assert(newCourseData, "Failed to insert new course: " + newCourseError?.message);
+  
+  const { data: newEnrollmentData, error: newEnrollmentError } = await client
+    .from("Enrollments")
+    .upsert({
+        StudentId: newStudentData.Id,
+        CourseCode: "TEST101",
+        CourseYear: "2024",
+        CourseSemesterCode: 1,
+        EnrolledAt: new Date().toISOString(),
+    })
+    .select()
+    .single();
+  
+    assert(newEnrollmentData, "Failed to insert new enrollment: " + newEnrollmentError?.message);
+  
+  const { data: newClassData, error: newClassError } = await client
+    .from("Classes")
+    .upsert({
+        CourseCode: "TEST101",
+        CourseYear: "2024",
+        CourseSemesterCode: 1,
+        Location: locationId,
+        StartTime: new Date(Date.now() - 15 * 60 * 1000).toISOString(), // 15 minutes ago
+        EndTime: new Date(Date.now() + 45 * 60 * 1000).toISOString(), // 45 minutes in the future
+    })
+    .select()
+    .single();
+  
+    assert(newClassData, "Failed to insert new class: " + newClassError?.message);
+  
   const { data: newStudentFaceData, error: newStudentFaceError } = await client
     .from("StudentFaces")
     .upsert({

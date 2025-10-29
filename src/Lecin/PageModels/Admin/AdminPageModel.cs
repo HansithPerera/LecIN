@@ -8,24 +8,14 @@ using static System.Text.Encoding;
 
 namespace Lecin.PageModels.Admin;
 
-public partial class AdminPageModel : BasePageModel
+public partial class AdminPageModel(Client client, ModalErrorHandler errorHandler) : BasePageModel
 {
-    private readonly Client _client;
-
-    private readonly ModalErrorHandler _errorHandler;
-
     [ObservableProperty] private ObservableCollection<Course> _courses = [];
     private bool _dataLoaded;
 
     [ObservableProperty] private bool _isBusy;
 
     [ObservableProperty] private bool _isRefreshing;
-
-    public AdminPageModel(Client client, ModalErrorHandler errorHandler)
-    {
-        _client = client;
-        _errorHandler = errorHandler;
-    }
 
     [RelayCommand]
     private async Task DownloadAttendance(Course? course)
@@ -38,16 +28,16 @@ public partial class AdminPageModel : BasePageModel
                 Body = new Dictionary<string, object>
                     { { "Code", course.Code }, { "SemesterCode", course.SemesterCode }, { "Year", course.Year } }
             };
-            var text = await _client.Functions.Invoke<CsvResponse>("export-attendance-csv", options: options);
+            var text = await client.Functions.Invoke<CsvResponse>("export-attendance-csv", options: options);
             if (text == null || string.IsNullOrWhiteSpace(text.Csv))
-                _errorHandler.HandleError(new Exception("Failed to retrieve CSV data."));
+                errorHandler.HandleError(new Exception("Failed to retrieve CSV data."));
             var fileName = $"{course.Code}_Attendance_{course.Year}_S{course.SemesterCode}.csv";
             using var stream = new MemoryStream(UTF8.GetBytes(text.Csv));
             var fileSaverResult = await FileSaver.Default.SaveAsync(fileName, stream);
         }
         catch (Exception ex)
         {
-            _errorHandler.HandleError(ex);
+            errorHandler.HandleError(ex);
         }
     }
 
@@ -60,7 +50,7 @@ public partial class AdminPageModel : BasePageModel
         {
             _dataLoaded = true;
 
-            var courses = await _client.From<Course>()
+            var courses = await client.From<Course>()
                 .Select("*")
                 .Get();
 
@@ -68,7 +58,7 @@ public partial class AdminPageModel : BasePageModel
         }
         catch (Exception ex)
         {
-            _errorHandler.HandleError(ex);
+            errorHandler.HandleError(ex);
         }
         finally
         {

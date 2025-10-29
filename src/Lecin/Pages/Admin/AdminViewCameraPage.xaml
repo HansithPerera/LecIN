@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:pages="clr-namespace:Lecin.Pages"
+                       xmlns:viewModels="clr-namespace:Lecin.PageModels.Admin"
+                       xmlns:fonts="clr-namespace:Lecin.Resources.Fonts"
+                       x:DataType="viewModels:AdminViewCameraPageModel"
+                       x:Class="Lecin.Pages.Admin.AdminViewCameraPage">
+    <pages:BaseContentPage.Content>
+        <ScrollView
+            Padding="5">
+                    <VerticalStackLayout Spacing="10">
+            <Label Text="Camera Details"
+                   FontAttributes="Bold"
+                   FontSize="32"
+                   HorizontalOptions="Center"
+                   Margin="0,20,0,10"/>
+            <Border Padding="10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding Camera.Name}"
+                           FontAttributes="Bold"
+                           FontSize="24"
+                           HorizontalOptions="Center"/>
+                    <Label Text="{Binding Camera.LocationRef.Id, StringFormat='Location: {0}'}"
+                           FontSize="16"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,10"/>
+                    <Button
+                        Text="View Location Details"
+                        Clicked="OnViewLocationDetailsClicked"
+                        HorizontalOptions="Center">
+                    </Button>
+                </VerticalStackLayout>
+            </Border>
+            <Border
+                IsVisible="{Binding PrimaryApiKey, Converter={StaticResource NotNullToBoolConverter}}">
+                <Grid
+                    RowDefinitions="Auto,Auto"
+                    ColumnDefinitions="Auto,*,Auto">
+                    <Label Grid.Column="1" Text="{Binding PrimaryApiKey.Prefix, StringFormat='Secondary Key Prefix: {0}'}"
+                           FontSize="18"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center">
+                    </Label>
+                    <Label
+                        Grid.Column="0"
+                        Grid.RowSpan="2"
+                        FontSize="22"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Text="{x:Static fonts:FluentUI.key_24_regular}"
+                        FontFamily="{x:Static fonts:FluentUI.FontFamily}" />
+                    <Label
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Text="{Binding PrimaryApiKey.CreatedAt, StringFormat='Created {0:MMMM dd, yyyy}'}" />
+                    <Button
+                        Grid.Column="2"
+                        Grid.RowSpan="2"
+                        FontFamily="{x:Static fonts:FluentUI.FontFamily}"
+                        FontSize="20"
+                        Text="{x:Static fonts:FluentUI.delete_20_regular}"
+                        CommandParameter="{Binding PrimaryApiKey}"
+                        Command="{Binding GeneratePrimaryKeyCommand}" />
+                </Grid>
+            </Border>
+            <Button
+                Command="{Binding GeneratePrimaryKeyCommand}"
+                Text="Generate Primary API Key"
+                HorizontalOptions="Center"
+                Padding="10"
+                BackgroundColor="{DynamicResource PrimaryColor}"
+                TextColor="White"
+                CornerRadius="8"
+                IsVisible="{Binding PrimaryApiKey, Converter={StaticResource NullToBoolConverter}}">
+            </Button>
+            <Border
+                IsVisible="{Binding SecondaryApiKey, Converter={StaticResource NotNullToBoolConverter}}">
+                <Grid
+                    RowDefinitions="Auto,Auto"
+                    ColumnDefinitions="Auto,*,Auto">
+                    <Label Grid.Column="1" Text="{Binding SecondaryApiKey.Prefix, StringFormat='Secondary Key Prefix: {0}'}"
+                           FontSize="18"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center">
+                    </Label>
+                    <Label
+                        Grid.Column="0"
+                        Grid.RowSpan="2"
+                        FontSize="22"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Text="{x:Static fonts:FluentUI.key_24_regular}"
+                        FontFamily="{x:Static fonts:FluentUI.FontFamily}" />
+                    <Label
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Text="{Binding SecondaryApiKey.CreatedAt, StringFormat='Created {0:MMMM dd, yyyy}'}" />
+                    <Button
+                        Grid.Column="2"
+                        Grid.RowSpan="2"
+                        FontFamily="{x:Static fonts:FluentUI.FontFamily}"
+                        FontSize="20"
+                        Text="{x:Static fonts:FluentUI.delete_20_regular}"
+                        CommandParameter="{Binding SecondaryApiKey}"
+                        Command="{Binding GenerateSecondaryKeyCommand}" />
+                </Grid>
+            </Border>
+            <Button
+                Command="{Binding GenerateSecondaryKeyCommand}"
+                Text="Generate Secondary API Key"
+                HorizontalOptions="Center"
+                Padding="10"
+                BackgroundColor="{DynamicResource PrimaryColor}"
+                TextColor="White"
+                CornerRadius="8"
+                IsVisible="{Binding SecondaryApiKey, Converter={StaticResource NullToBoolConverter}}">
+            </Button>
+        </VerticalStackLayout>
+        </ScrollView>
+    </pages:BaseContentPage.Content>
+</pages:BaseContentPage>

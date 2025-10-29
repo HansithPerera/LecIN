@@ -44,6 +44,10 @@ public partial class AppShell : Shell
     public static string AttendanceHistoryPageRoute => nameof(AttendanceHistoryPage);
 
     public static string CheckInPageRoute => nameof(CheckInPage);
+    
+    public static string AdminListLocationPageRoute => nameof(AdminListLocationPage);
+    
+    public static string AdminListCameraPageRoute => nameof(AdminListCameraPage);
 
     public static string TeacherReportsPageRoute => nameof(TeacherReportsPage);
 
@@ -77,6 +81,8 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(StudentCourseViewPage), typeof(StudentCourseViewPage));
         Routing.RegisterRoute(nameof(StudentRegisterFacePage), typeof(StudentRegisterFacePage));
         Routing.RegisterRoute(nameof(TeacherReportsPage), typeof(TeacherReportsPage));
+        Routing.RegisterRoute(nameof(AdminViewCameraPage), typeof(AdminViewCameraPage));
+        Routing.RegisterRoute(nameof(AdminViewLocationPage), typeof(AdminViewLocationPage));
         // Register CheckInPage as both a standard route and a root-level route
         Routing.RegisterRoute(nameof(CheckInPage), typeof(CheckInPage));
         Routing.RegisterRoute($"//{nameof(CheckInPage)}", typeof(CheckInPage));

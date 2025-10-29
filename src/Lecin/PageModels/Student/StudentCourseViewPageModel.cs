@@ -13,6 +13,7 @@ using CourseTeacherModel = Lecin.Models.CourseTeacher;
 using TeacherModel = Lecin.Models.Teacher;
 using System.Text.Json;
 using Color = Microsoft.Maui.Graphics.Color;
+using Location = SupabaseShared.Models.Location;
 
 namespace Lecin.PageModels.Student;
 

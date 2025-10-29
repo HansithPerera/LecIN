@@ -5,12 +5,13 @@
              xmlns:pages="clr-namespace:Lecin.Pages"
              xmlns:models="clr-namespace:SupabaseShared.Models;assembly=SupabaseShared"
              xmlns:teacher="clr-namespace:Lecin.PageModels.Teacher"
+             xmlns:picker="http://schemas.syncfusion.com/maui/toolkit"
              x:DataType="teacher:TeacherCourseViewPageModel"
              x:Class="Lecin.Pages.Teacher.TeacherCourseViewPage">
     <ContentPage.Content>
-        <VerticalStackLayout Padding="20" Spacing="15">
+        <ScrollView>
+                    <VerticalStackLayout Padding="20" Spacing="15">
             <Label Text="Your Classes" FontSize="24" HorizontalOptions="Center" Margin="10"/>
-
             <Button Text="View Attendance Reports"
                     x:Name="AttendanceReportsButton"
                     Clicked="OnAttendanceReportsClicked"
@@ -20,37 +21,66 @@
                     FontAttributes="Bold"
                     HeightRequest="50"
                     Margin="0,0,0,10" />
-
+            <Border>
+                <VerticalStackLayout
+                    Spacing="10">
+                    <Label Text="Schedule Class"></Label>
+                    <Picker ItemsSource="{Binding AvailableLocations}"
+                            SelectedItem="{Binding NewClassLocation}"
+                            ItemDisplayBinding="{Binding Id}"
+                            Title="Select Location">
+                    </Picker>
+                    <Label Text="Select Start Time:"></Label>
+                    <picker:SfDateTimePicker 
+                        SelectedDate="{Binding NewClassStartTime}">
+                    </picker:SfDateTimePicker>
+                    <Label Text="Select End Time:"></Label>
+                    <picker:SfDateTimePicker 
+                        SelectedDate="{Binding NewClassEndTime}">
+                    </picker:SfDateTimePicker>
+                    <Button Text="Schedule Class" Command="{Binding CreateClassCommand}"></Button>
+                </VerticalStackLayout>
+            </Border>
             <CollectionView
                 ItemsSource="{Binding Classes}"
                 SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Class">
-                        <Grid 
-                              ColumnDefinitions="{OnIdiom Phone='*', Default='Auto,*,Auto,Auto'}"
-                              RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto,Auto', Default='Auto'}"
-                              ColumnSpacing="10"
-                              Padding="10"
-                              Margin="5">
-                            <Label Grid.Column="{OnIdiom Phone=0, Default=0}"
-                                   Grid.Row="{OnIdiom Phone=0, Default=0}"
-                                   Text="{Binding Id}" FontSize="18" FontAttributes="Bold" />
-                            <Label Grid.Column="{OnIdiom Phone=0, Default=1}"
-                                   Grid.Row="{OnIdiom Phone=1, Default=0}"
-                                   Text="{Binding EndTime}" FontSize="18"
-                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
-                            <Label Grid.Column="{OnIdiom Phone=0, Default=2}"
-                                   Grid.Row="{OnIdiom Phone=2, Default=0}"
-                                   Text="{Binding StartTime}" FontSize="18"
-                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
-                            <Button Grid.Column="{OnIdiom Phone=0, Default=3}"
-                                    Grid.Row="{OnIdiom Phone=3, Default=0}"
-                                    Text="Manage Class" Clicked="GotoClassView"
-                                    HorizontalOptions="{OnIdiom Phone=Fill, Default=End}"/>
-                        </Grid>
+                        <VerticalStackLayout Padding="5">
+                            <Border
+                                Padding="5">
+                                <Grid 
+                                    ColumnDefinitions="{OnIdiom Phone='*', Default='Auto,*,Auto,Auto'}"
+                                    RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto,Auto', Default='Auto'}"
+                                    ColumnSpacing="10"
+                                    Padding="10"
+                                    Margin="5">
+                                    <Label Grid.Column="{OnIdiom Phone=0, Default=0}"
+                                           Grid.Row="{OnIdiom Phone=0, Default=0}"
+                                           Text="{Binding LocationRef.Id, StringFormat='Location: {0}'}"
+                                           FontSize="18" FontAttributes="Bold" />
+                                    <Label Grid.Column="{OnIdiom Phone=0, Default=1}"
+                                           Grid.Row="{OnIdiom Phone=1, Default=0}"
+                                           Text="{Binding EndTime, StringFormat='Ends: {0:MM/dd/yyyy HH:mm}'}"
+                                           FontSize="18"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                                    <Label Grid.Column="{OnIdiom Phone=0, Default=2}"
+                                           Grid.Row="{OnIdiom Phone=2, Default=0}"
+                                           Text="{Binding StartTime, StringFormat='Starts: {0:MM/dd/yyyy HH:mm}'}"
+                                           FontSize="18"
+                                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
+                                    <Button Grid.Column="{OnIdiom Phone=0, Default=3}"
+                                            Grid.Row="{OnIdiom Phone=3, Default=0}"
+                                            Text="Manage Class" 
+                                            Clicked="GotoClassView"
+                                            HorizontalOptions="{OnIdiom Phone=Fill, Default=End}"/>
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </VerticalStackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </pages:BaseContentPage>

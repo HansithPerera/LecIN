@@ -18,4 +18,14 @@ public partial class AdminDashboardPage : BaseContentPage
         if (BindingContext is AdminPageModel vm && vm.DownloadAttendanceCommand.CanExecute(course))
             vm.DownloadAttendanceCommand.Execute(course);
     }
+
+    private void GotoCameras(object? sender, EventArgs e)
+    {
+        Shell.Current.GoToAsync($"//{nameof(AdminListCameraPage)}");
+    }
+    
+    private void GotoLocations(object? sender, EventArgs e)
+    {
+        Shell.Current.GoToAsync($"//{nameof(AdminListLocationPage)}");
+    }
 }

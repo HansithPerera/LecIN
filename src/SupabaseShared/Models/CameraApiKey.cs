@@ -5,8 +5,8 @@ namespace SupabaseShared.Models;
 
 public enum ApiKeyRole
 {
-    Primary,
-    Secondary
+    Primary = 1,
+    Secondary = 2,
 }
 
 [Table("CameraApiKeys")]
@@ -20,6 +20,9 @@ public class CameraApiKey: BaseModel
 
     [Column]
     public ApiKeyRole Role { get; set; }
+    
+    [Reference(typeof(ApiKey))]
+    public ApiKey? ApiKey { get; set; }
     
     [Reference(typeof(Camera))]
     public Camera? Camera { get; set; }

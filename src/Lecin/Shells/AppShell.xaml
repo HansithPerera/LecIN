@@ -49,6 +49,18 @@
         Route="{x:Static local:AppShell.AdminDashboardPageRoute}"
         ContentTemplate="{DataTemplate admin:AdminDashboardPage}"
         FlyoutItemIsVisible="{Binding IsAdmin}" />
+    
+    <ShellContent
+        Title="Cameras"
+        Route="{x:Static local:AppShell.AdminListCameraPageRoute}"
+        ContentTemplate="{DataTemplate admin:AdminListCameraPage}"
+        FlyoutItemIsVisible="{Binding IsAdmin}" />
+    
+    <ShellContent
+        Title="Locations"
+        Route="{x:Static local:AppShell.AdminListLocationPageRoute}"
+        ContentTemplate="{DataTemplate admin:AdminListLocationPage}"
+        FlyoutItemIsVisible="{Binding IsAdmin}" />
 
     <ShellContent
         Title="Dashboard"

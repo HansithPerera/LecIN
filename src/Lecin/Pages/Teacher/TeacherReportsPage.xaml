@@ -121,14 +121,14 @@
 
                     <Label Text="Students with attendance below 75% or 3+ consecutive absences"
                            FontSize="12"
-                           TextColor="{AppThemeBinding Light={StaticResource Gray700}, Dark={StaticResource Gray300}}"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"
                            Margin="0,0,0,10" />
 
                     <CollectionView x:Name="AtRiskStudentsCollection">
                         <CollectionView.EmptyView>
                             <Label Text="No at-risk students found"
                                    HorizontalOptions="Center"
-                                   TextColor="{AppThemeBinding Light={StaticResource Gray700}, Dark={StaticResource Gray300}}" />
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}" />
                         </CollectionView.EmptyView>
                         <CollectionView.ItemTemplate>
                             <DataTemplate>

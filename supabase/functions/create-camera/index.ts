@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
     .insert([
       { Name: Name, Location: Location, IsActive: true },
     ])
-    .select();
+    .select().single();
 
   if (error || !data) {
     return new Response(

@@ -1,4 +1,6 @@
 ﻿@page "/"
+@inject IConfiguration Configuration;
+
 
 <PageTitle>Viewing Camera</PageTitle>
 
@@ -20,6 +22,8 @@
             await Task.Delay(_refreshMs);
         }
     }
+
+    private string BaseUrl => Configuration["CameraBaseUrl"] ?? "http://localhost:5105";
 
     protected override async Task OnInitializedAsync()
     {

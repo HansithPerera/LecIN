@@ -124,6 +124,16 @@
           "Supabase.Storage": "2.0.2"
         }
       },
+      "Syncfusion.Maui.Picker": {
+        "type": "Direct",
+        "requested": "[31.2.4, )",
+        "resolved": "31.2.4",
+        "contentHash": "xG6HTtP7p00Le6+V3WKPZ1NUZ2G/J5PK88bkWtE537kOpxJoNgw1T6HZTPS2CGc5tX6hVjrhGhk+UDCh31l6MQ==",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "31.2.4",
+          "Syncfusion.Maui.Popup": "31.2.4"
+        }
+      },
       "Syncfusion.Maui.Toolkit": {
         "type": "Direct",
         "requested": "[1.0.7, )",
@@ -485,6 +495,27 @@
           "MimeMapping": "3.0.1",
           "Newtonsoft.Json": "13.0.3",
           "Supabase.Core": "1.0.0"
+        }
+      },
+      "Syncfusion.Licensing": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "XdQautXkBTsz2RECY9FoXPfvxDjoweUllzaG0Du2IN/MOKGjrJUwrWxWg9omaKkZMcJUYXHgMZtw6jbxJsYjtQ=="
+      },
+      "Syncfusion.Maui.Core": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "AZ/bUyRthatPa6dBlG37r1qX7bZXw9xfvmWBWzpEZqItYIAGwDDGnCL605yuBHGb8so4S9Tiipw+GB6WaxrYnA==",
+        "dependencies": {
+          "Syncfusion.Licensing": "31.2.4"
+        }
+      },
+      "Syncfusion.Maui.Popup": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "7j52+lyLxSCGSmas1dOTqSeczMd+/OEZcq1Ms8enIsT5hALg95uH5UTIynTa/dSyfsYTxt7KYm9prscUn4KjRw==",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "31.2.4"
         }
       },
       "System.Buffers": {
@@ -1788,6 +1819,16 @@
           "Supabase.Storage": "2.0.2"
         }
       },
+      "Syncfusion.Maui.Picker": {
+        "type": "Direct",
+        "requested": "[31.2.4, )",
+        "resolved": "31.2.4",
+        "contentHash": "xG6HTtP7p00Le6+V3WKPZ1NUZ2G/J5PK88bkWtE537kOpxJoNgw1T6HZTPS2CGc5tX6hVjrhGhk+UDCh31l6MQ==",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "31.2.4",
+          "Syncfusion.Maui.Popup": "31.2.4"
+        }
+      },
       "Syncfusion.Maui.Toolkit": {
         "type": "Direct",
         "requested": "[1.0.7, )",
@@ -2178,6 +2219,27 @@
           "MimeMapping": "3.0.1",
           "Newtonsoft.Json": "13.0.3",
           "Supabase.Core": "1.0.0"
+        }
+      },
+      "Syncfusion.Licensing": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "XdQautXkBTsz2RECY9FoXPfvxDjoweUllzaG0Du2IN/MOKGjrJUwrWxWg9omaKkZMcJUYXHgMZtw6jbxJsYjtQ=="
+      },
+      "Syncfusion.Maui.Core": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "AZ/bUyRthatPa6dBlG37r1qX7bZXw9xfvmWBWzpEZqItYIAGwDDGnCL605yuBHGb8so4S9Tiipw+GB6WaxrYnA==",
+        "dependencies": {
+          "Syncfusion.Licensing": "31.2.4"
+        }
+      },
+      "Syncfusion.Maui.Popup": {
+        "type": "Transitive",
+        "resolved": "31.2.4",
+        "contentHash": "7j52+lyLxSCGSmas1dOTqSeczMd+/OEZcq1Ms8enIsT5hALg95uH5UTIynTa/dSyfsYTxt7KYm9prscUn4KjRw==",
+        "dependencies": {
+          "Syncfusion.Maui.Core": "31.2.4"
         }
       },
       "System.Drawing.Common": {

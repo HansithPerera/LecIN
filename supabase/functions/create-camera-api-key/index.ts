@@ -104,7 +104,7 @@ Deno.serve(async (req: Request) => {
         ApiKeyId: apiKeyResp.data.Id,
         Role: Primary ? 1 : 2,
       })
-      .select();
+      .select().single();
 
     console.log(cameraApiKeyResp.data);
 

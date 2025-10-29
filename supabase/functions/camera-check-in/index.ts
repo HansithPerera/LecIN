@@ -93,6 +93,45 @@ Deno.serve(async (req) => {
     );
   }
 
+  const { data: classData, error: classError } = await client
+    .from("Classes")
+    .select("*, Courses(*, Enrollments!inner(StudentId))")
+    .eq("Location", camera.Location)
+    .lt("StartTime", new Date().toISOString())
+    .gt("EndTime", new Date().toISOString());
+  
+  console.log("classData:", classData);
+  console.log("classError:", classError);
+
+  if (classError || !classData || classData.length === 0) {
+    return new Response(
+      JSON.stringify({
+        error: "No active class found for this camera location",
+      }),
+      { status: 404, headers: { "Content-Type": "application/json" } },
+    );
+  }
+
+  for (const item of classData) {
+    const { error: attendanceError } = await client
+      .from("Attendance")
+      .insert({
+        ClassId: item.Id,
+        StudentId: closestFace.StudentId,
+        Timestamp: new Date().toISOString(),
+      });
+
+    if (attendanceError) {
+      return new Response(
+        JSON.stringify({
+          error: "Failed to record attendance",
+          detail: attendanceError,
+        }),
+        { status: 500, headers: { "Content-Type": "application/json" } },
+      );
+    }
+  }
+
   return new Response(
     JSON.stringify({
       studentId: closestFace.StudentId,

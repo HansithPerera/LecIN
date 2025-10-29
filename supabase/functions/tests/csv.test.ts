@@ -96,7 +96,7 @@ const testUnauthorizedWithAnon = async () => {
 
   // Invoke the 'hello-world' function with a parameter
   const { error, data } = await client.functions.invoke("create-camera", {
-    body: { Name: "bar", Location: "baz" },
+    body: { Name: "bar", Location: "Room 101" },
   });
 
   console.log(JSON.stringify(error, null, 2));
@@ -109,15 +109,15 @@ const testSuccessWithServiceKey = async () => {
 
   // Invoke the 'hello-world' function with a parameter
   const { error, data } = await client.functions.invoke("create-camera", {
-    body: { Name: "bar", Location: "baz" },
+    body: { Name: "bar", Location: "Room 101" },
     method: "POST",
   });
 
   console.log(JSON.stringify(error, null, 2));
 
   assert(!error);
-  assertEquals(data[0].Name, "bar");
-  assertEquals(data[0].Location, "baz");
+  assertEquals(data.Name, "bar");
+  assertEquals(data.Location, "Room 101");
 };
 
 const testExportAttendanceCsv = async () => {
