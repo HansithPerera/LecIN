@@ -126,13 +126,32 @@
                                 <DataTemplate x:DataType="student:ClassStatusItem">
                                     <VerticalStackLayout Padding="5">
                                         <Border>
-                                            <Grid ColumnDefinitions="{OnIdiom Phone='*,Auto,Auto', Default='*, Auto, Auto, Auto, Auto'}"
-                                                  ColumnSpacing="10">
-                                                <Label Grid.Column="0" Text="{Binding StartTime, StringFormat='{0:MMMM d}'}" />
-                                                <Label Grid.Column="1" Text="{Binding StartTime, StringFormat='{0:HH:mm}'}" />
-                                                <Label Grid.Column="2" Text="{Binding Duration, StringFormat='{0:hh}h {0:mm}m'}" />
-                                                <Label Grid.Column="3" Text="{Binding Location}" FontSize="18" />
-                                                <Label Grid.Column="4" Text="{Binding Status}"
+                                            <Grid
+                                                ColumnDefinitions="{OnIdiom Phone='Auto,Auto,*', Default='*, Auto, Auto, Auto, Auto'}"
+                                                RowDefinitions="{OnIdiom Phone='Auto,Auto', Default='Auto'}"
+                                                ColumnSpacing="10">
+                                                <!-- Date -->
+                                                <Label Grid.Row="0" Grid.Column="0"
+                                                       Text="{Binding StartTime, StringFormat='{0:MMMM d}'}" />
+                                                <!-- Time -->
+                                                <Label Grid.Row="0" Grid.Column="1"
+                                                       Text="{Binding StartTime, StringFormat='{0:HH:mm}'}" />
+                                                <!-- Duration -->
+                                                <Label Grid.Row="0" Grid.Column="2"
+                                                       HorizontalTextAlignment="Start"
+                                                       Text="{Binding Duration, StringFormat='{0:hh}h {0:mm}m'}" />
+                                                <!-- Location (wraps to second row on phone) -->
+                                                <Label Grid.Row="{OnIdiom Phone=1, Default=0}"
+                                                       Grid.Column="{OnIdiom Phone=0, Default=3}"
+                                                       Grid.ColumnSpan="{OnIdiom Phone=2, Default=1}"
+                                                       FontSize="{OnIdiom Phone=16, Default=18}"
+                                                       LineBreakMode="TailTruncation"
+                                                       Text="{Binding Location}" />
+                                                <!-- Status (right aligned, second row on phone) -->
+                                                <Label Grid.Row="{OnIdiom Phone=1, Default=0}"
+                                                       Grid.Column="{OnIdiom Phone=2, Default=4}"
+                                                       HorizontalOptions="End"
+                                                       Text="{Binding Status}"
                                                        TextColor="{Binding StatusColor}"
                                                        FontAttributes="Bold" />
                                             </Grid>
