@@ -5,7 +5,8 @@
              Title="Check In"
              BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}">
 
-    <VerticalStackLayout Padding="30" Spacing="30" BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}">
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="30" BackgroundColor="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}">
 
         <Label Text="Attendance Check In"
                FontSize="32"
@@ -57,5 +58,6 @@
                 HeightRequest="{OnIdiom Phone=48, Default=60}"
                 IsEnabled="False" />
 
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

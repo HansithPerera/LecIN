@@ -123,15 +123,18 @@
 
                         <CollectionView ItemsSource="{Binding Classes}" SelectionMode="None">
                             <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:Class">
+                                <DataTemplate x:DataType="student:ClassStatusItem">
                                     <VerticalStackLayout Padding="5">
                                         <Border>
-                                            <Grid ColumnDefinitions="{OnIdiom Phone='*,Auto', Default='*, Auto, Auto, Auto'}"
+                                            <Grid ColumnDefinitions="{OnIdiom Phone='*,Auto,Auto', Default='*, Auto, Auto, Auto, Auto'}"
                                                   ColumnSpacing="10">
                                                 <Label Grid.Column="0" Text="{Binding StartTime, StringFormat='{0:MMMM d}'}" />
-                                                <Label Grid.Column="1" Text="{Binding StartTime, StringFormat='{0:h:mm tt}'}" />
+                                                <Label Grid.Column="1" Text="{Binding StartTime, StringFormat='{0:HH:mm}'}" />
                                                 <Label Grid.Column="2" Text="{Binding Duration, StringFormat='{0:hh}h {0:mm}m'}" />
                                                 <Label Grid.Column="3" Text="{Binding Location}" FontSize="18" />
+                                                <Label Grid.Column="4" Text="{Binding Status}"
+                                                       TextColor="{Binding StatusColor}"
+                                                       FontAttributes="Bold" />
                                             </Grid>
                                         </Border>
                                     </VerticalStackLayout>
